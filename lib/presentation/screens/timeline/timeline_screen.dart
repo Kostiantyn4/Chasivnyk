@@ -4,7 +4,7 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/localization/app_localizations_helper.dart';
-import '../../widgets/calendar_panel.dart';
+import '../../widgets/calendar/calendar_panel.dart';
 
 class TimelineScreen extends StatefulWidget {
   const TimelineScreen({super.key});

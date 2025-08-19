@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../core/constants/ui_constants.dart';
-import '../../core/theme/app_colors.dart';
+import '../../../core/constants/ui_constants.dart';
+import '../../../core/constants/app_colors.dart';
 
 class CalendarPanel extends StatelessWidget {
   final bool isVisible;
@@ -89,7 +89,7 @@ class CalendarPanel extends StatelessWidget {
             shape: BoxShape.circle,
           ),
           todayDecoration: BoxDecoration(
-            color: AppColors.primaryColor.withOpacity(0.5),
+            color: AppColors.primaryColor.withAlpha(128),
             shape: BoxShape.circle,
           ),
         ),
