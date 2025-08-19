@@ -1,0 +1,26 @@
+{
+  "greetingMessage": "Welcome",
+  "username": "Maxim",
+  "todayTasksTitle": "Today's Tasks",
+  "addTaskButton": "Add task",
+  "meetingWithAlexander": "Meeting with Alexander",
+  "lunch": "Lunch",
+  "workOnProject": "Work on project",
+  "timelineTab": "Timeline",
+  "foldersTab": "Folders",
+  "settingsTab": "Settings",
+  "projectsTab": "Projects",
+  "progressTab": "Progress",
+  "currentDate": "{date}",
+  "calendar": "Calendar",
+  "timeline": "Timeline",
+  "projects": "Projects",
+  "progress": "Progress",
+  "@currentDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  }
+}

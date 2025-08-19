@@ -1,0 +1,26 @@
+{
+  "greetingMessage": "Вітаю",
+  "username": "Максим",
+  "todayTasksTitle": "Завдання на сьогодні",
+  "addTaskButton": "Додати завдання",
+  "meetingWithAlexander": "Зустріч з Александром",
+  "lunch": "Обід",
+  "workOnProject": "Працювати над проєктом",
+  "timelineTab": "Таймлайн",
+  "projectsTab": "Проєкти",
+  "progressTab": "Прогрес",
+  "foldersTab": "Папки",
+  "settingsTab": "Налаштування",
+  "currentDate": "{date}",
+  "calendar": "Календар",
+  "timeline": "Стрічка",
+  "projects": "Проєкти",
+  "progress": "Прогрес",
+  "@currentDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  }
+}
