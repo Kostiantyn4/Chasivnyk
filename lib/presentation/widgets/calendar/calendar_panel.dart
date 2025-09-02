@@ -45,7 +45,9 @@ class CalendarPanel extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildHandle(),
-            if (isVisible) _buildCalendar(),
+            if (isVisible) Expanded(
+              child: _buildCalendar(),
+            ),
           ],
         ),
       ),

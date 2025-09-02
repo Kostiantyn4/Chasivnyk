@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'l10n/app_localizations.dart';
 import 'core/localization/app_localizations_helper.dart';
 import 'presentation/screens/timeline/timeline_screen.dart';
@@ -18,7 +20,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ProviderScope(
+      child: MaterialApp(
       title: 'Chasivnyk',
       theme: ThemeData.dark(),
       localizationsDelegates: [
@@ -37,6 +40,7 @@ class _MyAppState extends State<MyApp> {
           return const TimelineScreen();
         },
       ),
+    ),
     );
   }
 }
