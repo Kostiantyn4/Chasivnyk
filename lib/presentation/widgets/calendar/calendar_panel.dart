@@ -27,7 +27,7 @@ class CalendarPanel extends StatelessWidget {
       child: AnimatedContainer(
         duration: UIConstants.calendarAnimationDuration,
         curve: UIConstants.calendarAnimationCurve,
-        height: isVisible ? UIConstants.calendarPanelHeight : 0,
+        height: isVisible ? UIConstants.calendarPanelHeight : UIConstants.calendarHandleHeight,
         decoration: BoxDecoration(
           color: AppColors.accentColor,
           borderRadius: const BorderRadius.vertical(
@@ -41,14 +41,19 @@ class CalendarPanel extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildHandle(),
-            if (isVisible) Expanded(
-              child: _buildCalendar(),
-            ),
-          ],
+        child: ClipRRect(
+          borderRadius: const BorderRadius.vertical(
+            top: Radius.circular(UIConstants.calendarPanelRadius),
+          ),
+          child: Column(
+            children: [
+              _buildHandle(),
+              if (isVisible) 
+                Expanded(
+                  child: _buildCalendar(),
+                ),
+            ],
+          ),
         ),
       ),
     );
@@ -61,38 +66,81 @@ class CalendarPanel extends StatelessWidget {
         width: UIConstants.calendarHandleWidth,
         height: UIConstants.calendarHandleHeight,
         alignment: Alignment.center,
-        child: Icon(
-          Icons.keyboard_arrow_down,
-          color: AppColors.textSecondary,
-          size: 24,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(height: 4),
+            AnimatedSwitcher(
+              duration: UIConstants.calendarAnimationDuration,
+              transitionBuilder: (child, animation) {
+                return RotationTransition(
+                  turns: animation,
+                  child: child,
+                );
+              },
+              child: Icon(
+                isVisible ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
+                key: ValueKey(isVisible),
+                color: AppColors.textSecondary,
+                size: 20,
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   Widget _buildCalendar() {
-    return Expanded(
-      child: TableCalendar(
-        firstDay: DateTime.utc(2023, 1, 1),
-        lastDay: DateTime.utc(2025, 12, 31),
-        focusedDay: selectedDate,
-        calendarFormat: CalendarFormat.month,
-        selectedDayPredicate: (day) => isSameDay(selectedDate, day),
-        onDaySelected: (selectedDay, focusedDay) {
-          onDateSelected(selectedDay);
-        },
-        headerStyle: const HeaderStyle(
-          formatButtonVisible: false,
-          titleCentered: true,
-        ),
-        calendarStyle: CalendarStyle(
-          selectedDecoration: BoxDecoration(
-            color: AppColors.primaryColor,
-            shape: BoxShape.circle,
-          ),
-          todayDecoration: BoxDecoration(
-            color: AppColors.primaryColor.withAlpha(128),
-            shape: BoxShape.circle,
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: SizedBox(
+          height: 350, // Fixed height to prevent overflow
+          child: TableCalendar(
+            firstDay: DateTime.utc(2023, 1, 1),
+            lastDay: DateTime.utc(2025, 12, 31),
+            focusedDay: selectedDate,
+            calendarFormat: CalendarFormat.month,
+            selectedDayPredicate: (day) => isSameDay(selectedDate, day),
+            onDaySelected: (selectedDay, focusedDay) {
+              onDateSelected(selectedDay);
+            },
+            headerStyle: const HeaderStyle(
+              formatButtonVisible: false,
+              titleCentered: true,
+              titleTextStyle: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+              headerPadding: EdgeInsets.symmetric(vertical: 8.0),
+            ),
+            calendarStyle: CalendarStyle(
+              outsideDaysVisible: false,
+              weekendTextStyle: TextStyle(color: AppColors.textSecondary),
+              holidayTextStyle: TextStyle(color: AppColors.textSecondary),
+              selectedDecoration: BoxDecoration(
+                color: AppColors.primaryColor,
+                shape: BoxShape.circle,
+              ),
+              todayDecoration: BoxDecoration(
+                color: AppColors.primaryColor.withAlpha(128),
+                shape: BoxShape.circle,
+              ),
+              defaultTextStyle: TextStyle(color: AppColors.textPrimary),
+              cellMargin: const EdgeInsets.all(4.0),
+            ),
+            daysOfWeekStyle: DaysOfWeekStyle(
+              weekdayStyle: TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 12,
+              ),
+              weekendStyle: TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 12,
+              ),
+            ),
+            rowHeight: 40,
           ),
         ),
       ),
