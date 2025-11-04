@@ -60,4 +60,82 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get progress => 'Progress';
+
+  @override
+  String get newTask => 'New Task';
+
+  @override
+  String get taskNameLabel => 'Task Name';
+
+  @override
+  String get taskNameHint => 'For example, develop design...';
+
+  @override
+  String get taskDetailsLabel => 'Task Details';
+
+  @override
+  String get taskDetailsHint => 'Add more information about the task...';
+
+  @override
+  String get dueTimeOption => 'Due Time';
+
+  @override
+  String get dueTimeNotSet => 'Not set';
+
+  @override
+  String get remindersOption => 'Reminders';
+
+  @override
+  String get remindersNone => 'None';
+
+  @override
+  String get subtasksOption => 'Subtasks';
+
+  @override
+  String get subtasksNone => 'None';
+
+  @override
+  String get tagsOption => 'Tags';
+
+  @override
+  String get tagsNone => 'None';
+
+  @override
+  String get projectOption => 'Project';
+
+  @override
+  String get projectNotSelected => 'Not selected';
+
+  @override
+  String get saveButton => 'Save';
+
+  @override
+  String get discardChangesTitle => 'Discard changes?';
+
+  @override
+  String get discardChangesMessage => 'Draft saved. You can continue later.';
+
+  @override
+  String get discardChangesMessageNoSave => 'Unsaved changes will be lost';
+
+  @override
+  String get continueEditing => 'Continue';
+
+  @override
+  String get discard => 'Close';
+
+  @override
+  String get taskCreated => 'Task created';
+
+  @override
+  String get draftSaved => 'Draft saved';
+
+  @override
+  String get draftRestored => 'Draft restored';
+
+  @override
+  String get taskNameRequired => 'Task name cannot be empty';
+
+  @override
+  String get errorPrefix => 'Error';
 }

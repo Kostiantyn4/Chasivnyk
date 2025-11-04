@@ -5,6 +5,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/localization/app_localizations_helper.dart';
 import '../../widgets/calendar/calendar_panel.dart';
+import '../task_creation/create_task_screen.dart';
 
 class TimelineScreen extends StatefulWidget {
   const TimelineScreen({super.key});
@@ -39,6 +40,31 @@ class _TimelineScreenState extends State<TimelineScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 70), // Відступ над bottom nav bar
+        child: FloatingActionButton(
+          onPressed: () async {
+            final task = await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const CreateTaskScreen(),
+              ),
+            );
+            
+            // TODO: Додати задачу в список якщо task != null
+            if (task != null) {
+              // Тут можна оновити список задач
+              debugPrint('Task created: $task');
+            }
+          },
+          backgroundColor: AppColors.primaryColor,
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 28,
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SafeArea(
         child: Stack(
           children: [

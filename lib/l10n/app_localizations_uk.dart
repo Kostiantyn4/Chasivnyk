@@ -60,4 +60,83 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get progress => 'Прогрес';
+
+  @override
+  String get newTask => 'Нове завдання';
+
+  @override
+  String get taskNameLabel => 'Назва завдання';
+
+  @override
+  String get taskNameHint => 'Наприклад, розробити дизайн...';
+
+  @override
+  String get taskDetailsLabel => 'Деталі завдання';
+
+  @override
+  String get taskDetailsHint => 'Додайте більше інформації про завдання...';
+
+  @override
+  String get dueTimeOption => 'Час на виконання';
+
+  @override
+  String get dueTimeNotSet => 'Не встановлено';
+
+  @override
+  String get remindersOption => 'Нагадування';
+
+  @override
+  String get remindersNone => 'Відсутні';
+
+  @override
+  String get subtasksOption => 'Підзавдання';
+
+  @override
+  String get subtasksNone => 'Немає';
+
+  @override
+  String get tagsOption => 'Теги';
+
+  @override
+  String get tagsNone => 'Немає';
+
+  @override
+  String get projectOption => 'Проєкт';
+
+  @override
+  String get projectNotSelected => 'Не вибрано';
+
+  @override
+  String get saveButton => 'Зберегти';
+
+  @override
+  String get discardChangesTitle => 'Відмінити зміни?';
+
+  @override
+  String get discardChangesMessage =>
+      'Чернетка збережена. Ви зможете продовжити пізніше.';
+
+  @override
+  String get discardChangesMessageNoSave => 'Незбережені зміни будуть втрачені';
+
+  @override
+  String get continueEditing => 'Продовжити';
+
+  @override
+  String get discard => 'Закрити';
+
+  @override
+  String get taskCreated => 'Завдання створено';
+
+  @override
+  String get draftSaved => 'Чернетка збережена';
+
+  @override
+  String get draftRestored => 'Чернетку відновлено';
+
+  @override
+  String get taskNameRequired => 'Назва завдання не може бути порожньою';
+
+  @override
+  String get errorPrefix => 'Помилка';
 }

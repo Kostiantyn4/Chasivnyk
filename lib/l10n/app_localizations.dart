@@ -199,6 +199,162 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Progress'**
   String get progress;
+
+  /// No description provided for @newTask.
+  ///
+  /// In en, this message translates to:
+  /// **'New Task'**
+  String get newTask;
+
+  /// No description provided for @taskNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Task Name'**
+  String get taskNameLabel;
+
+  /// No description provided for @taskNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For example, develop design...'**
+  String get taskNameHint;
+
+  /// No description provided for @taskDetailsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Task Details'**
+  String get taskDetailsLabel;
+
+  /// No description provided for @taskDetailsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add more information about the task...'**
+  String get taskDetailsHint;
+
+  /// No description provided for @dueTimeOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Due Time'**
+  String get dueTimeOption;
+
+  /// No description provided for @dueTimeNotSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not set'**
+  String get dueTimeNotSet;
+
+  /// No description provided for @remindersOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get remindersOption;
+
+  /// No description provided for @remindersNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get remindersNone;
+
+  /// No description provided for @subtasksOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtasks'**
+  String get subtasksOption;
+
+  /// No description provided for @subtasksNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get subtasksNone;
+
+  /// No description provided for @tagsOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get tagsOption;
+
+  /// No description provided for @tagsNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get tagsNone;
+
+  /// No description provided for @projectOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Project'**
+  String get projectOption;
+
+  /// No description provided for @projectNotSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Not selected'**
+  String get projectNotSelected;
+
+  /// No description provided for @saveButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get saveButton;
+
+  /// No description provided for @discardChangesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard changes?'**
+  String get discardChangesTitle;
+
+  /// No description provided for @discardChangesMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft saved. You can continue later.'**
+  String get discardChangesMessage;
+
+  /// No description provided for @discardChangesMessageNoSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Unsaved changes will be lost'**
+  String get discardChangesMessageNoSave;
+
+  /// No description provided for @continueEditing.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueEditing;
+
+  /// No description provided for @discard.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get discard;
+
+  /// No description provided for @taskCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Task created'**
+  String get taskCreated;
+
+  /// No description provided for @draftSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft saved'**
+  String get draftSaved;
+
+  /// No description provided for @draftRestored.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft restored'**
+  String get draftRestored;
+
+  /// No description provided for @taskNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Task name cannot be empty'**
+  String get taskNameRequired;
+
+  /// No description provided for @errorPrefix.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get errorPrefix;
 }
 
 class _AppLocalizationsDelegate
