@@ -82,16 +82,6 @@ class TaskTagConverter implements JsonConverter<TaskTag, String> {
   String toJson(TaskTag object) => object.value;
 }
 
-class TaskPeriodConverter implements JsonConverter<TaskPeriod, String> {
-  const TaskPeriodConverter();
-
-  @override
-  TaskPeriod fromJson(String json) => TaskPeriod.values.byName(json);
-
-  @override
-  String toJson(TaskPeriod object) => object.name;
-}
-
 class ReminderRepeatConverter implements JsonConverter<ReminderRepeat, String> {
   const ReminderRepeatConverter();
 

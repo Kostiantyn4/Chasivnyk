@@ -29,7 +29,6 @@ class TaskAttachment with _$TaskAttachment {
   factory TaskAttachment.fromJson(Map<String, dynamic> json) =>
       _$TaskAttachmentFromJson(json);
 
-  @visibleForTesting
   static TaskAttachment createFile({
     String? id,
     required String taskId,
@@ -53,7 +52,6 @@ class TaskAttachment with _$TaskAttachment {
     );
   }
 
-  @visibleForTesting
   static TaskAttachment createLink({
     String? id,
     required String taskId,

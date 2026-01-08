@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:chasivnyk/presentation/screens/task_creation/create_task_screen.dart';
 import 'package:chasivnyk/l10n/app_localizations.dart';
 
@@ -11,28 +10,28 @@ void main() {
         const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          locale: Locale('uk'),
+          locale: Locale('en'),
           home: CreateTaskScreen(),
         ),
       );
 
       // Check header
-      expect(find.text('Нове завдання'), findsOneWidget);
+      expect(find.text('New Task'), findsOneWidget);
       expect(find.byIcon(Icons.close), findsOneWidget);
 
       // Check input fields
-      expect(find.text('Назва завдання'), findsOneWidget);
-      expect(find.text('Деталі завдання'), findsOneWidget);
+      expect(find.text('Task Name'), findsOneWidget);
+      expect(find.text('Task Details'), findsOneWidget);
 
       // Check option cards
-      expect(find.text('Час на виконання'), findsOneWidget);
-      expect(find.text('Нагадування'), findsOneWidget);
-      expect(find.text('Підзавдання'), findsOneWidget);
-      expect(find.text('Теги'), findsOneWidget);
-      expect(find.text('Проєкт'), findsOneWidget);
+      expect(find.text('Due Time'), findsOneWidget);
+      expect(find.text('Reminders'), findsOneWidget);
+      expect(find.text('Subtasks'), findsOneWidget);
+      expect(find.text('Tags'), findsOneWidget);
+      expect(find.text('Project'), findsOneWidget);
 
       // Check save button
-      expect(find.text('Зберегти'), findsOneWidget);
+      expect(find.text('Save'), findsOneWidget);
     });
 
     testWidgets('should show dialog when closing with unsaved changes', (WidgetTester tester) async {
@@ -40,14 +39,14 @@ void main() {
         const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          locale: Locale('uk'),
+          locale: Locale('en'),
           home: CreateTaskScreen(),
         ),
       );
 
       // Enter some text
       await tester.enterText(
-        find.widgetWithText(TextField, 'Наприклад, розробити дизайн...'),
+        find.widgetWithText(TextField, 'For example, develop design...'),
         'Test task',
       );
       await tester.pump();
@@ -57,16 +56,16 @@ void main() {
       await tester.pumpAndSettle();
 
       // Verify dialog is shown
-      expect(find.text('Відмінити зміни?'), findsOneWidget);
-      expect(find.text('Продовжити'), findsOneWidget);
-      expect(find.text('Закрити'), findsOneWidget);
+      expect(find.text('Discard changes?'), findsOneWidget);
+      expect(find.text('Continue'), findsOneWidget);
+      expect(find.text('Close'), findsOneWidget);
 
-      // Tap "Продовжити" to stay on screen
-      await tester.tap(find.text('Продовжити'));
+      // Tap "Continue" to stay on screen
+      await tester.tap(find.text('Continue'));
       await tester.pumpAndSettle();
 
       // Verify still on screen
-      expect(find.text('Нове завдання'), findsOneWidget);
+      expect(find.text('New Task'), findsOneWidget);
     });
 
     testWidgets('should allow text input in title field', (WidgetTester tester) async {
@@ -74,13 +73,13 @@ void main() {
         const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          locale: Locale('uk'),
+          locale: Locale('en'),
           home: CreateTaskScreen(),
         ),
       );
 
       // Find title field by hint text
-      final titleField = find.widgetWithText(TextField, 'Наприклад, розробити дизайн...');
+      final titleField = find.widgetWithText(TextField, 'For example, develop design...');
       expect(titleField, findsOneWidget);
 
       // Enter text
@@ -96,7 +95,7 @@ void main() {
         const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          locale: Locale('uk'),
+          locale: Locale('en'),
           home: CreateTaskScreen(),
         ),
       );
@@ -104,7 +103,7 @@ void main() {
       // Find description field by hint text
       final descriptionField = find.widgetWithText(
         TextField,
-        'Додайте більше інформації про завдання...',
+        'Add more information about the task...',
       );
       expect(descriptionField, findsOneWidget);
 
@@ -121,7 +120,7 @@ void main() {
         const MaterialApp(
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          locale: Locale('uk'),
+          locale: Locale('en'),
           home: CreateTaskScreen(),
         ),
       );

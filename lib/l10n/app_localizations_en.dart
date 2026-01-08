@@ -128,6 +128,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get taskCreated => 'Task created';
 
   @override
+  String get taskUpdated => 'Task updated';
+
+  @override
+  String get deleteButton => 'Delete';
+
+  @override
+  String get deleteTaskConfirmation => 'This task has subtasks. Delete anyway?';
+
+  @override
+  String get taskDeleted => 'Task deleted';
+
+  @override
   String get draftSaved => 'Draft saved';
 
   @override
@@ -138,4 +150,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get errorPrefix => 'Error';
+
+  @override
+  String get completedTasksTitle => 'Completed';
 }

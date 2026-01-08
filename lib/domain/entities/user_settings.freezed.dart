@@ -12,7 +12,8 @@ part of 'user_settings.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 UserSettings _$UserSettingsFromJson(Map<String, dynamic> json) {
   return _UserSettings.fromJson(json);
@@ -53,27 +54,29 @@ mixin _$UserSettings {
 /// @nodoc
 abstract class $UserSettingsCopyWith<$Res> {
   factory $UserSettingsCopyWith(
-          UserSettings value, $Res Function(UserSettings) then) =
-      _$UserSettingsCopyWithImpl<$Res, UserSettings>;
+    UserSettings value,
+    $Res Function(UserSettings) then,
+  ) = _$UserSettingsCopyWithImpl<$Res, UserSettings>;
   @useResult
-  $Res call(
-      {String userId,
-      String language,
-      ThemeMode themeMode,
-      @TaskPriorityConverter() TaskPriority defaultTaskPriority,
-      DateFormat dateFormat,
-      TimeFormat timeFormat,
-      bool showCompletedTasks,
-      bool enableNotifications,
-      int defaultReminderMinutes,
-      int autoArchiveCompletedDays,
-      bool enableDarkCalendar,
-      bool showWeekNumbers,
-      int weekStartDay,
-      String defaultProjectId,
-      List<String> pinnedProjectIds,
-      DateTime createdAt,
-      DateTime updatedAt});
+  $Res call({
+    String userId,
+    String language,
+    ThemeMode themeMode,
+    @TaskPriorityConverter() TaskPriority defaultTaskPriority,
+    DateFormat dateFormat,
+    TimeFormat timeFormat,
+    bool showCompletedTasks,
+    bool enableNotifications,
+    int defaultReminderMinutes,
+    int autoArchiveCompletedDays,
+    bool enableDarkCalendar,
+    bool showWeekNumbers,
+    int weekStartDay,
+    String defaultProjectId,
+    List<String> pinnedProjectIds,
+    DateTime createdAt,
+    DateTime updatedAt,
+  });
 }
 
 /// @nodoc
@@ -109,76 +112,79 @@ class _$UserSettingsCopyWithImpl<$Res, $Val extends UserSettings>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_value.copyWith(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      language: null == language
-          ? _value.language
-          : language // ignore: cast_nullable_to_non_nullable
-              as String,
-      themeMode: null == themeMode
-          ? _value.themeMode
-          : themeMode // ignore: cast_nullable_to_non_nullable
-              as ThemeMode,
-      defaultTaskPriority: null == defaultTaskPriority
-          ? _value.defaultTaskPriority
-          : defaultTaskPriority // ignore: cast_nullable_to_non_nullable
-              as TaskPriority,
-      dateFormat: null == dateFormat
-          ? _value.dateFormat
-          : dateFormat // ignore: cast_nullable_to_non_nullable
-              as DateFormat,
-      timeFormat: null == timeFormat
-          ? _value.timeFormat
-          : timeFormat // ignore: cast_nullable_to_non_nullable
-              as TimeFormat,
-      showCompletedTasks: null == showCompletedTasks
-          ? _value.showCompletedTasks
-          : showCompletedTasks // ignore: cast_nullable_to_non_nullable
-              as bool,
-      enableNotifications: null == enableNotifications
-          ? _value.enableNotifications
-          : enableNotifications // ignore: cast_nullable_to_non_nullable
-              as bool,
-      defaultReminderMinutes: null == defaultReminderMinutes
-          ? _value.defaultReminderMinutes
-          : defaultReminderMinutes // ignore: cast_nullable_to_non_nullable
-              as int,
-      autoArchiveCompletedDays: null == autoArchiveCompletedDays
-          ? _value.autoArchiveCompletedDays
-          : autoArchiveCompletedDays // ignore: cast_nullable_to_non_nullable
-              as int,
-      enableDarkCalendar: null == enableDarkCalendar
-          ? _value.enableDarkCalendar
-          : enableDarkCalendar // ignore: cast_nullable_to_non_nullable
-              as bool,
-      showWeekNumbers: null == showWeekNumbers
-          ? _value.showWeekNumbers
-          : showWeekNumbers // ignore: cast_nullable_to_non_nullable
-              as bool,
-      weekStartDay: null == weekStartDay
-          ? _value.weekStartDay
-          : weekStartDay // ignore: cast_nullable_to_non_nullable
-              as int,
-      defaultProjectId: null == defaultProjectId
-          ? _value.defaultProjectId
-          : defaultProjectId // ignore: cast_nullable_to_non_nullable
-              as String,
-      pinnedProjectIds: null == pinnedProjectIds
-          ? _value.pinnedProjectIds
-          : pinnedProjectIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            userId: null == userId
+                ? _value.userId
+                : userId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            language: null == language
+                ? _value.language
+                : language // ignore: cast_nullable_to_non_nullable
+                      as String,
+            themeMode: null == themeMode
+                ? _value.themeMode
+                : themeMode // ignore: cast_nullable_to_non_nullable
+                      as ThemeMode,
+            defaultTaskPriority: null == defaultTaskPriority
+                ? _value.defaultTaskPriority
+                : defaultTaskPriority // ignore: cast_nullable_to_non_nullable
+                      as TaskPriority,
+            dateFormat: null == dateFormat
+                ? _value.dateFormat
+                : dateFormat // ignore: cast_nullable_to_non_nullable
+                      as DateFormat,
+            timeFormat: null == timeFormat
+                ? _value.timeFormat
+                : timeFormat // ignore: cast_nullable_to_non_nullable
+                      as TimeFormat,
+            showCompletedTasks: null == showCompletedTasks
+                ? _value.showCompletedTasks
+                : showCompletedTasks // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            enableNotifications: null == enableNotifications
+                ? _value.enableNotifications
+                : enableNotifications // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            defaultReminderMinutes: null == defaultReminderMinutes
+                ? _value.defaultReminderMinutes
+                : defaultReminderMinutes // ignore: cast_nullable_to_non_nullable
+                      as int,
+            autoArchiveCompletedDays: null == autoArchiveCompletedDays
+                ? _value.autoArchiveCompletedDays
+                : autoArchiveCompletedDays // ignore: cast_nullable_to_non_nullable
+                      as int,
+            enableDarkCalendar: null == enableDarkCalendar
+                ? _value.enableDarkCalendar
+                : enableDarkCalendar // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            showWeekNumbers: null == showWeekNumbers
+                ? _value.showWeekNumbers
+                : showWeekNumbers // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            weekStartDay: null == weekStartDay
+                ? _value.weekStartDay
+                : weekStartDay // ignore: cast_nullable_to_non_nullable
+                      as int,
+            defaultProjectId: null == defaultProjectId
+                ? _value.defaultProjectId
+                : defaultProjectId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            pinnedProjectIds: null == pinnedProjectIds
+                ? _value.pinnedProjectIds
+                : pinnedProjectIds // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
+            createdAt: null == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            updatedAt: null == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -186,28 +192,30 @@ class _$UserSettingsCopyWithImpl<$Res, $Val extends UserSettings>
 abstract class _$$UserSettingsImplCopyWith<$Res>
     implements $UserSettingsCopyWith<$Res> {
   factory _$$UserSettingsImplCopyWith(
-          _$UserSettingsImpl value, $Res Function(_$UserSettingsImpl) then) =
-      __$$UserSettingsImplCopyWithImpl<$Res>;
+    _$UserSettingsImpl value,
+    $Res Function(_$UserSettingsImpl) then,
+  ) = __$$UserSettingsImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String userId,
-      String language,
-      ThemeMode themeMode,
-      @TaskPriorityConverter() TaskPriority defaultTaskPriority,
-      DateFormat dateFormat,
-      TimeFormat timeFormat,
-      bool showCompletedTasks,
-      bool enableNotifications,
-      int defaultReminderMinutes,
-      int autoArchiveCompletedDays,
-      bool enableDarkCalendar,
-      bool showWeekNumbers,
-      int weekStartDay,
-      String defaultProjectId,
-      List<String> pinnedProjectIds,
-      DateTime createdAt,
-      DateTime updatedAt});
+  $Res call({
+    String userId,
+    String language,
+    ThemeMode themeMode,
+    @TaskPriorityConverter() TaskPriority defaultTaskPriority,
+    DateFormat dateFormat,
+    TimeFormat timeFormat,
+    bool showCompletedTasks,
+    bool enableNotifications,
+    int defaultReminderMinutes,
+    int autoArchiveCompletedDays,
+    bool enableDarkCalendar,
+    bool showWeekNumbers,
+    int weekStartDay,
+    String defaultProjectId,
+    List<String> pinnedProjectIds,
+    DateTime createdAt,
+    DateTime updatedAt,
+  });
 }
 
 /// @nodoc
@@ -215,8 +223,9 @@ class __$$UserSettingsImplCopyWithImpl<$Res>
     extends _$UserSettingsCopyWithImpl<$Res, _$UserSettingsImpl>
     implements _$$UserSettingsImplCopyWith<$Res> {
   __$$UserSettingsImplCopyWithImpl(
-      _$UserSettingsImpl _value, $Res Function(_$UserSettingsImpl) _then)
-      : super(_value, _then);
+    _$UserSettingsImpl _value,
+    $Res Function(_$UserSettingsImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of UserSettings
   /// with the given fields replaced by the non-null parameter values.
@@ -241,101 +250,103 @@ class __$$UserSettingsImplCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? updatedAt = null,
   }) {
-    return _then(_$UserSettingsImpl(
-      userId: null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String,
-      language: null == language
-          ? _value.language
-          : language // ignore: cast_nullable_to_non_nullable
-              as String,
-      themeMode: null == themeMode
-          ? _value.themeMode
-          : themeMode // ignore: cast_nullable_to_non_nullable
-              as ThemeMode,
-      defaultTaskPriority: null == defaultTaskPriority
-          ? _value.defaultTaskPriority
-          : defaultTaskPriority // ignore: cast_nullable_to_non_nullable
-              as TaskPriority,
-      dateFormat: null == dateFormat
-          ? _value.dateFormat
-          : dateFormat // ignore: cast_nullable_to_non_nullable
-              as DateFormat,
-      timeFormat: null == timeFormat
-          ? _value.timeFormat
-          : timeFormat // ignore: cast_nullable_to_non_nullable
-              as TimeFormat,
-      showCompletedTasks: null == showCompletedTasks
-          ? _value.showCompletedTasks
-          : showCompletedTasks // ignore: cast_nullable_to_non_nullable
-              as bool,
-      enableNotifications: null == enableNotifications
-          ? _value.enableNotifications
-          : enableNotifications // ignore: cast_nullable_to_non_nullable
-              as bool,
-      defaultReminderMinutes: null == defaultReminderMinutes
-          ? _value.defaultReminderMinutes
-          : defaultReminderMinutes // ignore: cast_nullable_to_non_nullable
-              as int,
-      autoArchiveCompletedDays: null == autoArchiveCompletedDays
-          ? _value.autoArchiveCompletedDays
-          : autoArchiveCompletedDays // ignore: cast_nullable_to_non_nullable
-              as int,
-      enableDarkCalendar: null == enableDarkCalendar
-          ? _value.enableDarkCalendar
-          : enableDarkCalendar // ignore: cast_nullable_to_non_nullable
-              as bool,
-      showWeekNumbers: null == showWeekNumbers
-          ? _value.showWeekNumbers
-          : showWeekNumbers // ignore: cast_nullable_to_non_nullable
-              as bool,
-      weekStartDay: null == weekStartDay
-          ? _value.weekStartDay
-          : weekStartDay // ignore: cast_nullable_to_non_nullable
-              as int,
-      defaultProjectId: null == defaultProjectId
-          ? _value.defaultProjectId
-          : defaultProjectId // ignore: cast_nullable_to_non_nullable
-              as String,
-      pinnedProjectIds: null == pinnedProjectIds
-          ? _value._pinnedProjectIds
-          : pinnedProjectIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ));
+    return _then(
+      _$UserSettingsImpl(
+        userId: null == userId
+            ? _value.userId
+            : userId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        language: null == language
+            ? _value.language
+            : language // ignore: cast_nullable_to_non_nullable
+                  as String,
+        themeMode: null == themeMode
+            ? _value.themeMode
+            : themeMode // ignore: cast_nullable_to_non_nullable
+                  as ThemeMode,
+        defaultTaskPriority: null == defaultTaskPriority
+            ? _value.defaultTaskPriority
+            : defaultTaskPriority // ignore: cast_nullable_to_non_nullable
+                  as TaskPriority,
+        dateFormat: null == dateFormat
+            ? _value.dateFormat
+            : dateFormat // ignore: cast_nullable_to_non_nullable
+                  as DateFormat,
+        timeFormat: null == timeFormat
+            ? _value.timeFormat
+            : timeFormat // ignore: cast_nullable_to_non_nullable
+                  as TimeFormat,
+        showCompletedTasks: null == showCompletedTasks
+            ? _value.showCompletedTasks
+            : showCompletedTasks // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        enableNotifications: null == enableNotifications
+            ? _value.enableNotifications
+            : enableNotifications // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        defaultReminderMinutes: null == defaultReminderMinutes
+            ? _value.defaultReminderMinutes
+            : defaultReminderMinutes // ignore: cast_nullable_to_non_nullable
+                  as int,
+        autoArchiveCompletedDays: null == autoArchiveCompletedDays
+            ? _value.autoArchiveCompletedDays
+            : autoArchiveCompletedDays // ignore: cast_nullable_to_non_nullable
+                  as int,
+        enableDarkCalendar: null == enableDarkCalendar
+            ? _value.enableDarkCalendar
+            : enableDarkCalendar // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        showWeekNumbers: null == showWeekNumbers
+            ? _value.showWeekNumbers
+            : showWeekNumbers // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        weekStartDay: null == weekStartDay
+            ? _value.weekStartDay
+            : weekStartDay // ignore: cast_nullable_to_non_nullable
+                  as int,
+        defaultProjectId: null == defaultProjectId
+            ? _value.defaultProjectId
+            : defaultProjectId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        pinnedProjectIds: null == pinnedProjectIds
+            ? _value._pinnedProjectIds
+            : pinnedProjectIds // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        updatedAt: null == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$UserSettingsImpl implements _UserSettings {
-  const _$UserSettingsImpl(
-      {required this.userId,
-      this.language = 'uk',
-      this.themeMode = ThemeMode.dark,
-      @TaskPriorityConverter() this.defaultTaskPriority = TaskPriority.medium,
-      this.dateFormat = DateFormat.ddMMyyyy,
-      this.timeFormat = TimeFormat.h24,
-      this.showCompletedTasks = true,
-      this.enableNotifications = true,
-      this.defaultReminderMinutes = 15,
-      this.autoArchiveCompletedDays = 7,
-      this.enableDarkCalendar = false,
-      this.showWeekNumbers = true,
-      this.weekStartDay = 1,
-      this.defaultProjectId = '',
-      final List<String> pinnedProjectIds = const [],
-      required this.createdAt,
-      required this.updatedAt})
-      : _pinnedProjectIds = pinnedProjectIds;
+  const _$UserSettingsImpl({
+    required this.userId,
+    this.language = 'uk',
+    this.themeMode = ThemeMode.dark,
+    @TaskPriorityConverter() this.defaultTaskPriority = TaskPriority.medium,
+    this.dateFormat = DateFormat.ddMMyyyy,
+    this.timeFormat = TimeFormat.h24,
+    this.showCompletedTasks = true,
+    this.enableNotifications = true,
+    this.defaultReminderMinutes = 15,
+    this.autoArchiveCompletedDays = 7,
+    this.enableDarkCalendar = false,
+    this.showWeekNumbers = true,
+    this.weekStartDay = 1,
+    this.defaultProjectId = '',
+    final List<String> pinnedProjectIds = const [],
+    required this.createdAt,
+    required this.updatedAt,
+  }) : _pinnedProjectIds = pinnedProjectIds;
 
   factory _$UserSettingsImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserSettingsImplFromJson(json);
@@ -379,7 +390,7 @@ class _$UserSettingsImpl implements _UserSettings {
   @override
   @JsonKey()
   final int weekStartDay;
-// 1 = Monday, 7 = Sunday
+  // 1 = Monday, 7 = Sunday
   @override
   @JsonKey()
   final String defaultProjectId;
@@ -426,7 +437,9 @@ class _$UserSettingsImpl implements _UserSettings {
             (identical(other.defaultReminderMinutes, defaultReminderMinutes) ||
                 other.defaultReminderMinutes == defaultReminderMinutes) &&
             (identical(
-                    other.autoArchiveCompletedDays, autoArchiveCompletedDays) ||
+                  other.autoArchiveCompletedDays,
+                  autoArchiveCompletedDays,
+                ) ||
                 other.autoArchiveCompletedDays == autoArchiveCompletedDays) &&
             (identical(other.enableDarkCalendar, enableDarkCalendar) ||
                 other.enableDarkCalendar == enableDarkCalendar) &&
@@ -436,8 +449,10 @@ class _$UserSettingsImpl implements _UserSettings {
                 other.weekStartDay == weekStartDay) &&
             (identical(other.defaultProjectId, defaultProjectId) ||
                 other.defaultProjectId == defaultProjectId) &&
-            const DeepCollectionEquality()
-                .equals(other._pinnedProjectIds, _pinnedProjectIds) &&
+            const DeepCollectionEquality().equals(
+              other._pinnedProjectIds,
+              _pinnedProjectIds,
+            ) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -447,24 +462,25 @@ class _$UserSettingsImpl implements _UserSettings {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      userId,
-      language,
-      themeMode,
-      defaultTaskPriority,
-      dateFormat,
-      timeFormat,
-      showCompletedTasks,
-      enableNotifications,
-      defaultReminderMinutes,
-      autoArchiveCompletedDays,
-      enableDarkCalendar,
-      showWeekNumbers,
-      weekStartDay,
-      defaultProjectId,
-      const DeepCollectionEquality().hash(_pinnedProjectIds),
-      createdAt,
-      updatedAt);
+    runtimeType,
+    userId,
+    language,
+    themeMode,
+    defaultTaskPriority,
+    dateFormat,
+    timeFormat,
+    showCompletedTasks,
+    enableNotifications,
+    defaultReminderMinutes,
+    autoArchiveCompletedDays,
+    enableDarkCalendar,
+    showWeekNumbers,
+    weekStartDay,
+    defaultProjectId,
+    const DeepCollectionEquality().hash(_pinnedProjectIds),
+    createdAt,
+    updatedAt,
+  );
 
   /// Create a copy of UserSettings
   /// with the given fields replaced by the non-null parameter values.
@@ -476,31 +492,30 @@ class _$UserSettingsImpl implements _UserSettings {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$UserSettingsImplToJson(
-      this,
-    );
+    return _$$UserSettingsImplToJson(this);
   }
 }
 
 abstract class _UserSettings implements UserSettings {
-  const factory _UserSettings(
-      {required final String userId,
-      final String language,
-      final ThemeMode themeMode,
-      @TaskPriorityConverter() final TaskPriority defaultTaskPriority,
-      final DateFormat dateFormat,
-      final TimeFormat timeFormat,
-      final bool showCompletedTasks,
-      final bool enableNotifications,
-      final int defaultReminderMinutes,
-      final int autoArchiveCompletedDays,
-      final bool enableDarkCalendar,
-      final bool showWeekNumbers,
-      final int weekStartDay,
-      final String defaultProjectId,
-      final List<String> pinnedProjectIds,
-      required final DateTime createdAt,
-      required final DateTime updatedAt}) = _$UserSettingsImpl;
+  const factory _UserSettings({
+    required final String userId,
+    final String language,
+    final ThemeMode themeMode,
+    @TaskPriorityConverter() final TaskPriority defaultTaskPriority,
+    final DateFormat dateFormat,
+    final TimeFormat timeFormat,
+    final bool showCompletedTasks,
+    final bool enableNotifications,
+    final int defaultReminderMinutes,
+    final int autoArchiveCompletedDays,
+    final bool enableDarkCalendar,
+    final bool showWeekNumbers,
+    final int weekStartDay,
+    final String defaultProjectId,
+    final List<String> pinnedProjectIds,
+    required final DateTime createdAt,
+    required final DateTime updatedAt,
+  }) = _$UserSettingsImpl;
 
   factory _UserSettings.fromJson(Map<String, dynamic> json) =
       _$UserSettingsImpl.fromJson;

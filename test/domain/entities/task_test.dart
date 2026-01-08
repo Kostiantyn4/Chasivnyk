@@ -31,7 +31,7 @@ void main() {
         title: TaskTitle('Test Task'),
         description: TaskDescription('Test Description'),
         dueDate: now,
-        period: TaskPeriod.daily,
+        duration: TaskDuration.day,
         reminders: [
           Reminder(
             id: TaskId(const Uuid().v4()),
@@ -58,7 +58,7 @@ void main() {
       expect(deserializedTask.title.value, equals(task.title.value));
       expect(deserializedTask.description?.value, equals(task.description?.value));
       expect(deserializedTask.dueDate?.toIso8601String(), equals(task.dueDate?.toIso8601String()));
-      expect(deserializedTask.period, equals(task.period));
+      expect(deserializedTask.duration, equals(task.duration));
       expect(deserializedTask.reminders.length, equals(task.reminders.length));
       expect(deserializedTask.reminders.first.id.value, equals(task.reminders.first.id.value));
       expect(deserializedTask.reminders.first.time.toIso8601String(), equals(task.reminders.first.time.toIso8601String()));
@@ -78,7 +78,7 @@ void main() {
       expect(task.title.value, equals('Test Task'));
       expect(task.description?.value, isNull);
       expect(task.dueDate, isNull);
-      expect(task.period, isNull);
+      expect(task.duration, isNull);
       expect(task.reminders, isEmpty);
       expect(task.subtasks, isEmpty);
       expect(task.tags.map((t) => t.value), isEmpty);
@@ -87,27 +87,27 @@ void main() {
       expect(task.completedAt, isNull);
     });
 
-    test('should throw ArgumentError when custom period without dueDate', () {
+    test('should throw ArgumentError when custom duration without customDuration', () {
       expect(
-        () => Task.create(title: 'Test Task', period: TaskPeriod.daily),
+        () => Task.create(title: 'Test Task', duration: TaskDuration.custom),
         throwsA(
           isA<ArgumentError>().having(
             (e) => e.message,
             'message',
-            'Custom period requires dueDate',
+            'Custom duration requires customDuration parameter',
           ),
         ),
       );
     });
 
-    test('should create task with custom period and dueDate', () {
+    test('should create task with duration and dueDate', () {
       final dueDate = DateTime.now().add(Duration(days: 1));
       final task = Task.create(
         title: 'Test Task',
-        period: TaskPeriod.daily,
+        duration: TaskDuration.week,
         dueDate: dueDate,
       );
-      expect(task.period, equals(TaskPeriod.daily));
+      expect(task.duration, equals(TaskDuration.week));
       expect(task.dueDate, equals(dueDate));
     });
 

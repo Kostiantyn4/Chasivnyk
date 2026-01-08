@@ -12,7 +12,8 @@ part of 'task_attachment.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 TaskAttachment _$TaskAttachmentFromJson(Map<String, dynamic> json) {
   return _TaskAttachment.fromJson(json);
@@ -48,18 +49,20 @@ mixin _$TaskAttachment {
 /// @nodoc
 abstract class $TaskAttachmentCopyWith<$Res> {
   factory $TaskAttachmentCopyWith(
-          TaskAttachment value, $Res Function(TaskAttachment) then) =
-      _$TaskAttachmentCopyWithImpl<$Res, TaskAttachment>;
+    TaskAttachment value,
+    $Res Function(TaskAttachment) then,
+  ) = _$TaskAttachmentCopyWithImpl<$Res, TaskAttachment>;
   @useResult
-  $Res call(
-      {@TaskIdConverter() TaskId id,
-      @TaskIdConverter() TaskId taskId,
-      @AttachmentFilenameConverter() AttachmentFilename filename,
-      @AttachmentPathConverter() AttachmentPath path,
-      @AttachmentTypeConverter() AttachmentType type,
-      String? mimeType,
-      @AttachmentSizeConverter() AttachmentSize? size,
-      DateTime createdAt});
+  $Res call({
+    @TaskIdConverter() TaskId id,
+    @TaskIdConverter() TaskId taskId,
+    @AttachmentFilenameConverter() AttachmentFilename filename,
+    @AttachmentPathConverter() AttachmentPath path,
+    @AttachmentTypeConverter() AttachmentType type,
+    String? mimeType,
+    @AttachmentSizeConverter() AttachmentSize? size,
+    DateTime createdAt,
+  });
 }
 
 /// @nodoc
@@ -86,60 +89,65 @@ class _$TaskAttachmentCopyWithImpl<$Res, $Val extends TaskAttachment>
     Object? size = freezed,
     Object? createdAt = null,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      taskId: null == taskId
-          ? _value.taskId
-          : taskId // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      filename: null == filename
-          ? _value.filename
-          : filename // ignore: cast_nullable_to_non_nullable
-              as AttachmentFilename,
-      path: null == path
-          ? _value.path
-          : path // ignore: cast_nullable_to_non_nullable
-              as AttachmentPath,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as AttachmentType,
-      mimeType: freezed == mimeType
-          ? _value.mimeType
-          : mimeType // ignore: cast_nullable_to_non_nullable
-              as String?,
-      size: freezed == size
-          ? _value.size
-          : size // ignore: cast_nullable_to_non_nullable
-              as AttachmentSize?,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as TaskId,
+            taskId: null == taskId
+                ? _value.taskId
+                : taskId // ignore: cast_nullable_to_non_nullable
+                      as TaskId,
+            filename: null == filename
+                ? _value.filename
+                : filename // ignore: cast_nullable_to_non_nullable
+                      as AttachmentFilename,
+            path: null == path
+                ? _value.path
+                : path // ignore: cast_nullable_to_non_nullable
+                      as AttachmentPath,
+            type: null == type
+                ? _value.type
+                : type // ignore: cast_nullable_to_non_nullable
+                      as AttachmentType,
+            mimeType: freezed == mimeType
+                ? _value.mimeType
+                : mimeType // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            size: freezed == size
+                ? _value.size
+                : size // ignore: cast_nullable_to_non_nullable
+                      as AttachmentSize?,
+            createdAt: null == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$TaskAttachmentImplCopyWith<$Res>
     implements $TaskAttachmentCopyWith<$Res> {
-  factory _$$TaskAttachmentImplCopyWith(_$TaskAttachmentImpl value,
-          $Res Function(_$TaskAttachmentImpl) then) =
-      __$$TaskAttachmentImplCopyWithImpl<$Res>;
+  factory _$$TaskAttachmentImplCopyWith(
+    _$TaskAttachmentImpl value,
+    $Res Function(_$TaskAttachmentImpl) then,
+  ) = __$$TaskAttachmentImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@TaskIdConverter() TaskId id,
-      @TaskIdConverter() TaskId taskId,
-      @AttachmentFilenameConverter() AttachmentFilename filename,
-      @AttachmentPathConverter() AttachmentPath path,
-      @AttachmentTypeConverter() AttachmentType type,
-      String? mimeType,
-      @AttachmentSizeConverter() AttachmentSize? size,
-      DateTime createdAt});
+  $Res call({
+    @TaskIdConverter() TaskId id,
+    @TaskIdConverter() TaskId taskId,
+    @AttachmentFilenameConverter() AttachmentFilename filename,
+    @AttachmentPathConverter() AttachmentPath path,
+    @AttachmentTypeConverter() AttachmentType type,
+    String? mimeType,
+    @AttachmentSizeConverter() AttachmentSize? size,
+    DateTime createdAt,
+  });
 }
 
 /// @nodoc
@@ -147,8 +155,9 @@ class __$$TaskAttachmentImplCopyWithImpl<$Res>
     extends _$TaskAttachmentCopyWithImpl<$Res, _$TaskAttachmentImpl>
     implements _$$TaskAttachmentImplCopyWith<$Res> {
   __$$TaskAttachmentImplCopyWithImpl(
-      _$TaskAttachmentImpl _value, $Res Function(_$TaskAttachmentImpl) _then)
-      : super(_value, _then);
+    _$TaskAttachmentImpl _value,
+    $Res Function(_$TaskAttachmentImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TaskAttachment
   /// with the given fields replaced by the non-null parameter values.
@@ -164,55 +173,58 @@ class __$$TaskAttachmentImplCopyWithImpl<$Res>
     Object? size = freezed,
     Object? createdAt = null,
   }) {
-    return _then(_$TaskAttachmentImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      taskId: null == taskId
-          ? _value.taskId
-          : taskId // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      filename: null == filename
-          ? _value.filename
-          : filename // ignore: cast_nullable_to_non_nullable
-              as AttachmentFilename,
-      path: null == path
-          ? _value.path
-          : path // ignore: cast_nullable_to_non_nullable
-              as AttachmentPath,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as AttachmentType,
-      mimeType: freezed == mimeType
-          ? _value.mimeType
-          : mimeType // ignore: cast_nullable_to_non_nullable
-              as String?,
-      size: freezed == size
-          ? _value.size
-          : size // ignore: cast_nullable_to_non_nullable
-              as AttachmentSize?,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-    ));
+    return _then(
+      _$TaskAttachmentImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as TaskId,
+        taskId: null == taskId
+            ? _value.taskId
+            : taskId // ignore: cast_nullable_to_non_nullable
+                  as TaskId,
+        filename: null == filename
+            ? _value.filename
+            : filename // ignore: cast_nullable_to_non_nullable
+                  as AttachmentFilename,
+        path: null == path
+            ? _value.path
+            : path // ignore: cast_nullable_to_non_nullable
+                  as AttachmentPath,
+        type: null == type
+            ? _value.type
+            : type // ignore: cast_nullable_to_non_nullable
+                  as AttachmentType,
+        mimeType: freezed == mimeType
+            ? _value.mimeType
+            : mimeType // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        size: freezed == size
+            ? _value.size
+            : size // ignore: cast_nullable_to_non_nullable
+                  as AttachmentSize?,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$TaskAttachmentImpl implements _TaskAttachment {
-  const _$TaskAttachmentImpl(
-      {@TaskIdConverter() required this.id,
-      @TaskIdConverter() required this.taskId,
-      @AttachmentFilenameConverter() required this.filename,
-      @AttachmentPathConverter() required this.path,
-      @AttachmentTypeConverter() required this.type,
-      this.mimeType,
-      @AttachmentSizeConverter() this.size,
-      required this.createdAt});
+  const _$TaskAttachmentImpl({
+    @TaskIdConverter() required this.id,
+    @TaskIdConverter() required this.taskId,
+    @AttachmentFilenameConverter() required this.filename,
+    @AttachmentPathConverter() required this.path,
+    @AttachmentTypeConverter() required this.type,
+    this.mimeType,
+    @AttachmentSizeConverter() this.size,
+    required this.createdAt,
+  });
 
   factory _$TaskAttachmentImpl.fromJson(Map<String, dynamic> json) =>
       _$$TaskAttachmentImplFromJson(json);
@@ -266,7 +278,16 @@ class _$TaskAttachmentImpl implements _TaskAttachment {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, taskId, filename, path, type, mimeType, size, createdAt);
+    runtimeType,
+    id,
+    taskId,
+    filename,
+    path,
+    type,
+    mimeType,
+    size,
+    createdAt,
+  );
 
   /// Create a copy of TaskAttachment
   /// with the given fields replaced by the non-null parameter values.
@@ -275,26 +296,27 @@ class _$TaskAttachmentImpl implements _TaskAttachment {
   @pragma('vm:prefer-inline')
   _$$TaskAttachmentImplCopyWith<_$TaskAttachmentImpl> get copyWith =>
       __$$TaskAttachmentImplCopyWithImpl<_$TaskAttachmentImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TaskAttachmentImplToJson(
-      this,
-    );
+    return _$$TaskAttachmentImplToJson(this);
   }
 }
 
 abstract class _TaskAttachment implements TaskAttachment {
-  const factory _TaskAttachment(
-      {@TaskIdConverter() required final TaskId id,
-      @TaskIdConverter() required final TaskId taskId,
-      @AttachmentFilenameConverter() required final AttachmentFilename filename,
-      @AttachmentPathConverter() required final AttachmentPath path,
-      @AttachmentTypeConverter() required final AttachmentType type,
-      final String? mimeType,
-      @AttachmentSizeConverter() final AttachmentSize? size,
-      required final DateTime createdAt}) = _$TaskAttachmentImpl;
+  const factory _TaskAttachment({
+    @TaskIdConverter() required final TaskId id,
+    @TaskIdConverter() required final TaskId taskId,
+    @AttachmentFilenameConverter() required final AttachmentFilename filename,
+    @AttachmentPathConverter() required final AttachmentPath path,
+    @AttachmentTypeConverter() required final AttachmentType type,
+    final String? mimeType,
+    @AttachmentSizeConverter() final AttachmentSize? size,
+    required final DateTime createdAt,
+  }) = _$TaskAttachmentImpl;
 
   factory _TaskAttachment.fromJson(Map<String, dynamic> json) =
       _$TaskAttachmentImpl.fromJson;

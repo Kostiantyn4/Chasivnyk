@@ -12,7 +12,8 @@ part of 'project.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 Project _$ProjectFromJson(Map<String, dynamic> json) {
   return _Project.fromJson(json);
@@ -47,15 +48,16 @@ abstract class $ProjectCopyWith<$Res> {
   factory $ProjectCopyWith(Project value, $Res Function(Project) then) =
       _$ProjectCopyWithImpl<$Res, Project>;
   @useResult
-  $Res call(
-      {@ProjectIdConverter() ProjectId id,
-      @ProjectTitleConverter() ProjectTitle title,
-      @ProjectDescriptionConverter() ProjectDescription? description,
-      ProjectStatus status,
-      @TaskTagConverter() List<TaskTag> tags,
-      DateTime createdAt,
-      DateTime updatedAt,
-      DateTime? completedAt});
+  $Res call({
+    @ProjectIdConverter() ProjectId id,
+    @ProjectTitleConverter() ProjectTitle title,
+    @ProjectDescriptionConverter() ProjectDescription? description,
+    ProjectStatus status,
+    @TaskTagConverter() List<TaskTag> tags,
+    DateTime createdAt,
+    DateTime updatedAt,
+    DateTime? completedAt,
+  });
 }
 
 /// @nodoc
@@ -82,59 +84,64 @@ class _$ProjectCopyWithImpl<$Res, $Val extends Project>
     Object? updatedAt = null,
     Object? completedAt = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as ProjectId,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as ProjectTitle,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as ProjectDescription?,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as ProjectStatus,
-      tags: null == tags
-          ? _value.tags
-          : tags // ignore: cast_nullable_to_non_nullable
-              as List<TaskTag>,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      completedAt: freezed == completedAt
-          ? _value.completedAt
-          : completedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as ProjectId,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as ProjectTitle,
+            description: freezed == description
+                ? _value.description
+                : description // ignore: cast_nullable_to_non_nullable
+                      as ProjectDescription?,
+            status: null == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                      as ProjectStatus,
+            tags: null == tags
+                ? _value.tags
+                : tags // ignore: cast_nullable_to_non_nullable
+                      as List<TaskTag>,
+            createdAt: null == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            updatedAt: null == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            completedAt: freezed == completedAt
+                ? _value.completedAt
+                : completedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$ProjectImplCopyWith<$Res> implements $ProjectCopyWith<$Res> {
   factory _$$ProjectImplCopyWith(
-          _$ProjectImpl value, $Res Function(_$ProjectImpl) then) =
-      __$$ProjectImplCopyWithImpl<$Res>;
+    _$ProjectImpl value,
+    $Res Function(_$ProjectImpl) then,
+  ) = __$$ProjectImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@ProjectIdConverter() ProjectId id,
-      @ProjectTitleConverter() ProjectTitle title,
-      @ProjectDescriptionConverter() ProjectDescription? description,
-      ProjectStatus status,
-      @TaskTagConverter() List<TaskTag> tags,
-      DateTime createdAt,
-      DateTime updatedAt,
-      DateTime? completedAt});
+  $Res call({
+    @ProjectIdConverter() ProjectId id,
+    @ProjectTitleConverter() ProjectTitle title,
+    @ProjectDescriptionConverter() ProjectDescription? description,
+    ProjectStatus status,
+    @TaskTagConverter() List<TaskTag> tags,
+    DateTime createdAt,
+    DateTime updatedAt,
+    DateTime? completedAt,
+  });
 }
 
 /// @nodoc
@@ -142,8 +149,9 @@ class __$$ProjectImplCopyWithImpl<$Res>
     extends _$ProjectCopyWithImpl<$Res, _$ProjectImpl>
     implements _$$ProjectImplCopyWith<$Res> {
   __$$ProjectImplCopyWithImpl(
-      _$ProjectImpl _value, $Res Function(_$ProjectImpl) _then)
-      : super(_value, _then);
+    _$ProjectImpl _value,
+    $Res Function(_$ProjectImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Project
   /// with the given fields replaced by the non-null parameter values.
@@ -159,56 +167,58 @@ class __$$ProjectImplCopyWithImpl<$Res>
     Object? updatedAt = null,
     Object? completedAt = freezed,
   }) {
-    return _then(_$ProjectImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as ProjectId,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as ProjectTitle,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as ProjectDescription?,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as ProjectStatus,
-      tags: null == tags
-          ? _value._tags
-          : tags // ignore: cast_nullable_to_non_nullable
-              as List<TaskTag>,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      completedAt: freezed == completedAt
-          ? _value.completedAt
-          : completedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ));
+    return _then(
+      _$ProjectImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as ProjectId,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as ProjectTitle,
+        description: freezed == description
+            ? _value.description
+            : description // ignore: cast_nullable_to_non_nullable
+                  as ProjectDescription?,
+        status: null == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                  as ProjectStatus,
+        tags: null == tags
+            ? _value._tags
+            : tags // ignore: cast_nullable_to_non_nullable
+                  as List<TaskTag>,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        updatedAt: null == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        completedAt: freezed == completedAt
+            ? _value.completedAt
+            : completedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ProjectImpl implements _Project {
-  const _$ProjectImpl(
-      {@ProjectIdConverter() required this.id,
-      @ProjectTitleConverter() required this.title,
-      @ProjectDescriptionConverter() this.description,
-      this.status = ProjectStatus.active,
-      @TaskTagConverter() final List<TaskTag> tags = const [],
-      required this.createdAt,
-      required this.updatedAt,
-      this.completedAt})
-      : _tags = tags;
+  const _$ProjectImpl({
+    @ProjectIdConverter() required this.id,
+    @ProjectTitleConverter() required this.title,
+    @ProjectDescriptionConverter() this.description,
+    this.status = ProjectStatus.active,
+    @TaskTagConverter() final List<TaskTag> tags = const [],
+    required this.createdAt,
+    required this.updatedAt,
+    this.completedAt,
+  }) : _tags = tags;
 
   factory _$ProjectImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProjectImplFromJson(json);
@@ -269,15 +279,16 @@ class _$ProjectImpl implements _Project {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      title,
-      description,
-      status,
-      const DeepCollectionEquality().hash(_tags),
-      createdAt,
-      updatedAt,
-      completedAt);
+    runtimeType,
+    id,
+    title,
+    description,
+    status,
+    const DeepCollectionEquality().hash(_tags),
+    createdAt,
+    updatedAt,
+    completedAt,
+  );
 
   /// Create a copy of Project
   /// with the given fields replaced by the non-null parameter values.
@@ -289,22 +300,21 @@ class _$ProjectImpl implements _Project {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ProjectImplToJson(
-      this,
-    );
+    return _$$ProjectImplToJson(this);
   }
 }
 
 abstract class _Project implements Project {
-  const factory _Project(
-      {@ProjectIdConverter() required final ProjectId id,
-      @ProjectTitleConverter() required final ProjectTitle title,
-      @ProjectDescriptionConverter() final ProjectDescription? description,
-      final ProjectStatus status,
-      @TaskTagConverter() final List<TaskTag> tags,
-      required final DateTime createdAt,
-      required final DateTime updatedAt,
-      final DateTime? completedAt}) = _$ProjectImpl;
+  const factory _Project({
+    @ProjectIdConverter() required final ProjectId id,
+    @ProjectTitleConverter() required final ProjectTitle title,
+    @ProjectDescriptionConverter() final ProjectDescription? description,
+    final ProjectStatus status,
+    @TaskTagConverter() final List<TaskTag> tags,
+    required final DateTime createdAt,
+    required final DateTime updatedAt,
+    final DateTime? completedAt,
+  }) = _$ProjectImpl;
 
   factory _Project.fromJson(Map<String, dynamic> json) = _$ProjectImpl.fromJson;
 

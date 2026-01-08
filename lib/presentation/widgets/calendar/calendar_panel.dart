@@ -92,15 +92,24 @@ class CalendarPanel extends StatelessWidget {
   }
 
   Widget _buildCalendar() {
+    final now = DateTime.now();
+    final firstDay = DateTime(now.year - 2, 1, 1);
+    final lastDay = DateTime(now.year + 2, 12, 31);
+    final clampedFocusedDay = selectedDate.isBefore(firstDay)
+        ? firstDay
+        : selectedDate.isAfter(lastDay)
+            ? lastDay
+            : selectedDate;
+
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: SizedBox(
           height: 350, // Fixed height to prevent overflow
           child: TableCalendar(
-            firstDay: DateTime.utc(2023, 1, 1),
-            lastDay: DateTime.utc(2025, 12, 31),
-            focusedDay: selectedDate,
+            firstDay: firstDay,
+            lastDay: lastDay,
+            focusedDay: clampedFocusedDay,
             calendarFormat: CalendarFormat.month,
             selectedDayPredicate: (day) => isSameDay(selectedDate, day),
             onDaySelected: (selectedDay, focusedDay) {

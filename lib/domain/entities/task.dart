@@ -17,7 +17,12 @@ class Task with _$Task {
     @TaskTitleConverter() required TaskTitle title,
     @TaskDescriptionConverter() TaskDescription? description,
     DateTime? dueDate,
-    @TaskPeriodConverter() TaskPeriod? period,
+    // Duration - how long the task is active for
+    TaskDuration? duration,
+    CustomDuration? customDuration, // When duration == TaskDuration.custom
+    // Recurrence - when/how the task repeats (RFC 5545 RRULE)
+    String? rrule, // e.g., "FREQ=WEEKLY;BYDAY=MO,WE,FR"
+    DateTime? recurrenceEnd, // When to stop repeating
     @Default([]) List<Reminder> reminders,
     @Default([]) List<Subtask> subtasks,
     @Default([]) @TaskTagConverter() List<TaskTag> tags,
@@ -38,13 +43,16 @@ class Task with _$Task {
     required String title,
     String? description,
     DateTime? dueDate,
-    TaskPeriod? period,
+    TaskDuration? duration,
+    CustomDuration? customDuration,
+    String? rrule,
+    DateTime? recurrenceEnd,
     List<TaskTag>? tags,
     String? projectId,
     TaskPriority? priority,
   }) {
-    if (period != null && dueDate == null) {
-      throw ArgumentError('Custom period requires dueDate');
+    if (duration == TaskDuration.custom && customDuration == null) {
+      throw ArgumentError('Custom duration requires customDuration parameter');
     }
 
     if (dueDate != null && dueDate.isBefore(DateTime.now())) {
@@ -57,7 +65,10 @@ class Task with _$Task {
       title: TaskTitle(title),
       description: description != null ? TaskDescription(description) : null,
       dueDate: dueDate,
-      period: period,
+      duration: duration,
+      customDuration: customDuration,
+      rrule: rrule,
+      recurrenceEnd: recurrenceEnd,
       tags: tags ?? const [],
       projectId: projectId != null ? ProjectId(projectId) : null,
       priority: priority ?? TaskPriority.medium,

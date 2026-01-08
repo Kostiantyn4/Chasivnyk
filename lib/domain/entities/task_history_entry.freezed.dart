@@ -12,7 +12,8 @@ part of 'task_history_entry.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 TaskHistoryEntry _$TaskHistoryEntryFromJson(Map<String, dynamic> json) {
   return _TaskHistoryEntry.fromJson(json);
@@ -44,18 +45,20 @@ mixin _$TaskHistoryEntry {
 /// @nodoc
 abstract class $TaskHistoryEntryCopyWith<$Res> {
   factory $TaskHistoryEntryCopyWith(
-          TaskHistoryEntry value, $Res Function(TaskHistoryEntry) then) =
-      _$TaskHistoryEntryCopyWithImpl<$Res, TaskHistoryEntry>;
+    TaskHistoryEntry value,
+    $Res Function(TaskHistoryEntry) then,
+  ) = _$TaskHistoryEntryCopyWithImpl<$Res, TaskHistoryEntry>;
   @useResult
-  $Res call(
-      {@TaskIdConverter() TaskId id,
-      @TaskIdConverter() TaskId taskId,
-      TaskHistoryAction action,
-      String? oldValue,
-      String? newValue,
-      String? description,
-      DateTime timestamp,
-      String? userId});
+  $Res call({
+    @TaskIdConverter() TaskId id,
+    @TaskIdConverter() TaskId taskId,
+    TaskHistoryAction action,
+    String? oldValue,
+    String? newValue,
+    String? description,
+    DateTime timestamp,
+    String? userId,
+  });
 }
 
 /// @nodoc
@@ -82,69 +85,75 @@ class _$TaskHistoryEntryCopyWithImpl<$Res, $Val extends TaskHistoryEntry>
     Object? timestamp = null,
     Object? userId = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      taskId: null == taskId
-          ? _value.taskId
-          : taskId // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      action: null == action
-          ? _value.action
-          : action // ignore: cast_nullable_to_non_nullable
-              as TaskHistoryAction,
-      oldValue: freezed == oldValue
-          ? _value.oldValue
-          : oldValue // ignore: cast_nullable_to_non_nullable
-              as String?,
-      newValue: freezed == newValue
-          ? _value.newValue
-          : newValue // ignore: cast_nullable_to_non_nullable
-              as String?,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      timestamp: null == timestamp
-          ? _value.timestamp
-          : timestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      userId: freezed == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as TaskId,
+            taskId: null == taskId
+                ? _value.taskId
+                : taskId // ignore: cast_nullable_to_non_nullable
+                      as TaskId,
+            action: null == action
+                ? _value.action
+                : action // ignore: cast_nullable_to_non_nullable
+                      as TaskHistoryAction,
+            oldValue: freezed == oldValue
+                ? _value.oldValue
+                : oldValue // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            newValue: freezed == newValue
+                ? _value.newValue
+                : newValue // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            description: freezed == description
+                ? _value.description
+                : description // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            timestamp: null == timestamp
+                ? _value.timestamp
+                : timestamp // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            userId: freezed == userId
+                ? _value.userId
+                : userId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$TaskHistoryEntryImplCopyWith<$Res>
     implements $TaskHistoryEntryCopyWith<$Res> {
-  factory _$$TaskHistoryEntryImplCopyWith(_$TaskHistoryEntryImpl value,
-          $Res Function(_$TaskHistoryEntryImpl) then) =
-      __$$TaskHistoryEntryImplCopyWithImpl<$Res>;
+  factory _$$TaskHistoryEntryImplCopyWith(
+    _$TaskHistoryEntryImpl value,
+    $Res Function(_$TaskHistoryEntryImpl) then,
+  ) = __$$TaskHistoryEntryImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@TaskIdConverter() TaskId id,
-      @TaskIdConverter() TaskId taskId,
-      TaskHistoryAction action,
-      String? oldValue,
-      String? newValue,
-      String? description,
-      DateTime timestamp,
-      String? userId});
+  $Res call({
+    @TaskIdConverter() TaskId id,
+    @TaskIdConverter() TaskId taskId,
+    TaskHistoryAction action,
+    String? oldValue,
+    String? newValue,
+    String? description,
+    DateTime timestamp,
+    String? userId,
+  });
 }
 
 /// @nodoc
 class __$$TaskHistoryEntryImplCopyWithImpl<$Res>
     extends _$TaskHistoryEntryCopyWithImpl<$Res, _$TaskHistoryEntryImpl>
     implements _$$TaskHistoryEntryImplCopyWith<$Res> {
-  __$$TaskHistoryEntryImplCopyWithImpl(_$TaskHistoryEntryImpl _value,
-      $Res Function(_$TaskHistoryEntryImpl) _then)
-      : super(_value, _then);
+  __$$TaskHistoryEntryImplCopyWithImpl(
+    _$TaskHistoryEntryImpl _value,
+    $Res Function(_$TaskHistoryEntryImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TaskHistoryEntry
   /// with the given fields replaced by the non-null parameter values.
@@ -160,55 +169,58 @@ class __$$TaskHistoryEntryImplCopyWithImpl<$Res>
     Object? timestamp = null,
     Object? userId = freezed,
   }) {
-    return _then(_$TaskHistoryEntryImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      taskId: null == taskId
-          ? _value.taskId
-          : taskId // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      action: null == action
-          ? _value.action
-          : action // ignore: cast_nullable_to_non_nullable
-              as TaskHistoryAction,
-      oldValue: freezed == oldValue
-          ? _value.oldValue
-          : oldValue // ignore: cast_nullable_to_non_nullable
-              as String?,
-      newValue: freezed == newValue
-          ? _value.newValue
-          : newValue // ignore: cast_nullable_to_non_nullable
-              as String?,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      timestamp: null == timestamp
-          ? _value.timestamp
-          : timestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      userId: freezed == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$TaskHistoryEntryImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as TaskId,
+        taskId: null == taskId
+            ? _value.taskId
+            : taskId // ignore: cast_nullable_to_non_nullable
+                  as TaskId,
+        action: null == action
+            ? _value.action
+            : action // ignore: cast_nullable_to_non_nullable
+                  as TaskHistoryAction,
+        oldValue: freezed == oldValue
+            ? _value.oldValue
+            : oldValue // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        newValue: freezed == newValue
+            ? _value.newValue
+            : newValue // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        description: freezed == description
+            ? _value.description
+            : description // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        timestamp: null == timestamp
+            ? _value.timestamp
+            : timestamp // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        userId: freezed == userId
+            ? _value.userId
+            : userId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$TaskHistoryEntryImpl implements _TaskHistoryEntry {
-  const _$TaskHistoryEntryImpl(
-      {@TaskIdConverter() required this.id,
-      @TaskIdConverter() required this.taskId,
-      required this.action,
-      this.oldValue,
-      this.newValue,
-      this.description,
-      required this.timestamp,
-      this.userId});
+  const _$TaskHistoryEntryImpl({
+    @TaskIdConverter() required this.id,
+    @TaskIdConverter() required this.taskId,
+    required this.action,
+    this.oldValue,
+    this.newValue,
+    this.description,
+    required this.timestamp,
+    this.userId,
+  });
 
   factory _$TaskHistoryEntryImpl.fromJson(Map<String, dynamic> json) =>
       _$$TaskHistoryEntryImplFromJson(json);
@@ -258,8 +270,17 @@ class _$TaskHistoryEntryImpl implements _TaskHistoryEntry {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, taskId, action, oldValue,
-      newValue, description, timestamp, userId);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    taskId,
+    action,
+    oldValue,
+    newValue,
+    description,
+    timestamp,
+    userId,
+  );
 
   /// Create a copy of TaskHistoryEntry
   /// with the given fields replaced by the non-null parameter values.
@@ -268,26 +289,27 @@ class _$TaskHistoryEntryImpl implements _TaskHistoryEntry {
   @pragma('vm:prefer-inline')
   _$$TaskHistoryEntryImplCopyWith<_$TaskHistoryEntryImpl> get copyWith =>
       __$$TaskHistoryEntryImplCopyWithImpl<_$TaskHistoryEntryImpl>(
-          this, _$identity);
+        this,
+        _$identity,
+      );
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TaskHistoryEntryImplToJson(
-      this,
-    );
+    return _$$TaskHistoryEntryImplToJson(this);
   }
 }
 
 abstract class _TaskHistoryEntry implements TaskHistoryEntry {
-  const factory _TaskHistoryEntry(
-      {@TaskIdConverter() required final TaskId id,
-      @TaskIdConverter() required final TaskId taskId,
-      required final TaskHistoryAction action,
-      final String? oldValue,
-      final String? newValue,
-      final String? description,
-      required final DateTime timestamp,
-      final String? userId}) = _$TaskHistoryEntryImpl;
+  const factory _TaskHistoryEntry({
+    @TaskIdConverter() required final TaskId id,
+    @TaskIdConverter() required final TaskId taskId,
+    required final TaskHistoryAction action,
+    final String? oldValue,
+    final String? newValue,
+    final String? description,
+    required final DateTime timestamp,
+    final String? userId,
+  }) = _$TaskHistoryEntryImpl;
 
   factory _TaskHistoryEntry.fromJson(Map<String, dynamic> json) =
       _$TaskHistoryEntryImpl.fromJson;

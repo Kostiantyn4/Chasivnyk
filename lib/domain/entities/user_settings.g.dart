@@ -10,18 +10,20 @@ _$UserSettingsImpl _$$UserSettingsImplFromJson(Map<String, dynamic> json) =>
     _$UserSettingsImpl(
       userId: json['user_id'] as String,
       language: json['language'] as String? ?? 'uk',
-      themeMode: $enumDecodeNullable(_$ThemeModeEnumMap, json['theme_mode']) ??
+      themeMode:
+          $enumDecodeNullable(_$ThemeModeEnumMap, json['theme_mode']) ??
           ThemeMode.dark,
       defaultTaskPriority: json['default_task_priority'] == null
           ? TaskPriority.medium
-          : const TaskPriorityConverter()
-              .fromJson(json['default_task_priority'] as String),
+          : const TaskPriorityConverter().fromJson(
+              json['default_task_priority'] as String,
+            ),
       dateFormat:
           $enumDecodeNullable(_$DateFormatEnumMap, json['date_format']) ??
-              DateFormat.ddMMyyyy,
+          DateFormat.ddMMyyyy,
       timeFormat:
           $enumDecodeNullable(_$TimeFormatEnumMap, json['time_format']) ??
-              TimeFormat.h24,
+          TimeFormat.h24,
       showCompletedTasks: json['show_completed_tasks'] as bool? ?? true,
       enableNotifications: json['enable_notifications'] as bool? ?? true,
       defaultReminderMinutes:
@@ -32,7 +34,8 @@ _$UserSettingsImpl _$$UserSettingsImplFromJson(Map<String, dynamic> json) =>
       showWeekNumbers: json['show_week_numbers'] as bool? ?? true,
       weekStartDay: (json['week_start_day'] as num?)?.toInt() ?? 1,
       defaultProjectId: json['default_project_id'] as String? ?? '',
-      pinnedProjectIds: (json['pinned_project_ids'] as List<dynamic>?)
+      pinnedProjectIds:
+          (json['pinned_project_ids'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const [],
@@ -45,8 +48,9 @@ Map<String, dynamic> _$$UserSettingsImplToJson(_$UserSettingsImpl instance) =>
       'user_id': instance.userId,
       'language': instance.language,
       'theme_mode': _$ThemeModeEnumMap[instance.themeMode]!,
-      'default_task_priority':
-          const TaskPriorityConverter().toJson(instance.defaultTaskPriority),
+      'default_task_priority': const TaskPriorityConverter().toJson(
+        instance.defaultTaskPriority,
+      ),
       'date_format': _$DateFormatEnumMap[instance.dateFormat]!,
       'time_format': _$TimeFormatEnumMap[instance.timeFormat]!,
       'show_completed_tasks': instance.showCompletedTasks,
@@ -74,7 +78,4 @@ const _$DateFormatEnumMap = {
   DateFormat.yyyyMMdd: 'yyyyMMdd',
 };
 
-const _$TimeFormatEnumMap = {
-  TimeFormat.h12: 'h12',
-  TimeFormat.h24: 'h24',
-};
+const _$TimeFormatEnumMap = {TimeFormat.h12: 'h12', TimeFormat.h24: 'h24'};

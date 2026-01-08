@@ -197,11 +197,70 @@ class ProjectDescription {
   String toString() => value;
 }
 
-enum TaskPeriod {
-  daily,
-  weekly,
-  monthly,
-  yearly,
+/// Task duration - how long the task is active for
+enum TaskDuration {
+  day,      // Задача на день
+  week,     // Задача на тиждень (плани на тиждень)
+  month,    // Задача на місяць
+  quarter,  // Задача на квартал (3 місяці)
+  year,     // Задача на рік (плани на рік)
+  custom,   // Кастомна тривалість
+}
+
+/// Custom duration configuration for flexible task duration
+@immutable
+class CustomDuration {
+  final int value;
+  final DurationUnit unit;
+  
+  const CustomDuration({
+    required this.value,
+    required this.unit,
+  }) : assert(value > 0, 'Duration value must be positive');
+
+  /// Duration in days (approximate for months/years)
+  int get inDays {
+    switch (unit) {
+      case DurationUnit.days:
+        return value;
+      case DurationUnit.weeks:
+        return value * 7;
+      case DurationUnit.months:
+        return value * 30; // Approximate
+      case DurationUnit.years:
+        return value * 365; // Approximate
+    }
+  }
+
+  factory CustomDuration.fromJson(Map<String, dynamic> json) => CustomDuration(
+    value: json['value'] as int,
+    unit: DurationUnit.values[json['unit'] as int],
+  );
+
+  Map<String, dynamic> toJson() => {
+    'value': value,
+    'unit': unit.index,
+  };
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CustomDuration &&
+          value == other.value &&
+          unit == other.unit;
+
+  @override
+  int get hashCode => Object.hash(value, unit);
+
+  @override
+  String toString() => '$value ${unit.name}';
+}
+
+enum DurationUnit {
+  days,    // днів
+  weeks,   // тижнів
+  months,  // місяців
+  years,   // років
 }
 
 enum ReminderRepeat {

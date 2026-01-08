@@ -332,6 +332,30 @@ abstract class AppLocalizations {
   /// **'Task created'**
   String get taskCreated;
 
+  /// No description provided for @taskUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Task updated'**
+  String get taskUpdated;
+
+  /// No description provided for @deleteButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteButton;
+
+  /// No description provided for @deleteTaskConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'This task has subtasks. Delete anyway?'**
+  String get deleteTaskConfirmation;
+
+  /// No description provided for @taskDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Task deleted'**
+  String get taskDeleted;
+
   /// No description provided for @draftSaved.
   ///
   /// In en, this message translates to:
@@ -355,6 +379,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error'**
   String get errorPrefix;
+
+  /// No description provided for @completedTasksTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get completedTasksTitle;
 }
 
 class _AppLocalizationsDelegate

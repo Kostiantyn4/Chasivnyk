@@ -8,10 +8,12 @@ part of 'task_recurrence.dart';
 
 _$TaskRecurrenceImpl _$$TaskRecurrenceImplFromJson(Map<String, dynamic> json) =>
     _$TaskRecurrenceImpl(
-      type: $enumDecodeNullable(_$RecurrenceTypeEnumMap, json['type']) ??
+      type:
+          $enumDecodeNullable(_$RecurrenceTypeEnumMap, json['type']) ??
           RecurrenceType.none,
       interval: (json['interval'] as num?)?.toInt() ?? 1,
-      weekDays: (json['week_days'] as List<dynamic>?)
+      weekDays:
+          (json['week_days'] as List<dynamic>?)
               ?.map((e) => $enumDecode(_$WeekDayEnumMap, e))
               .toList() ??
           const [],
@@ -26,17 +28,17 @@ _$TaskRecurrenceImpl _$$TaskRecurrenceImplFromJson(Map<String, dynamic> json) =>
     );
 
 Map<String, dynamic> _$$TaskRecurrenceImplToJson(
-        _$TaskRecurrenceImpl instance) =>
-    <String, dynamic>{
-      'type': _$RecurrenceTypeEnumMap[instance.type]!,
-      'interval': instance.interval,
-      'week_days': instance.weekDays.map((e) => _$WeekDayEnumMap[e]!).toList(),
-      'day_of_month': instance.dayOfMonth,
-      'month_of_year': instance.monthOfYear,
-      'end_date': instance.endDate?.toIso8601String(),
-      'max_occurrences': instance.maxOccurrences,
-      'completed_occurrences': instance.completedOccurrences,
-    };
+  _$TaskRecurrenceImpl instance,
+) => <String, dynamic>{
+  'type': _$RecurrenceTypeEnumMap[instance.type]!,
+  'interval': instance.interval,
+  'week_days': instance.weekDays.map((e) => _$WeekDayEnumMap[e]!).toList(),
+  'day_of_month': instance.dayOfMonth,
+  'month_of_year': instance.monthOfYear,
+  'end_date': instance.endDate?.toIso8601String(),
+  'max_occurrences': instance.maxOccurrences,
+  'completed_occurrences': instance.completedOccurrences,
+};
 
 const _$RecurrenceTypeEnumMap = {
   RecurrenceType.none: 'none',

@@ -129,6 +129,18 @@ class AppLocalizationsUk extends AppLocalizations {
   String get taskCreated => 'Завдання створено';
 
   @override
+  String get taskUpdated => 'Task updated';
+
+  @override
+  String get deleteButton => 'Delete';
+
+  @override
+  String get deleteTaskConfirmation => 'This task has subtasks. Delete anyway?';
+
+  @override
+  String get taskDeleted => 'Task deleted';
+
+  @override
   String get draftSaved => 'Чернетка збережена';
 
   @override
@@ -139,4 +151,7 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get errorPrefix => 'Помилка';
+
+  @override
+  String get completedTasksTitle => 'Completed';
 }

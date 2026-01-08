@@ -1,5 +1,5 @@
 import 'package:uuid/uuid.dart';
-import '../entities/task.dart' hide TaskPeriod;
+import '../entities/task.dart';
 import '../entities/task_extension.dart';
 import '../entities/value_objects/task_value_objects.dart';
 import '../repositories/task_repository.dart';
@@ -10,7 +10,21 @@ abstract class ITaskService {
   Future<Task> createTask(String title, {
     String? description,
     DateTime? dueDate,
-    TaskPeriod? period,
+    TaskDuration? duration,
+    CustomDuration? customDuration,
+    String? rrule,
+    DateTime? recurrenceEnd,
+    TaskPriority? priority,
+  });
+  Future<Task> updateTask(
+    Task task, {
+    String? title,
+    String? description,
+    DateTime? dueDate,
+    TaskDuration? duration,
+    CustomDuration? customDuration,
+    String? rrule,
+    DateTime? recurrenceEnd,
     TaskPriority? priority,
   });
   
@@ -23,6 +37,7 @@ abstract class ITaskService {
   Future<Task> addFileAttachment(Task task, String name, String url, String mimeType, int size);
   Future<Task> addLinkAttachment(Task task, String name, String url);
   Future<Task> updatePriority(Task task, TaskPriority priority);
+  Future<void> deleteTask(Task task);
 }
 
 class TaskService implements ITaskService {
@@ -34,17 +49,58 @@ class TaskService implements ITaskService {
   Future<Task> createTask(String title, {
     String? description,
     DateTime? dueDate,
-    TaskPeriod? period,
+    TaskDuration? duration,
+    CustomDuration? customDuration,
+    String? rrule,
+    DateTime? recurrenceEnd,
     TaskPriority? priority,
   }) async {
     final task = Task.create(
       title: title,
       description: description,
       dueDate: dueDate,
-      period: period,
+      duration: duration,
+      customDuration: customDuration,
+      rrule: rrule,
+      recurrenceEnd: recurrenceEnd,
+      priority: priority,
     ).copyWith(status: TaskStatus.active);
     await _repository.save(task);
     return task;
+  }
+
+  @override
+  Future<void> deleteTask(Task task) async {
+    await _repository.delete(task.id);
+  }
+
+  @override
+  Future<Task> updateTask(
+    Task task, {
+    String? title,
+    String? description,
+    DateTime? dueDate,
+    TaskDuration? duration,
+    CustomDuration? customDuration,
+    String? rrule,
+    DateTime? recurrenceEnd,
+    TaskPriority? priority,
+  }) async {
+    final updatedTask = task.copyWith(
+      title: title != null ? TaskTitle(title) : task.title,
+      description: description != null
+          ? (description.isEmpty ? null : TaskDescription(description))
+          : task.description,
+      dueDate: dueDate ?? task.dueDate,
+      duration: duration ?? task.duration,
+      customDuration: customDuration ?? task.customDuration,
+      rrule: rrule ?? task.rrule,
+      recurrenceEnd: recurrenceEnd ?? task.recurrenceEnd,
+      priority: priority ?? task.priority,
+      updatedAt: DateTime.now(),
+    );
+    await _repository.save(updatedTask);
+    return updatedTask;
   }
 
   @override

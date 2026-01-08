@@ -1,18 +1,22 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../data/repositories/task_draft_repository.dart';
+import '../../../core/di/providers.dart';
 import '../../../domain/entities/task.dart';
 
-class CreateTaskScreen extends StatefulWidget {
-  const CreateTaskScreen({super.key});
+class CreateTaskScreen extends ConsumerStatefulWidget {
+  final Task? initialTask;
+
+  const CreateTaskScreen({super.key, this.initialTask});
 
   @override
-  State<CreateTaskScreen> createState() => _CreateTaskScreenState();
+  ConsumerState<CreateTaskScreen> createState() => _CreateTaskScreenState();
 }
 
-class _CreateTaskScreenState extends State<CreateTaskScreen> {
+class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
   // Draft keys constants
   static const String _draftKeyTitle = 'title';
   static const String _draftKeyDescription = 'description';
@@ -24,16 +28,93 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
   
   Timer? _autoSaveTimer;
   bool _isSaving = false;
+  late final bool _isEditing;
 
   @override
   void initState() {
     super.initState();
-    _loadDraft();
-    _startAutoSave();
+    _isEditing = widget.initialTask != null;
+    if (_isEditing) {
+      final task = widget.initialTask!;
+      _titleController.text = task.title.value;
+      _descriptionController.text = task.description?.value ?? '';
+    } else {
+      _loadDraft();
+      _startAutoSave();
+    }
     
     // Listen to changes
     _titleController.addListener(_onFieldChanged);
     _descriptionController.addListener(_onFieldChanged);
+  }
+
+  Future<void> _handleDelete() async {
+    if (!_isEditing) return;
+    final localization = AppLocalizations.of(context)!;
+
+    bool proceed = true;
+    if (widget.initialTask!.subtasks.isNotEmpty) {
+      proceed = await showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+              backgroundColor: AppColors.accentColor,
+              title: Text(
+                localization.deleteButton,
+                style: TextStyle(color: AppColors.textPrimary),
+              ),
+              content: Text(
+                localization.deleteTaskConfirmation,
+                style: TextStyle(color: AppColors.textSecondary),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: Text(localization.discard),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(context, true),
+                  child: Text(
+                    localization.deleteButton,
+                    style: TextStyle(color: Colors.red.shade300),
+                  ),
+                ),
+              ],
+            ),
+          ) ??
+          false;
+    }
+
+    if (!proceed) return;
+
+    setState(() => _isSaving = true);
+
+    try {
+      final taskService = await ref.read(taskServiceProvider.future);
+      await taskService.deleteTask(widget.initialTask!);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(localization.taskDeleted),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.of(context).pop(widget.initialTask!);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${localization.errorPrefix}: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
+    }
   }
 
   @override
@@ -58,6 +139,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
   }
 
   Future<void> _loadDraft() async {
+    if (_isEditing) return;
     final draft = await _draftRepository.loadDraft();
     if (draft != null && mounted) {
       setState(() {
@@ -83,6 +165,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
   }
 
   Future<void> _saveDraft() async {
+    if (_isEditing) return;
     if (!_hasContent) return;
     
     final draft = {
@@ -95,6 +178,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
   }
 
   Future<void> _clearDraft() async {
+    if (_isEditing) return;
     await _draftRepository.clearDraft();
   }
 
@@ -109,31 +193,31 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
       return true;
     }
     
-    final l10n = AppLocalizations.of(context)!;
+    final localization = AppLocalizations.of(context)!;
     final shouldClose = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: AppColors.accentColor,
         title: Text(
-          l10n.discardChangesTitle,
+          localization.discardChangesTitle,
           style: TextStyle(color: AppColors.textPrimary),
         ),
         content: Text(
-          l10n.discardChangesMessage,
+          localization.discardChangesMessage,
           style: TextStyle(color: AppColors.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
             child: Text(
-              l10n.continueEditing,
+              localization.continueEditing,
               style: TextStyle(color: AppColors.primaryColor),
             ),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             child: Text(
-              l10n.discard,
+              localization.discard,
               style: TextStyle(color: AppColors.textSecondary),
             ),
           ),
@@ -145,13 +229,13 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
   }
 
   Future<void> _handleSave() async {
-    final l10n = AppLocalizations.of(context)!;
+    final localization = AppLocalizations.of(context)!;
     
     // Validate
     if (_titleController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(l10n.taskNameRequired),
+          content: Text(localization.taskNameRequired),
           backgroundColor: Colors.red,
         ),
       );
@@ -161,13 +245,23 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
     setState(() => _isSaving = true);
     
     try {
-      // Create task
-      final task = Task.create(
-        title: _titleController.text.trim(),
-        description: _descriptionController.text.trim().isEmpty
-            ? null
-            : _descriptionController.text.trim(),
-      );
+      final taskService = await ref.read(taskServiceProvider.future);
+
+      final title = _titleController.text.trim();
+      final description = _descriptionController.text.trim().isEmpty
+          ? null
+          : _descriptionController.text.trim();
+
+      final task = _isEditing
+          ? await taskService.updateTask(
+              widget.initialTask!,
+              title: title,
+              description: description,
+            )
+          : await taskService.createTask(
+              title,
+              description: description,
+            );
       
       // Clear draft
       await _clearDraft();
@@ -176,7 +270,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.taskCreated),
+            content: Text(_isEditing ? localization.taskUpdated : localization.taskCreated),
             backgroundColor: Colors.green,
             duration: const Duration(seconds: 2),
           ),
@@ -189,7 +283,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${l10n.errorPrefix}: $e'),
+            content: Text('${localization.errorPrefix}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -203,7 +297,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
+    final localization = AppLocalizations.of(context)!;
     
     return PopScope(
       canPop: false,
@@ -233,7 +327,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
           },
         ),
         title: Text(
-          l10n.newTask,
+          localization.newTask,
           style: TextStyle(
             color: AppColors.textPrimary,
             fontSize: 18,
@@ -251,20 +345,20 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Title field
-                  _buildLabel(l10n.taskNameLabel),
+                  _buildLabel(localization.taskNameLabel),
                   const SizedBox(height: 8),
                   _buildTextField(
                     controller: _titleController,
-                    hint: l10n.taskNameHint,
+                    hint: localization.taskNameHint,
                   ),
                   const SizedBox(height: 24),
 
                   // Description field
-                  _buildLabel(l10n.taskDetailsLabel),
+                  _buildLabel(localization.taskDetailsLabel),
                   const SizedBox(height: 8),
                   _buildTextField(
                     controller: _descriptionController,
-                    hint: l10n.taskDetailsHint,
+                    hint: localization.taskDetailsHint,
                     maxLines: 4,
                   ),
                   const SizedBox(height: 24),
@@ -272,8 +366,8 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   // Options section
                   _buildOptionCard(
                     icon: Icons.calendar_today,
-                    title: l10n.dueTimeOption,
-                    value: l10n.dueTimeNotSet,
+                    title: localization.dueTimeOption,
+                    value: localization.dueTimeNotSet,
                     onTap: () {
                       // TODO: Navigate to date picker
                     },
@@ -281,8 +375,8 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   const SizedBox(height: 8),
                   _buildOptionCard(
                     icon: Icons.notifications,
-                    title: l10n.remindersOption,
-                    value: l10n.remindersNone,
+                    title: localization.remindersOption,
+                    value: localization.remindersNone,
                     onTap: () {
                       // TODO: Navigate to reminders
                     },
@@ -290,8 +384,8 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   const SizedBox(height: 8),
                   _buildOptionCard(
                     icon: Icons.playlist_add_check,
-                    title: l10n.subtasksOption,
-                    value: l10n.subtasksNone,
+                    title: localization.subtasksOption,
+                    value: localization.subtasksNone,
                     onTap: () {
                       // TODO: Navigate to subtasks
                     },
@@ -299,8 +393,8 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   const SizedBox(height: 8),
                   _buildOptionCard(
                     icon: Icons.label,
-                    title: l10n.tagsOption,
-                    value: l10n.tagsNone,
+                    title: localization.tagsOption,
+                    value: localization.tagsNone,
                     onTap: () {
                       // TODO: Navigate to tags
                     },
@@ -308,8 +402,8 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   const SizedBox(height: 8),
                   _buildOptionCard(
                     icon: Icons.topic,
-                    title: l10n.projectOption,
-                    value: l10n.projectNotSelected,
+                    title: localization.projectOption,
+                    value: localization.projectNotSelected,
                     onTap: () {
                       // TODO: Navigate to project picker
                     },
@@ -332,37 +426,80 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
               ),
             ),
             child: SafeArea(
-              child: SizedBox(
-                width: double.infinity,
-                height: 48,
-                child: ElevatedButton(
-                  onPressed: _isSaving ? null : _handleSave,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primaryColor,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    elevation: 0,
-                    disabledBackgroundColor: AppColors.primaryColor.withValues(alpha: 0.5),
-                  ),
-                  child: _isSaving
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                          ),
-                        )
-                      : Text(
-                          l10n.saveButton,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+              child: Row(
+                children: [
+                  if (_isEditing) ...[
+                    Expanded(
+                      child: SizedBox(
+                        height: 48,
+                        child: ElevatedButton(
+                        onPressed: _isSaving ? null : _handleDelete,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red.shade600,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            elevation: 0,
+                            disabledBackgroundColor: Colors.red.shade200,
                         ),
-                ),
+                        child: _isSaving
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                ),
+                              )
+                            : Text(
+                                localization.deleteButton,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                      ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                  ],
+                  Expanded(
+                    flex: 2,
+                    child: SizedBox(
+                      height: 48,
+                      child: ElevatedButton(
+                        onPressed: _isSaving ? null : _handleSave,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.primaryColor,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          elevation: 0,
+                          disabledBackgroundColor:
+                              AppColors.primaryColor.withValues(alpha: 0.5),
+                        ),
+                        child: _isSaving
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                ),
+                              )
+                            : Text(
+                                localization.saveButton,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

@@ -12,7 +12,8 @@ part of 'task.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 Task _$TaskFromJson(Map<String, dynamic> json) {
   return _Task.fromJson(json);
@@ -26,9 +27,16 @@ mixin _$Task {
   TaskTitle get title => throw _privateConstructorUsedError;
   @TaskDescriptionConverter()
   TaskDescription? get description => throw _privateConstructorUsedError;
-  DateTime? get dueDate => throw _privateConstructorUsedError;
-  @TaskPeriodConverter()
-  TaskPeriod? get period => throw _privateConstructorUsedError;
+  DateTime? get dueDate =>
+      throw _privateConstructorUsedError; // Duration - how long the task is active for
+  TaskDuration? get duration => throw _privateConstructorUsedError;
+  CustomDuration? get customDuration =>
+      throw _privateConstructorUsedError; // When duration == TaskDuration.custom
+  // Recurrence - when/how the task repeats (RFC 5545 RRULE)
+  String? get rrule =>
+      throw _privateConstructorUsedError; // e.g., "FREQ=WEEKLY;BYDAY=MO,WE,FR"
+  DateTime? get recurrenceEnd =>
+      throw _privateConstructorUsedError; // When to stop repeating
   List<Reminder> get reminders => throw _privateConstructorUsedError;
   List<Subtask> get subtasks => throw _privateConstructorUsedError;
   @TaskTagConverter()
@@ -58,23 +66,27 @@ abstract class $TaskCopyWith<$Res> {
   factory $TaskCopyWith(Task value, $Res Function(Task) then) =
       _$TaskCopyWithImpl<$Res, Task>;
   @useResult
-  $Res call(
-      {@TaskIdConverter() TaskId id,
-      @TaskTitleConverter() TaskTitle title,
-      @TaskDescriptionConverter() TaskDescription? description,
-      DateTime? dueDate,
-      @TaskPeriodConverter() TaskPeriod? period,
-      List<Reminder> reminders,
-      List<Subtask> subtasks,
-      @TaskTagConverter() List<TaskTag> tags,
-      @ProjectIdConverter() ProjectId? projectId,
-      TaskStatus status,
-      @TaskPriorityConverter() TaskPriority priority,
-      List<TaskComment> comments,
-      List<TaskAttachment> attachments,
-      DateTime createdAt,
-      DateTime updatedAt,
-      DateTime? completedAt});
+  $Res call({
+    @TaskIdConverter() TaskId id,
+    @TaskTitleConverter() TaskTitle title,
+    @TaskDescriptionConverter() TaskDescription? description,
+    DateTime? dueDate,
+    TaskDuration? duration,
+    CustomDuration? customDuration,
+    String? rrule,
+    DateTime? recurrenceEnd,
+    List<Reminder> reminders,
+    List<Subtask> subtasks,
+    @TaskTagConverter() List<TaskTag> tags,
+    @ProjectIdConverter() ProjectId? projectId,
+    TaskStatus status,
+    @TaskPriorityConverter() TaskPriority priority,
+    List<TaskComment> comments,
+    List<TaskAttachment> attachments,
+    DateTime createdAt,
+    DateTime updatedAt,
+    DateTime? completedAt,
+  });
 }
 
 /// @nodoc
@@ -96,7 +108,10 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
     Object? title = null,
     Object? description = freezed,
     Object? dueDate = freezed,
-    Object? period = freezed,
+    Object? duration = freezed,
+    Object? customDuration = freezed,
+    Object? rrule = freezed,
+    Object? recurrenceEnd = freezed,
     Object? reminders = null,
     Object? subtasks = null,
     Object? tags = null,
@@ -109,99 +124,119 @@ class _$TaskCopyWithImpl<$Res, $Val extends Task>
     Object? updatedAt = null,
     Object? completedAt = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as TaskTitle,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as TaskDescription?,
-      dueDate: freezed == dueDate
-          ? _value.dueDate
-          : dueDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      period: freezed == period
-          ? _value.period
-          : period // ignore: cast_nullable_to_non_nullable
-              as TaskPeriod?,
-      reminders: null == reminders
-          ? _value.reminders
-          : reminders // ignore: cast_nullable_to_non_nullable
-              as List<Reminder>,
-      subtasks: null == subtasks
-          ? _value.subtasks
-          : subtasks // ignore: cast_nullable_to_non_nullable
-              as List<Subtask>,
-      tags: null == tags
-          ? _value.tags
-          : tags // ignore: cast_nullable_to_non_nullable
-              as List<TaskTag>,
-      projectId: freezed == projectId
-          ? _value.projectId
-          : projectId // ignore: cast_nullable_to_non_nullable
-              as ProjectId?,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as TaskStatus,
-      priority: null == priority
-          ? _value.priority
-          : priority // ignore: cast_nullable_to_non_nullable
-              as TaskPriority,
-      comments: null == comments
-          ? _value.comments
-          : comments // ignore: cast_nullable_to_non_nullable
-              as List<TaskComment>,
-      attachments: null == attachments
-          ? _value.attachments
-          : attachments // ignore: cast_nullable_to_non_nullable
-              as List<TaskAttachment>,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      completedAt: freezed == completedAt
-          ? _value.completedAt
-          : completedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as TaskId,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as TaskTitle,
+            description: freezed == description
+                ? _value.description
+                : description // ignore: cast_nullable_to_non_nullable
+                      as TaskDescription?,
+            dueDate: freezed == dueDate
+                ? _value.dueDate
+                : dueDate // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            duration: freezed == duration
+                ? _value.duration
+                : duration // ignore: cast_nullable_to_non_nullable
+                      as TaskDuration?,
+            customDuration: freezed == customDuration
+                ? _value.customDuration
+                : customDuration // ignore: cast_nullable_to_non_nullable
+                      as CustomDuration?,
+            rrule: freezed == rrule
+                ? _value.rrule
+                : rrule // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            recurrenceEnd: freezed == recurrenceEnd
+                ? _value.recurrenceEnd
+                : recurrenceEnd // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            reminders: null == reminders
+                ? _value.reminders
+                : reminders // ignore: cast_nullable_to_non_nullable
+                      as List<Reminder>,
+            subtasks: null == subtasks
+                ? _value.subtasks
+                : subtasks // ignore: cast_nullable_to_non_nullable
+                      as List<Subtask>,
+            tags: null == tags
+                ? _value.tags
+                : tags // ignore: cast_nullable_to_non_nullable
+                      as List<TaskTag>,
+            projectId: freezed == projectId
+                ? _value.projectId
+                : projectId // ignore: cast_nullable_to_non_nullable
+                      as ProjectId?,
+            status: null == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                      as TaskStatus,
+            priority: null == priority
+                ? _value.priority
+                : priority // ignore: cast_nullable_to_non_nullable
+                      as TaskPriority,
+            comments: null == comments
+                ? _value.comments
+                : comments // ignore: cast_nullable_to_non_nullable
+                      as List<TaskComment>,
+            attachments: null == attachments
+                ? _value.attachments
+                : attachments // ignore: cast_nullable_to_non_nullable
+                      as List<TaskAttachment>,
+            createdAt: null == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            updatedAt: null == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            completedAt: freezed == completedAt
+                ? _value.completedAt
+                : completedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$TaskImplCopyWith<$Res> implements $TaskCopyWith<$Res> {
   factory _$$TaskImplCopyWith(
-          _$TaskImpl value, $Res Function(_$TaskImpl) then) =
-      __$$TaskImplCopyWithImpl<$Res>;
+    _$TaskImpl value,
+    $Res Function(_$TaskImpl) then,
+  ) = __$$TaskImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@TaskIdConverter() TaskId id,
-      @TaskTitleConverter() TaskTitle title,
-      @TaskDescriptionConverter() TaskDescription? description,
-      DateTime? dueDate,
-      @TaskPeriodConverter() TaskPeriod? period,
-      List<Reminder> reminders,
-      List<Subtask> subtasks,
-      @TaskTagConverter() List<TaskTag> tags,
-      @ProjectIdConverter() ProjectId? projectId,
-      TaskStatus status,
-      @TaskPriorityConverter() TaskPriority priority,
-      List<TaskComment> comments,
-      List<TaskAttachment> attachments,
-      DateTime createdAt,
-      DateTime updatedAt,
-      DateTime? completedAt});
+  $Res call({
+    @TaskIdConverter() TaskId id,
+    @TaskTitleConverter() TaskTitle title,
+    @TaskDescriptionConverter() TaskDescription? description,
+    DateTime? dueDate,
+    TaskDuration? duration,
+    CustomDuration? customDuration,
+    String? rrule,
+    DateTime? recurrenceEnd,
+    List<Reminder> reminders,
+    List<Subtask> subtasks,
+    @TaskTagConverter() List<TaskTag> tags,
+    @ProjectIdConverter() ProjectId? projectId,
+    TaskStatus status,
+    @TaskPriorityConverter() TaskPriority priority,
+    List<TaskComment> comments,
+    List<TaskAttachment> attachments,
+    DateTime createdAt,
+    DateTime updatedAt,
+    DateTime? completedAt,
+  });
 }
 
 /// @nodoc
@@ -209,7 +244,7 @@ class __$$TaskImplCopyWithImpl<$Res>
     extends _$TaskCopyWithImpl<$Res, _$TaskImpl>
     implements _$$TaskImplCopyWith<$Res> {
   __$$TaskImplCopyWithImpl(_$TaskImpl _value, $Res Function(_$TaskImpl) _then)
-      : super(_value, _then);
+    : super(_value, _then);
 
   /// Create a copy of Task
   /// with the given fields replaced by the non-null parameter values.
@@ -220,7 +255,10 @@ class __$$TaskImplCopyWithImpl<$Res>
     Object? title = null,
     Object? description = freezed,
     Object? dueDate = freezed,
-    Object? period = freezed,
+    Object? duration = freezed,
+    Object? customDuration = freezed,
+    Object? rrule = freezed,
+    Object? recurrenceEnd = freezed,
     Object? reminders = null,
     Object? subtasks = null,
     Object? tags = null,
@@ -233,100 +271,117 @@ class __$$TaskImplCopyWithImpl<$Res>
     Object? updatedAt = null,
     Object? completedAt = freezed,
   }) {
-    return _then(_$TaskImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as TaskTitle,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as TaskDescription?,
-      dueDate: freezed == dueDate
-          ? _value.dueDate
-          : dueDate // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      period: freezed == period
-          ? _value.period
-          : period // ignore: cast_nullable_to_non_nullable
-              as TaskPeriod?,
-      reminders: null == reminders
-          ? _value._reminders
-          : reminders // ignore: cast_nullable_to_non_nullable
-              as List<Reminder>,
-      subtasks: null == subtasks
-          ? _value._subtasks
-          : subtasks // ignore: cast_nullable_to_non_nullable
-              as List<Subtask>,
-      tags: null == tags
-          ? _value._tags
-          : tags // ignore: cast_nullable_to_non_nullable
-              as List<TaskTag>,
-      projectId: freezed == projectId
-          ? _value.projectId
-          : projectId // ignore: cast_nullable_to_non_nullable
-              as ProjectId?,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as TaskStatus,
-      priority: null == priority
-          ? _value.priority
-          : priority // ignore: cast_nullable_to_non_nullable
-              as TaskPriority,
-      comments: null == comments
-          ? _value._comments
-          : comments // ignore: cast_nullable_to_non_nullable
-              as List<TaskComment>,
-      attachments: null == attachments
-          ? _value._attachments
-          : attachments // ignore: cast_nullable_to_non_nullable
-              as List<TaskAttachment>,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      updatedAt: null == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      completedAt: freezed == completedAt
-          ? _value.completedAt
-          : completedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ));
+    return _then(
+      _$TaskImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as TaskId,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as TaskTitle,
+        description: freezed == description
+            ? _value.description
+            : description // ignore: cast_nullable_to_non_nullable
+                  as TaskDescription?,
+        dueDate: freezed == dueDate
+            ? _value.dueDate
+            : dueDate // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        duration: freezed == duration
+            ? _value.duration
+            : duration // ignore: cast_nullable_to_non_nullable
+                  as TaskDuration?,
+        customDuration: freezed == customDuration
+            ? _value.customDuration
+            : customDuration // ignore: cast_nullable_to_non_nullable
+                  as CustomDuration?,
+        rrule: freezed == rrule
+            ? _value.rrule
+            : rrule // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        recurrenceEnd: freezed == recurrenceEnd
+            ? _value.recurrenceEnd
+            : recurrenceEnd // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        reminders: null == reminders
+            ? _value._reminders
+            : reminders // ignore: cast_nullable_to_non_nullable
+                  as List<Reminder>,
+        subtasks: null == subtasks
+            ? _value._subtasks
+            : subtasks // ignore: cast_nullable_to_non_nullable
+                  as List<Subtask>,
+        tags: null == tags
+            ? _value._tags
+            : tags // ignore: cast_nullable_to_non_nullable
+                  as List<TaskTag>,
+        projectId: freezed == projectId
+            ? _value.projectId
+            : projectId // ignore: cast_nullable_to_non_nullable
+                  as ProjectId?,
+        status: null == status
+            ? _value.status
+            : status // ignore: cast_nullable_to_non_nullable
+                  as TaskStatus,
+        priority: null == priority
+            ? _value.priority
+            : priority // ignore: cast_nullable_to_non_nullable
+                  as TaskPriority,
+        comments: null == comments
+            ? _value._comments
+            : comments // ignore: cast_nullable_to_non_nullable
+                  as List<TaskComment>,
+        attachments: null == attachments
+            ? _value._attachments
+            : attachments // ignore: cast_nullable_to_non_nullable
+                  as List<TaskAttachment>,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        updatedAt: null == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        completedAt: freezed == completedAt
+            ? _value.completedAt
+            : completedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$TaskImpl implements _Task {
-  const _$TaskImpl(
-      {@TaskIdConverter() required this.id,
-      @TaskTitleConverter() required this.title,
-      @TaskDescriptionConverter() this.description,
-      this.dueDate,
-      @TaskPeriodConverter() this.period,
-      final List<Reminder> reminders = const [],
-      final List<Subtask> subtasks = const [],
-      @TaskTagConverter() final List<TaskTag> tags = const [],
-      @ProjectIdConverter() this.projectId,
-      this.status = TaskStatus.active,
-      @TaskPriorityConverter() this.priority = TaskPriority.medium,
-      final List<TaskComment> comments = const [],
-      final List<TaskAttachment> attachments = const [],
-      required this.createdAt,
-      required this.updatedAt,
-      this.completedAt})
-      : _reminders = reminders,
-        _subtasks = subtasks,
-        _tags = tags,
-        _comments = comments,
-        _attachments = attachments;
+  const _$TaskImpl({
+    @TaskIdConverter() required this.id,
+    @TaskTitleConverter() required this.title,
+    @TaskDescriptionConverter() this.description,
+    this.dueDate,
+    this.duration,
+    this.customDuration,
+    this.rrule,
+    this.recurrenceEnd,
+    final List<Reminder> reminders = const [],
+    final List<Subtask> subtasks = const [],
+    @TaskTagConverter() final List<TaskTag> tags = const [],
+    @ProjectIdConverter() this.projectId,
+    this.status = TaskStatus.active,
+    @TaskPriorityConverter() this.priority = TaskPriority.medium,
+    final List<TaskComment> comments = const [],
+    final List<TaskAttachment> attachments = const [],
+    required this.createdAt,
+    required this.updatedAt,
+    this.completedAt,
+  }) : _reminders = reminders,
+       _subtasks = subtasks,
+       _tags = tags,
+       _comments = comments,
+       _attachments = attachments;
 
   factory _$TaskImpl.fromJson(Map<String, dynamic> json) =>
       _$$TaskImplFromJson(json);
@@ -342,10 +397,21 @@ class _$TaskImpl implements _Task {
   final TaskDescription? description;
   @override
   final DateTime? dueDate;
+  // Duration - how long the task is active for
   @override
-  @TaskPeriodConverter()
-  final TaskPeriod? period;
+  final TaskDuration? duration;
+  @override
+  final CustomDuration? customDuration;
+  // When duration == TaskDuration.custom
+  // Recurrence - when/how the task repeats (RFC 5545 RRULE)
+  @override
+  final String? rrule;
+  // e.g., "FREQ=WEEKLY;BYDAY=MO,WE,FR"
+  @override
+  final DateTime? recurrenceEnd;
+  // When to stop repeating
   final List<Reminder> _reminders;
+  // When to stop repeating
   @override
   @JsonKey()
   List<Reminder> get reminders {
@@ -410,7 +476,7 @@ class _$TaskImpl implements _Task {
 
   @override
   String toString() {
-    return 'Task(id: $id, title: $title, description: $description, dueDate: $dueDate, period: $period, reminders: $reminders, subtasks: $subtasks, tags: $tags, projectId: $projectId, status: $status, priority: $priority, comments: $comments, attachments: $attachments, createdAt: $createdAt, updatedAt: $updatedAt, completedAt: $completedAt)';
+    return 'Task(id: $id, title: $title, description: $description, dueDate: $dueDate, duration: $duration, customDuration: $customDuration, rrule: $rrule, recurrenceEnd: $recurrenceEnd, reminders: $reminders, subtasks: $subtasks, tags: $tags, projectId: $projectId, status: $status, priority: $priority, comments: $comments, attachments: $attachments, createdAt: $createdAt, updatedAt: $updatedAt, completedAt: $completedAt)';
   }
 
   @override
@@ -423,9 +489,17 @@ class _$TaskImpl implements _Task {
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.dueDate, dueDate) || other.dueDate == dueDate) &&
-            (identical(other.period, period) || other.period == period) &&
-            const DeepCollectionEquality()
-                .equals(other._reminders, _reminders) &&
+            (identical(other.duration, duration) ||
+                other.duration == duration) &&
+            (identical(other.customDuration, customDuration) ||
+                other.customDuration == customDuration) &&
+            (identical(other.rrule, rrule) || other.rrule == rrule) &&
+            (identical(other.recurrenceEnd, recurrenceEnd) ||
+                other.recurrenceEnd == recurrenceEnd) &&
+            const DeepCollectionEquality().equals(
+              other._reminders,
+              _reminders,
+            ) &&
             const DeepCollectionEquality().equals(other._subtasks, _subtasks) &&
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             (identical(other.projectId, projectId) ||
@@ -434,8 +508,10 @@ class _$TaskImpl implements _Task {
             (identical(other.priority, priority) ||
                 other.priority == priority) &&
             const DeepCollectionEquality().equals(other._comments, _comments) &&
-            const DeepCollectionEquality()
-                .equals(other._attachments, _attachments) &&
+            const DeepCollectionEquality().equals(
+              other._attachments,
+              _attachments,
+            ) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
@@ -446,24 +522,28 @@ class _$TaskImpl implements _Task {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      title,
-      description,
-      dueDate,
-      period,
-      const DeepCollectionEquality().hash(_reminders),
-      const DeepCollectionEquality().hash(_subtasks),
-      const DeepCollectionEquality().hash(_tags),
-      projectId,
-      status,
-      priority,
-      const DeepCollectionEquality().hash(_comments),
-      const DeepCollectionEquality().hash(_attachments),
-      createdAt,
-      updatedAt,
-      completedAt);
+  int get hashCode => Object.hashAll([
+    runtimeType,
+    id,
+    title,
+    description,
+    dueDate,
+    duration,
+    customDuration,
+    rrule,
+    recurrenceEnd,
+    const DeepCollectionEquality().hash(_reminders),
+    const DeepCollectionEquality().hash(_subtasks),
+    const DeepCollectionEquality().hash(_tags),
+    projectId,
+    status,
+    priority,
+    const DeepCollectionEquality().hash(_comments),
+    const DeepCollectionEquality().hash(_attachments),
+    createdAt,
+    updatedAt,
+    completedAt,
+  ]);
 
   /// Create a copy of Task
   /// with the given fields replaced by the non-null parameter values.
@@ -475,30 +555,32 @@ class _$TaskImpl implements _Task {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TaskImplToJson(
-      this,
-    );
+    return _$$TaskImplToJson(this);
   }
 }
 
 abstract class _Task implements Task {
-  const factory _Task(
-      {@TaskIdConverter() required final TaskId id,
-      @TaskTitleConverter() required final TaskTitle title,
-      @TaskDescriptionConverter() final TaskDescription? description,
-      final DateTime? dueDate,
-      @TaskPeriodConverter() final TaskPeriod? period,
-      final List<Reminder> reminders,
-      final List<Subtask> subtasks,
-      @TaskTagConverter() final List<TaskTag> tags,
-      @ProjectIdConverter() final ProjectId? projectId,
-      final TaskStatus status,
-      @TaskPriorityConverter() final TaskPriority priority,
-      final List<TaskComment> comments,
-      final List<TaskAttachment> attachments,
-      required final DateTime createdAt,
-      required final DateTime updatedAt,
-      final DateTime? completedAt}) = _$TaskImpl;
+  const factory _Task({
+    @TaskIdConverter() required final TaskId id,
+    @TaskTitleConverter() required final TaskTitle title,
+    @TaskDescriptionConverter() final TaskDescription? description,
+    final DateTime? dueDate,
+    final TaskDuration? duration,
+    final CustomDuration? customDuration,
+    final String? rrule,
+    final DateTime? recurrenceEnd,
+    final List<Reminder> reminders,
+    final List<Subtask> subtasks,
+    @TaskTagConverter() final List<TaskTag> tags,
+    @ProjectIdConverter() final ProjectId? projectId,
+    final TaskStatus status,
+    @TaskPriorityConverter() final TaskPriority priority,
+    final List<TaskComment> comments,
+    final List<TaskAttachment> attachments,
+    required final DateTime createdAt,
+    required final DateTime updatedAt,
+    final DateTime? completedAt,
+  }) = _$TaskImpl;
 
   factory _Task.fromJson(Map<String, dynamic> json) = _$TaskImpl.fromJson;
 
@@ -512,10 +594,16 @@ abstract class _Task implements Task {
   @TaskDescriptionConverter()
   TaskDescription? get description;
   @override
-  DateTime? get dueDate;
+  DateTime? get dueDate; // Duration - how long the task is active for
   @override
-  @TaskPeriodConverter()
-  TaskPeriod? get period;
+  TaskDuration? get duration;
+  @override
+  CustomDuration? get customDuration; // When duration == TaskDuration.custom
+  // Recurrence - when/how the task repeats (RFC 5545 RRULE)
+  @override
+  String? get rrule; // e.g., "FREQ=WEEKLY;BYDAY=MO,WE,FR"
+  @override
+  DateTime? get recurrenceEnd; // When to stop repeating
   @override
   List<Reminder> get reminders;
   @override
@@ -576,10 +664,11 @@ abstract class $SubtaskCopyWith<$Res> {
   factory $SubtaskCopyWith(Subtask value, $Res Function(Subtask) then) =
       _$SubtaskCopyWithImpl<$Res, Subtask>;
   @useResult
-  $Res call(
-      {@TaskIdConverter() TaskId id,
-      @TaskTitleConverter() TaskTitle title,
-      bool isDone});
+  $Res call({
+    @TaskIdConverter() TaskId id,
+    @TaskTitleConverter() TaskTitle title,
+    bool isDone,
+  });
 }
 
 /// @nodoc
@@ -596,39 +685,40 @@ class _$SubtaskCopyWithImpl<$Res, $Val extends Subtask>
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-    Object? title = null,
-    Object? isDone = null,
-  }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as TaskTitle,
-      isDone: null == isDone
-          ? _value.isDone
-          : isDone // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ) as $Val);
+  $Res call({Object? id = null, Object? title = null, Object? isDone = null}) {
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as TaskId,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as TaskTitle,
+            isDone: null == isDone
+                ? _value.isDone
+                : isDone // ignore: cast_nullable_to_non_nullable
+                      as bool,
+          )
+          as $Val,
+    );
   }
 }
 
 /// @nodoc
 abstract class _$$SubtaskImplCopyWith<$Res> implements $SubtaskCopyWith<$Res> {
   factory _$$SubtaskImplCopyWith(
-          _$SubtaskImpl value, $Res Function(_$SubtaskImpl) then) =
-      __$$SubtaskImplCopyWithImpl<$Res>;
+    _$SubtaskImpl value,
+    $Res Function(_$SubtaskImpl) then,
+  ) = __$$SubtaskImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@TaskIdConverter() TaskId id,
-      @TaskTitleConverter() TaskTitle title,
-      bool isDone});
+  $Res call({
+    @TaskIdConverter() TaskId id,
+    @TaskTitleConverter() TaskTitle title,
+    bool isDone,
+  });
 }
 
 /// @nodoc
@@ -636,42 +726,42 @@ class __$$SubtaskImplCopyWithImpl<$Res>
     extends _$SubtaskCopyWithImpl<$Res, _$SubtaskImpl>
     implements _$$SubtaskImplCopyWith<$Res> {
   __$$SubtaskImplCopyWithImpl(
-      _$SubtaskImpl _value, $Res Function(_$SubtaskImpl) _then)
-      : super(_value, _then);
+    _$SubtaskImpl _value,
+    $Res Function(_$SubtaskImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Subtask
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? id = null,
-    Object? title = null,
-    Object? isDone = null,
-  }) {
-    return _then(_$SubtaskImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as TaskTitle,
-      isDone: null == isDone
-          ? _value.isDone
-          : isDone // ignore: cast_nullable_to_non_nullable
-              as bool,
-    ));
+  $Res call({Object? id = null, Object? title = null, Object? isDone = null}) {
+    return _then(
+      _$SubtaskImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as TaskId,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as TaskTitle,
+        isDone: null == isDone
+            ? _value.isDone
+            : isDone // ignore: cast_nullable_to_non_nullable
+                  as bool,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$SubtaskImpl implements _Subtask {
-  const _$SubtaskImpl(
-      {@TaskIdConverter() required this.id,
-      @TaskTitleConverter() required this.title,
-      this.isDone = false});
+  const _$SubtaskImpl({
+    @TaskIdConverter() required this.id,
+    @TaskTitleConverter() required this.title,
+    this.isDone = false,
+  });
 
   factory _$SubtaskImpl.fromJson(Map<String, dynamic> json) =>
       _$$SubtaskImplFromJson(json);
@@ -715,17 +805,16 @@ class _$SubtaskImpl implements _Subtask {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SubtaskImplToJson(
-      this,
-    );
+    return _$$SubtaskImplToJson(this);
   }
 }
 
 abstract class _Subtask implements Subtask {
-  const factory _Subtask(
-      {@TaskIdConverter() required final TaskId id,
-      @TaskTitleConverter() required final TaskTitle title,
-      final bool isDone}) = _$SubtaskImpl;
+  const factory _Subtask({
+    @TaskIdConverter() required final TaskId id,
+    @TaskTitleConverter() required final TaskTitle title,
+    final bool isDone,
+  }) = _$SubtaskImpl;
 
   factory _Subtask.fromJson(Map<String, dynamic> json) = _$SubtaskImpl.fromJson;
 
@@ -775,12 +864,13 @@ abstract class $ReminderCopyWith<$Res> {
   factory $ReminderCopyWith(Reminder value, $Res Function(Reminder) then) =
       _$ReminderCopyWithImpl<$Res, Reminder>;
   @useResult
-  $Res call(
-      {@TaskIdConverter() TaskId id,
-      DateTime time,
-      bool isTriggered,
-      @ReminderRepeatConverter() ReminderRepeat repeat,
-      int? notificationId});
+  $Res call({
+    @TaskIdConverter() TaskId id,
+    DateTime time,
+    bool isTriggered,
+    @ReminderRepeatConverter() ReminderRepeat repeat,
+    int? notificationId,
+  });
 }
 
 /// @nodoc
@@ -804,28 +894,31 @@ class _$ReminderCopyWithImpl<$Res, $Val extends Reminder>
     Object? repeat = null,
     Object? notificationId = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      time: null == time
-          ? _value.time
-          : time // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      isTriggered: null == isTriggered
-          ? _value.isTriggered
-          : isTriggered // ignore: cast_nullable_to_non_nullable
-              as bool,
-      repeat: null == repeat
-          ? _value.repeat
-          : repeat // ignore: cast_nullable_to_non_nullable
-              as ReminderRepeat,
-      notificationId: freezed == notificationId
-          ? _value.notificationId
-          : notificationId // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as TaskId,
+            time: null == time
+                ? _value.time
+                : time // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            isTriggered: null == isTriggered
+                ? _value.isTriggered
+                : isTriggered // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            repeat: null == repeat
+                ? _value.repeat
+                : repeat // ignore: cast_nullable_to_non_nullable
+                      as ReminderRepeat,
+            notificationId: freezed == notificationId
+                ? _value.notificationId
+                : notificationId // ignore: cast_nullable_to_non_nullable
+                      as int?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -833,16 +926,18 @@ class _$ReminderCopyWithImpl<$Res, $Val extends Reminder>
 abstract class _$$ReminderImplCopyWith<$Res>
     implements $ReminderCopyWith<$Res> {
   factory _$$ReminderImplCopyWith(
-          _$ReminderImpl value, $Res Function(_$ReminderImpl) then) =
-      __$$ReminderImplCopyWithImpl<$Res>;
+    _$ReminderImpl value,
+    $Res Function(_$ReminderImpl) then,
+  ) = __$$ReminderImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@TaskIdConverter() TaskId id,
-      DateTime time,
-      bool isTriggered,
-      @ReminderRepeatConverter() ReminderRepeat repeat,
-      int? notificationId});
+  $Res call({
+    @TaskIdConverter() TaskId id,
+    DateTime time,
+    bool isTriggered,
+    @ReminderRepeatConverter() ReminderRepeat repeat,
+    int? notificationId,
+  });
 }
 
 /// @nodoc
@@ -850,8 +945,9 @@ class __$$ReminderImplCopyWithImpl<$Res>
     extends _$ReminderCopyWithImpl<$Res, _$ReminderImpl>
     implements _$$ReminderImplCopyWith<$Res> {
   __$$ReminderImplCopyWithImpl(
-      _$ReminderImpl _value, $Res Function(_$ReminderImpl) _then)
-      : super(_value, _then);
+    _$ReminderImpl _value,
+    $Res Function(_$ReminderImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of Reminder
   /// with the given fields replaced by the non-null parameter values.
@@ -864,40 +960,43 @@ class __$$ReminderImplCopyWithImpl<$Res>
     Object? repeat = null,
     Object? notificationId = freezed,
   }) {
-    return _then(_$ReminderImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      time: null == time
-          ? _value.time
-          : time // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      isTriggered: null == isTriggered
-          ? _value.isTriggered
-          : isTriggered // ignore: cast_nullable_to_non_nullable
-              as bool,
-      repeat: null == repeat
-          ? _value.repeat
-          : repeat // ignore: cast_nullable_to_non_nullable
-              as ReminderRepeat,
-      notificationId: freezed == notificationId
-          ? _value.notificationId
-          : notificationId // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ));
+    return _then(
+      _$ReminderImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as TaskId,
+        time: null == time
+            ? _value.time
+            : time // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        isTriggered: null == isTriggered
+            ? _value.isTriggered
+            : isTriggered // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        repeat: null == repeat
+            ? _value.repeat
+            : repeat // ignore: cast_nullable_to_non_nullable
+                  as ReminderRepeat,
+        notificationId: freezed == notificationId
+            ? _value.notificationId
+            : notificationId // ignore: cast_nullable_to_non_nullable
+                  as int?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ReminderImpl implements _Reminder {
-  const _$ReminderImpl(
-      {@TaskIdConverter() required this.id,
-      required this.time,
-      this.isTriggered = false,
-      @ReminderRepeatConverter() this.repeat = ReminderRepeat.none,
-      this.notificationId});
+  const _$ReminderImpl({
+    @TaskIdConverter() required this.id,
+    required this.time,
+    this.isTriggered = false,
+    @ReminderRepeatConverter() this.repeat = ReminderRepeat.none,
+    this.notificationId,
+  });
 
   factory _$ReminderImpl.fromJson(Map<String, dynamic> json) =>
       _$$ReminderImplFromJson(json);
@@ -951,19 +1050,18 @@ class _$ReminderImpl implements _Reminder {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ReminderImplToJson(
-      this,
-    );
+    return _$$ReminderImplToJson(this);
   }
 }
 
 abstract class _Reminder implements Reminder {
-  const factory _Reminder(
-      {@TaskIdConverter() required final TaskId id,
-      required final DateTime time,
-      final bool isTriggered,
-      @ReminderRepeatConverter() final ReminderRepeat repeat,
-      final int? notificationId}) = _$ReminderImpl;
+  const factory _Reminder({
+    @TaskIdConverter() required final TaskId id,
+    required final DateTime time,
+    final bool isTriggered,
+    @ReminderRepeatConverter() final ReminderRepeat repeat,
+    final int? notificationId,
+  }) = _$ReminderImpl;
 
   factory _Reminder.fromJson(Map<String, dynamic> json) =
       _$ReminderImpl.fromJson;

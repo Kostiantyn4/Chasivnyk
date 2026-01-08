@@ -38,10 +38,15 @@
   "continueEditing": "Continue",
   "discard": "Close",
   "taskCreated": "Task created",
+  "taskUpdated": "Task updated",
+  "deleteButton": "Delete",
+  "deleteTaskConfirmation": "This task has subtasks. Delete anyway?",
+  "taskDeleted": "Task deleted",
   "draftSaved": "Draft saved",
   "draftRestored": "Draft restored",
   "taskNameRequired": "Task name cannot be empty",
   "errorPrefix": "Error",
+  "completedTasksTitle": "Completed",
   "@currentDate": {
     "placeholders": {
       "date": {

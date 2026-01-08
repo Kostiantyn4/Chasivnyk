@@ -12,7 +12,8 @@ part of 'task_comment.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 TaskComment _$TaskCommentFromJson(Map<String, dynamic> json) {
   return _TaskComment.fromJson(json);
@@ -42,16 +43,18 @@ mixin _$TaskComment {
 /// @nodoc
 abstract class $TaskCommentCopyWith<$Res> {
   factory $TaskCommentCopyWith(
-          TaskComment value, $Res Function(TaskComment) then) =
-      _$TaskCommentCopyWithImpl<$Res, TaskComment>;
+    TaskComment value,
+    $Res Function(TaskComment) then,
+  ) = _$TaskCommentCopyWithImpl<$Res, TaskComment>;
   @useResult
-  $Res call(
-      {@TaskIdConverter() TaskId id,
-      @TaskIdConverter() TaskId taskId,
-      String authorId,
-      String content,
-      DateTime createdAt,
-      DateTime? editedAt});
+  $Res call({
+    @TaskIdConverter() TaskId id,
+    @TaskIdConverter() TaskId taskId,
+    String authorId,
+    String content,
+    DateTime createdAt,
+    DateTime? editedAt,
+  });
 }
 
 /// @nodoc
@@ -76,32 +79,35 @@ class _$TaskCommentCopyWithImpl<$Res, $Val extends TaskComment>
     Object? createdAt = null,
     Object? editedAt = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      taskId: null == taskId
-          ? _value.taskId
-          : taskId // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      authorId: null == authorId
-          ? _value.authorId
-          : authorId // ignore: cast_nullable_to_non_nullable
-              as String,
-      content: null == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      editedAt: freezed == editedAt
-          ? _value.editedAt
-          : editedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as TaskId,
+            taskId: null == taskId
+                ? _value.taskId
+                : taskId // ignore: cast_nullable_to_non_nullable
+                      as TaskId,
+            authorId: null == authorId
+                ? _value.authorId
+                : authorId // ignore: cast_nullable_to_non_nullable
+                      as String,
+            content: null == content
+                ? _value.content
+                : content // ignore: cast_nullable_to_non_nullable
+                      as String,
+            createdAt: null == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime,
+            editedAt: freezed == editedAt
+                ? _value.editedAt
+                : editedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -109,17 +115,19 @@ class _$TaskCommentCopyWithImpl<$Res, $Val extends TaskComment>
 abstract class _$$TaskCommentImplCopyWith<$Res>
     implements $TaskCommentCopyWith<$Res> {
   factory _$$TaskCommentImplCopyWith(
-          _$TaskCommentImpl value, $Res Function(_$TaskCommentImpl) then) =
-      __$$TaskCommentImplCopyWithImpl<$Res>;
+    _$TaskCommentImpl value,
+    $Res Function(_$TaskCommentImpl) then,
+  ) = __$$TaskCommentImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@TaskIdConverter() TaskId id,
-      @TaskIdConverter() TaskId taskId,
-      String authorId,
-      String content,
-      DateTime createdAt,
-      DateTime? editedAt});
+  $Res call({
+    @TaskIdConverter() TaskId id,
+    @TaskIdConverter() TaskId taskId,
+    String authorId,
+    String content,
+    DateTime createdAt,
+    DateTime? editedAt,
+  });
 }
 
 /// @nodoc
@@ -127,8 +135,9 @@ class __$$TaskCommentImplCopyWithImpl<$Res>
     extends _$TaskCommentCopyWithImpl<$Res, _$TaskCommentImpl>
     implements _$$TaskCommentImplCopyWith<$Res> {
   __$$TaskCommentImplCopyWithImpl(
-      _$TaskCommentImpl _value, $Res Function(_$TaskCommentImpl) _then)
-      : super(_value, _then);
+    _$TaskCommentImpl _value,
+    $Res Function(_$TaskCommentImpl) _then,
+  ) : super(_value, _then);
 
   /// Create a copy of TaskComment
   /// with the given fields replaced by the non-null parameter values.
@@ -142,46 +151,48 @@ class __$$TaskCommentImplCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? editedAt = freezed,
   }) {
-    return _then(_$TaskCommentImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      taskId: null == taskId
-          ? _value.taskId
-          : taskId // ignore: cast_nullable_to_non_nullable
-              as TaskId,
-      authorId: null == authorId
-          ? _value.authorId
-          : authorId // ignore: cast_nullable_to_non_nullable
-              as String,
-      content: null == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      editedAt: freezed == editedAt
-          ? _value.editedAt
-          : editedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ));
+    return _then(
+      _$TaskCommentImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as TaskId,
+        taskId: null == taskId
+            ? _value.taskId
+            : taskId // ignore: cast_nullable_to_non_nullable
+                  as TaskId,
+        authorId: null == authorId
+            ? _value.authorId
+            : authorId // ignore: cast_nullable_to_non_nullable
+                  as String,
+        content: null == content
+            ? _value.content
+            : content // ignore: cast_nullable_to_non_nullable
+                  as String,
+        createdAt: null == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime,
+        editedAt: freezed == editedAt
+            ? _value.editedAt
+            : editedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$TaskCommentImpl extends _TaskComment {
-  const _$TaskCommentImpl(
-      {@TaskIdConverter() required this.id,
-      @TaskIdConverter() required this.taskId,
-      required this.authorId,
-      required this.content,
-      required this.createdAt,
-      this.editedAt})
-      : super._();
+  const _$TaskCommentImpl({
+    @TaskIdConverter() required this.id,
+    @TaskIdConverter() required this.taskId,
+    required this.authorId,
+    required this.content,
+    required this.createdAt,
+    this.editedAt,
+  }) : super._();
 
   factory _$TaskCommentImpl.fromJson(Map<String, dynamic> json) =>
       _$$TaskCommentImplFromJson(json);
@@ -225,7 +236,14 @@ class _$TaskCommentImpl extends _TaskComment {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, id, taskId, authorId, content, createdAt, editedAt);
+    runtimeType,
+    id,
+    taskId,
+    authorId,
+    content,
+    createdAt,
+    editedAt,
+  );
 
   /// Create a copy of TaskComment
   /// with the given fields replaced by the non-null parameter values.
@@ -237,20 +255,19 @@ class _$TaskCommentImpl extends _TaskComment {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$TaskCommentImplToJson(
-      this,
-    );
+    return _$$TaskCommentImplToJson(this);
   }
 }
 
 abstract class _TaskComment extends TaskComment {
-  const factory _TaskComment(
-      {@TaskIdConverter() required final TaskId id,
-      @TaskIdConverter() required final TaskId taskId,
-      required final String authorId,
-      required final String content,
-      required final DateTime createdAt,
-      final DateTime? editedAt}) = _$TaskCommentImpl;
+  const factory _TaskComment({
+    @TaskIdConverter() required final TaskId id,
+    @TaskIdConverter() required final TaskId taskId,
+    required final String authorId,
+    required final String content,
+    required final DateTime createdAt,
+    final DateTime? editedAt,
+  }) = _$TaskCommentImpl;
   const _TaskComment._() : super._();
 
   factory _TaskComment.fromJson(Map<String, dynamic> json) =

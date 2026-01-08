@@ -10,11 +10,14 @@ _$ProjectImpl _$$ProjectImplFromJson(Map<String, dynamic> json) =>
     _$ProjectImpl(
       id: ProjectId.fromJson(json['id'] as String),
       title: const ProjectTitleConverter().fromJson(json['title'] as String),
-      description: const ProjectDescriptionConverter()
-          .fromJson(json['description'] as String?),
-      status: $enumDecodeNullable(_$ProjectStatusEnumMap, json['status']) ??
+      description: const ProjectDescriptionConverter().fromJson(
+        json['description'] as String?,
+      ),
+      status:
+          $enumDecodeNullable(_$ProjectStatusEnumMap, json['status']) ??
           ProjectStatus.active,
-      tags: (json['tags'] as List<dynamic>?)
+      tags:
+          (json['tags'] as List<dynamic>?)
               ?.map((e) => const TaskTagConverter().fromJson(e as String))
               .toList() ??
           const [],
@@ -29,8 +32,9 @@ Map<String, dynamic> _$$ProjectImplToJson(_$ProjectImpl instance) =>
     <String, dynamic>{
       'id': instance.id.toJson(),
       'title': const ProjectTitleConverter().toJson(instance.title),
-      'description':
-          const ProjectDescriptionConverter().toJson(instance.description),
+      'description': const ProjectDescriptionConverter().toJson(
+        instance.description,
+      ),
       'status': _$ProjectStatusEnumMap[instance.status]!,
       'tags': instance.tags.map(const TaskTagConverter().toJson).toList(),
       'created_at': instance.createdAt.toIso8601String(),

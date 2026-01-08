@@ -22,7 +22,7 @@ void main() {
       final taskWithSubtask = task.copyWith(
         description: TaskDescription('Test Description'),
         dueDate: now.add(Duration(days: 1)),
-        period: TaskPeriod.weekly,
+        duration: TaskDuration.week,
         subtasks: [
           Subtask.create(title: 'Test Subtask'),
         ],
