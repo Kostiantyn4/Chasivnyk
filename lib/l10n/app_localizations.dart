@@ -290,6 +290,78 @@ abstract class AppLocalizations {
   /// **'Not selected'**
   String get projectNotSelected;
 
+  /// No description provided for @newProject.
+  ///
+  /// In en, this message translates to:
+  /// **'New Project'**
+  String get newProject;
+
+  /// No description provided for @projectNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Project name'**
+  String get projectNameLabel;
+
+  /// No description provided for @projectNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For example, Move apartment'**
+  String get projectNameHint;
+
+  /// No description provided for @projectDescriptionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get projectDescriptionLabel;
+
+  /// No description provided for @projectDescriptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add context about this project'**
+  String get projectDescriptionHint;
+
+  /// No description provided for @projectTagsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Tags'**
+  String get projectTagsLabel;
+
+  /// No description provided for @projectTagsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Press Enter to add tag'**
+  String get projectTagsHint;
+
+  /// No description provided for @projectTagsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No tags yet'**
+  String get projectTagsEmpty;
+
+  /// No description provided for @projectNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Project name cannot be empty'**
+  String get projectNameRequired;
+
+  /// No description provided for @projectCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Project created'**
+  String get projectCreated;
+
+  /// No description provided for @selectProjectTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select project'**
+  String get selectProjectTitle;
+
+  /// No description provided for @clearProjectSelection.
+  ///
+  /// In en, this message translates to:
+  /// **'No project'**
+  String get clearProjectSelection;
+
   /// No description provided for @saveButton.
   ///
   /// In en, this message translates to:
@@ -391,6 +463,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Completed'**
   String get completedTasksTitle;
+
+  /// No description provided for @projectsScreenTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Projects'**
+  String get projectsScreenTitle;
+
+  /// No description provided for @projectsAddProject.
+  ///
+  /// In en, this message translates to:
+  /// **'Add project'**
+  String get projectsAddProject;
+
+  /// No description provided for @projectProgressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} tasks'**
+  String projectProgressLabel(int done, int total);
+
+  /// No description provided for @projectSampleGiftForAlina.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift for Alina'**
+  String get projectSampleGiftForAlina;
+
+  /// No description provided for @projectSampleTripToCarpathians.
+  ///
+  /// In en, this message translates to:
+  /// **'Trip to the Carpathians'**
+  String get projectSampleTripToCarpathians;
+
+  /// No description provided for @projectSampleGiftForMark.
+  ///
+  /// In en, this message translates to:
+  /// **'Gift for Mark'**
+  String get projectSampleGiftForMark;
+
+  /// No description provided for @projectsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No projects yet'**
+  String get projectsEmptyTitle;
+
+  /// No description provided for @projectsEmptySubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap + to start your first project'**
+  String get projectsEmptySubtitle;
 }
 
 class _AppLocalizationsDelegate

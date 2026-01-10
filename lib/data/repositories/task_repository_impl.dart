@@ -48,4 +48,14 @@ class TaskRepositoryImpl implements ITaskRepository {
       return b.updatedAt.compareTo(a.updatedAt);
     });
   }
+
+  @override
+  Future<List<Task>> findByProject(String? projectId) async {
+    if (projectId == null) {
+      return _tasks.where((task) => task.projectId == null).toList();
+    }
+    return _tasks
+        .where((task) => task.projectId?.value == projectId)
+        .toList();
+  }
 }

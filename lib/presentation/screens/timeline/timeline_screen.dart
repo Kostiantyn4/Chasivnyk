@@ -9,18 +9,44 @@ import '../../../core/di/providers.dart';
 import '../../../data/repositories/task_order_repository.dart';
 import '../../../domain/entities/task.dart';
 import '../../../domain/entities/value_objects/task_value_objects.dart';
-import '../../widgets/calendar/calendar_panel.dart';
+import '../../models/project_context.dart';
+import 'modes/task_list_mode.dart';
+import 'widgets/task_calendar_overlay.dart';
 import '../task_creation/create_task_screen.dart';
+import '../../widgets/buttons/primary_fab.dart';
 
 class TimelineScreen extends ConsumerStatefulWidget {
-  const TimelineScreen({super.key});
+  final TaskListMode mode;
+
+  const TimelineScreen({
+    super.key,
+    TaskListMode? mode,
+  }) : mode = mode ?? const TodayTaskListMode();
 
   @override
   ConsumerState<TimelineScreen> createState() => _TimelineScreenState();
 }
 
 class _TimelineScreenState extends ConsumerState<TimelineScreen> {
+  late final TaskListMode _mode;
+
+  bool _isCalendarVisible = false;
+  DateTime _selectedDate = DateTime.now();
+  bool _isQuickAddExpanded = false;
+  bool _isQuickAddSaving = false;
+  final TextEditingController _quickAddController = TextEditingController();
+  final FocusNode _quickAddFocusNode = FocusNode();
+  final GlobalKey _quickAddKey = GlobalKey();
+  final TaskOrderRepository _taskOrderRepository = TaskOrderRepository();
+  List<String> _storedOrder = [];
+
+  ProjectContext? get _projectContext => _mode.projectContext;
+  String? get _projectId => _mode.projectId;
+  bool get _usesDateFilter => _mode.usesDateFilter;
+  bool get _showsCalendarOverlay => _mode.showsCalendarOverlay;
+
   void _initState() {
+    _mode = widget.mode;
     _selectedDate = DateTime.now();
     _isCalendarVisible = false;
     _loadOrderForSelectedDate();
@@ -33,15 +59,14 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
     _initState();
   }
   
-  bool _isCalendarVisible = false;
-  DateTime _selectedDate = DateTime.now();
-  bool _isQuickAddExpanded = false;
-  bool _isQuickAddSaving = false;
-  final TextEditingController _quickAddController = TextEditingController();
-  final FocusNode _quickAddFocusNode = FocusNode();
-  final GlobalKey _quickAddKey = GlobalKey();
-  final TaskOrderRepository _taskOrderRepository = TaskOrderRepository();
-  List<String> _storedOrder = [];
+  void _invalidateTasksSource() {
+    final projectId = _projectId;
+    if (projectId == null) {
+      ref.invalidate(tasksProvider);
+    } else {
+      ref.invalidate(projectTasksProvider(projectId));
+    }
+  }
 
   @override
   void dispose() {
@@ -52,13 +77,16 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final tasksAsync = ref.watch(tasksProvider);
+    final projectId = _projectId;
+    final tasksAsync = projectId == null
+        ? ref.watch(tasksProvider)
+        : ref.watch(projectTasksProvider(projectId));
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 70), // Відступ над bottom nav bar
-        child: FloatingActionButton(
+        padding: const EdgeInsets.only(bottom: 70),
+        child: PrimaryFab(
           onPressed: () async {
             if (_isQuickAddExpanded) {
               _collapseQuickAdd();
@@ -66,204 +94,92 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
             }
             final task = await Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const CreateTaskScreen(
+                builder: (context) => CreateTaskScreen(
                   enableDraftPersistence: false,
+                  projectContext: _projectContext,
                 ),
               ),
             );
-            
-            // TODO: Додати задачу в список якщо task != null
             if (task != null) {
-              ref.invalidate(tasksProvider);
+              _invalidateTasksSource();
             }
           },
-          backgroundColor: AppColors.primaryColor,
-          child: const Icon(
-            Icons.add,
-            color: Colors.white,
-            size: 28,
-          ),
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SafeArea(
         child: Stack(
           children: [
-            // Main content
             GestureDetector(
-            behavior: HitTestBehavior.deferToChild,
-            onTap: () {
-              bool needsSetState = false;
-              if (_isCalendarVisible) {
-                _isCalendarVisible = false;
-                needsSetState = true;
-              }
-              if (_isQuickAddExpanded) {
-                _collapseQuickAdd();
-                needsSetState = true;
-              }
-              if (needsSetState) {
-                setState(() {});
-              }
-            },
-            child: Column(
-              children: [
-                // Header with avatar and greeting
-                _buildHeader(),
-                
-                // Task list
-                Expanded(
-                  child: tasksAsync.when(
-                    data: (tasks) => _buildTasksContent(tasks),
-                    loading: () => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    error: (error, _) => Center(
-                      child: Text(
-                        error.toString(),
-                        style: TextStyle(color: AppColors.textSecondary),
+              behavior: HitTestBehavior.deferToChild,
+              onTap: () {
+                bool needsSetState = false;
+                if (_isCalendarVisible) {
+                  _isCalendarVisible = false;
+                  needsSetState = true;
+                }
+                if (_isQuickAddExpanded) {
+                  _collapseQuickAdd();
+                  needsSetState = true;
+                }
+                if (needsSetState) {
+                  setState(() {});
+                }
+              },
+              child: Column(
+                children: [
+                  _buildHeader(),
+                  Expanded(
+                    child: tasksAsync.when(
+                      data: (tasks) => _buildTasksContent(tasks),
+                      loading: () => const Center(
+                        child: CircularProgressIndicator(),
                       ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Calendar button
-          if (!_isCalendarVisible)
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: kBottomNavigationBarHeight + 8,
-              child: Center(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          _isCalendarVisible = true;
-                        });
-                      },
-                      borderRadius: BorderRadius.circular(24),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.backgroundColor,
-                          borderRadius: BorderRadius.circular(24),
-                          border: Border.all(color: Colors.white24),
-                        ),
-                        child: const Icon(
-                          Icons.keyboard_arrow_up,
-                          color: Colors.white,
-                          size: 24,
+                      error: (error, _) => Center(
+                        child: Text(
+                          error.toString(),
+                          style: TextStyle(color: AppColors.textSecondary),
                         ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
-
-          // Calendar panel
-          CalendarPanel(
-            isVisible: _isCalendarVisible,
-            selectedDate: _selectedDate,
-            onDateSelected: (date) {
-              setState(() {
-                _collapseQuickAdd();
-                _selectedDate = date;
-                _isCalendarVisible = false;
-              });
-              _loadOrderForSelectedDate();
-            },
-            onToggleVisibility: () {
-              setState(() {
-                _collapseQuickAdd();
-                _isCalendarVisible = !_isCalendarVisible;
-              });
-            },
-          ),
-
-
-          // Bottom navigation bar
-          _buildBottomNavBar(),
-        ],
-      ),
+            if (_showsCalendarOverlay)
+              TaskCalendarOverlay(
+                isCalendarVisible: _isCalendarVisible,
+                selectedDate: _selectedDate,
+                onShowRequest: () {
+                  setState(() {
+                    _isCalendarVisible = true;
+                  });
+                },
+                onDateSelected: (date) {
+                  setState(() {
+                    _collapseQuickAdd();
+                    _selectedDate = date;
+                  });
+                  _isCalendarVisible = false;
+                  _loadOrderForSelectedDate();
+                },
+                onToggleVisibility: () {
+                  setState(() {
+                    _collapseQuickAdd();
+                    _isCalendarVisible = !_isCalendarVisible;
+                  });
+                },
+              ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.all(13),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            AppColors.backgroundColor,
-            AppColors.backgroundColor.withAlpha(0),
-          ],
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 26,
-                height: 26,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppColors.primaryColor,
-                    width: 2,
-                  ),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(13),
-                  child: const Placeholder(), // TODO: Replace with actual avatar
-                ),
-              ),
-              const SizedBox(width: 12),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    Localization.current.greetingMessage,
-                    style: TextStyle(
-                      color: AppColors.textSecondary,
-                      fontSize: 13,
-                    ),
-                  ),
-                  Text(
-                    'User', // TODO: Replace with actual username
-                    style: TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              // TODO: Handle notifications
-            },
-            color: AppColors.textPrimary,
-          ),
-        ],
-      ),
+    return _mode.buildHeader(
+      context,
+      () => Navigator.of(context).maybePop(),
     );
   }
 
@@ -271,23 +187,17 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          Localization.current.todayTasksTitle,
-          style: TextStyle(
-            color: AppColors.textPrimary,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            letterSpacing: -0.5,
+        _mode.buildTitle(context, _selectedDate),
+        if (_usesDateFilter) ...[
+          const SizedBox(height: 2),
+          Text(
+            DateFormat.yMMMMEEEEd(Localizations.localeOf(context).toString()).format(_selectedDate),
+            style: TextStyle(
+              color: AppColors.textSecondary,
+              fontSize: 13,
+            ),
           ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          DateFormat.yMMMMEEEEd(Localizations.localeOf(context).toString()).format(_selectedDate),
-          style: TextStyle(
-            color: AppColors.textSecondary,
-            fontSize: 13,
-          ),
-        ),
+        ],
       ],
     );
   }
@@ -511,56 +421,6 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
       ),
     );
   }
-
-
-  Widget _buildBottomNavBar() {
-    return Positioned(
-      left: 0,
-      right: 0,
-      bottom: 0,
-      child: SafeArea(
-        child: Theme(
-          data: Theme.of(context).copyWith(
-            navigationBarTheme: NavigationBarThemeData(
-              labelTextStyle: WidgetStateProperty.all(
-                const TextStyle(fontSize: 11.0),
-              ),
-              height: 58,
-              labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-              iconTheme: WidgetStateProperty.all(
-                const IconThemeData(size: 20),
-              ),
-            ),
-          ),
-          child: NavigationBar(
-            backgroundColor: AppColors.accentColor,
-            destinations: [
-              NavigationDestination(
-                icon: Icon(Icons.calendar_today, size: 20),
-                selectedIcon: Icon(Icons.calendar_today, size: 20),
-                label: Localization.current.timeline,
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.folder, size: 20),
-                selectedIcon: Icon(Icons.folder, size: 20),
-                label: Localization.current.projects,
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.bar_chart, size: 20),
-                selectedIcon: Icon(Icons.bar_chart, size: 20),
-                label: Localization.current.progress,
-              ),
-            ],
-            selectedIndex: 0,
-            onDestinationSelected: (index) {
-              // TODO: Handle navigation
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
   String _formatTaskTime(Task task) {
     if (task.dueDate == null) {
       return Localization.current.dueTimeNotSet;
@@ -743,6 +603,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
         text,
         dueDate: dueDate,
         duration: TaskDuration.day,
+        projectId: _projectId,
       );
 
       _collapseQuickAdd(clearText: true);
@@ -756,7 +617,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
         );
       }
 
-      ref.invalidate(tasksProvider);
+      _invalidateTasksSource();
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -807,6 +668,9 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
   }
 
   List<Task> _tasksForSelectedDate(List<Task> tasks) {
+    if (!_usesDateFilter) {
+      return tasks;
+    }
     return tasks.where((task) {
       if (task.dueDate == null) return false;
       return DateUtils.isSameDay(task.dueDate, _selectedDate);
@@ -821,7 +685,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
       ),
     );
     if (result != null && mounted) {
-      ref.invalidate(tasksProvider);
+      _invalidateTasksSource();
     }
   }
 
@@ -834,17 +698,17 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
       setState(() {
         _storedOrder.remove(task.id.value);
       });
-      await _taskOrderRepository.saveOrder(_selectedDate, _storedOrder);
+      await _taskOrderRepository.saveOrder(_selectedDate, _storedOrder, projectId: _projectId);
     } else {
       setState(() {
         if (!_storedOrder.contains(task.id.value)) {
           _storedOrder.add(task.id.value);
         }
       });
-      await _taskOrderRepository.saveOrder(_selectedDate, _storedOrder);
+      await _taskOrderRepository.saveOrder(_selectedDate, _storedOrder, projectId: _projectId);
     }
     if (mounted) {
-      ref.invalidate(tasksProvider);
+      _invalidateTasksSource();
     }
   }
 
@@ -863,7 +727,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
   }
 
   Future<void> _loadOrderForSelectedDate() async {
-    final order = await _taskOrderRepository.loadOrder(_selectedDate);
+    final order = await _taskOrderRepository.loadOrder(_selectedDate, projectId: _projectId);
     if (mounted) {
       setState(() {
         _storedOrder = order;
@@ -881,6 +745,6 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
       reordered.insert(newIndex, task);
       _storedOrder = reordered.map((task) => task.id.value).toList();
     });
-    _taskOrderRepository.saveOrder(_selectedDate, _storedOrder);
+    _taskOrderRepository.saveOrder(_selectedDate, _storedOrder, projectId: _projectId);
   }
 }

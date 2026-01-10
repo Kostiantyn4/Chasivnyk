@@ -31,6 +31,18 @@
   "tagsNone": "None",
   "projectOption": "Project",
   "projectNotSelected": "Not selected",
+  "newProject": "New Project",
+  "projectNameLabel": "Project name",
+  "projectNameHint": "For example, Move apartment",
+  "projectDescriptionLabel": "Description",
+  "projectDescriptionHint": "Add context about this project",
+  "projectTagsLabel": "Tags",
+  "projectTagsHint": "Press Enter to add tag",
+  "projectTagsEmpty": "No tags yet",
+  "projectNameRequired": "Project name cannot be empty",
+  "projectCreated": "Project created",
+  "selectProjectTitle": "Select project",
+  "clearProjectSelection": "No project",
   "saveButton": "Save",
   "editTaskTitle": "Edit task",
   "discardChangesTitle": "Discard changes?",
@@ -48,6 +60,24 @@
   "taskNameRequired": "Task name cannot be empty",
   "errorPrefix": "Error",
   "completedTasksTitle": "Completed",
+  "projectsScreenTitle": "Projects",
+  "projectsAddProject": "Add project",
+  "projectProgressLabel": "{done} of {total} tasks",
+  "@projectProgressLabel": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "projectSampleGiftForAlina": "Gift for Alina",
+  "projectSampleTripToCarpathians": "Trip to the Carpathians",
+  "projectSampleGiftForMark": "Gift for Mark",
+  "projectsEmptyTitle": "No projects yet",
+  "projectsEmptySubtitle": "Tap + to start your first project",
   "@currentDate": {
     "placeholders": {
       "date": {

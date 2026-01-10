@@ -32,6 +32,9 @@ class TaskEntity {
   @Index()
   late int priority; // 1=low, 2=medium, 3=high, 4=critical
 
+  @Index()
+  String? projectId;
+
   late int createdAt; // DateTime as milliseconds
   late int updatedAt; // DateTime as milliseconds
 

@@ -45,32 +45,37 @@ const TaskEntitySchema = CollectionSchema(
     r'dueDate': PropertySchema(id: 5, name: r'dueDate', type: IsarType.long),
     r'duration': PropertySchema(id: 6, name: r'duration', type: IsarType.long),
     r'priority': PropertySchema(id: 7, name: r'priority', type: IsarType.long),
-    r'recurrenceEnd': PropertySchema(
+    r'projectId': PropertySchema(
       id: 8,
+      name: r'projectId',
+      type: IsarType.string,
+    ),
+    r'recurrenceEnd': PropertySchema(
+      id: 9,
       name: r'recurrenceEnd',
       type: IsarType.long,
     ),
     r'remindersJson': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'remindersJson',
       type: IsarType.string,
     ),
-    r'rrule': PropertySchema(id: 10, name: r'rrule', type: IsarType.string),
-    r'status': PropertySchema(id: 11, name: r'status', type: IsarType.long),
+    r'rrule': PropertySchema(id: 11, name: r'rrule', type: IsarType.string),
+    r'status': PropertySchema(id: 12, name: r'status', type: IsarType.long),
     r'subtasksJson': PropertySchema(
-      id: 12,
+      id: 13,
       name: r'subtasksJson',
       type: IsarType.string,
     ),
     r'tagsJson': PropertySchema(
-      id: 13,
+      id: 14,
       name: r'tagsJson',
       type: IsarType.string,
     ),
-    r'taskId': PropertySchema(id: 14, name: r'taskId', type: IsarType.string),
-    r'title': PropertySchema(id: 15, name: r'title', type: IsarType.string),
+    r'taskId': PropertySchema(id: 15, name: r'taskId', type: IsarType.string),
+    r'title': PropertySchema(id: 16, name: r'title', type: IsarType.string),
     r'updatedAt': PropertySchema(
-      id: 16,
+      id: 17,
       name: r'updatedAt',
       type: IsarType.long,
     ),
@@ -160,6 +165,19 @@ const TaskEntitySchema = CollectionSchema(
         ),
       ],
     ),
+    r'projectId': IndexSchema(
+      id: 3305656282123791113,
+      name: r'projectId',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'projectId',
+          type: IndexType.hash,
+          caseSensitive: true,
+        ),
+      ],
+    ),
   },
   links: {},
   embeddedSchemas: {},
@@ -196,6 +214,12 @@ int _taskEntityEstimateSize(
   }
   {
     final value = object.description;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
+  {
+    final value = object.projectId;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -243,15 +267,16 @@ void _taskEntitySerialize(
   writer.writeLong(offsets[5], object.dueDate);
   writer.writeLong(offsets[6], object.duration);
   writer.writeLong(offsets[7], object.priority);
-  writer.writeLong(offsets[8], object.recurrenceEnd);
-  writer.writeString(offsets[9], object.remindersJson);
-  writer.writeString(offsets[10], object.rrule);
-  writer.writeLong(offsets[11], object.status);
-  writer.writeString(offsets[12], object.subtasksJson);
-  writer.writeString(offsets[13], object.tagsJson);
-  writer.writeString(offsets[14], object.taskId);
-  writer.writeString(offsets[15], object.title);
-  writer.writeLong(offsets[16], object.updatedAt);
+  writer.writeString(offsets[8], object.projectId);
+  writer.writeLong(offsets[9], object.recurrenceEnd);
+  writer.writeString(offsets[10], object.remindersJson);
+  writer.writeString(offsets[11], object.rrule);
+  writer.writeLong(offsets[12], object.status);
+  writer.writeString(offsets[13], object.subtasksJson);
+  writer.writeString(offsets[14], object.tagsJson);
+  writer.writeString(offsets[15], object.taskId);
+  writer.writeString(offsets[16], object.title);
+  writer.writeLong(offsets[17], object.updatedAt);
 }
 
 TaskEntity _taskEntityDeserialize(
@@ -270,15 +295,16 @@ TaskEntity _taskEntityDeserialize(
   object.duration = reader.readLongOrNull(offsets[6]);
   object.id = id;
   object.priority = reader.readLong(offsets[7]);
-  object.recurrenceEnd = reader.readLongOrNull(offsets[8]);
-  object.remindersJson = reader.readStringOrNull(offsets[9]);
-  object.rrule = reader.readStringOrNull(offsets[10]);
-  object.status = reader.readLong(offsets[11]);
-  object.subtasksJson = reader.readStringOrNull(offsets[12]);
-  object.tagsJson = reader.readStringOrNull(offsets[13]);
-  object.taskId = reader.readString(offsets[14]);
-  object.title = reader.readString(offsets[15]);
-  object.updatedAt = reader.readLong(offsets[16]);
+  object.projectId = reader.readStringOrNull(offsets[8]);
+  object.recurrenceEnd = reader.readLongOrNull(offsets[9]);
+  object.remindersJson = reader.readStringOrNull(offsets[10]);
+  object.rrule = reader.readStringOrNull(offsets[11]);
+  object.status = reader.readLong(offsets[12]);
+  object.subtasksJson = reader.readStringOrNull(offsets[13]);
+  object.tagsJson = reader.readStringOrNull(offsets[14]);
+  object.taskId = reader.readString(offsets[15]);
+  object.title = reader.readString(offsets[16]);
+  object.updatedAt = reader.readLong(offsets[17]);
   return object;
 }
 
@@ -306,22 +332,24 @@ P _taskEntityDeserializeProp<P>(
     case 7:
       return (reader.readLong(offset)) as P;
     case 8:
-      return (reader.readLongOrNull(offset)) as P;
-    case 9:
       return (reader.readStringOrNull(offset)) as P;
+    case 9:
+      return (reader.readLongOrNull(offset)) as P;
     case 10:
       return (reader.readStringOrNull(offset)) as P;
     case 11:
-      return (reader.readLong(offset)) as P;
-    case 12:
       return (reader.readStringOrNull(offset)) as P;
+    case 12:
+      return (reader.readLong(offset)) as P;
     case 13:
       return (reader.readStringOrNull(offset)) as P;
     case 14:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 15:
       return (reader.readString(offset)) as P;
     case 16:
+      return (reader.readString(offset)) as P;
+    case 17:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -1121,6 +1149,81 @@ extension TaskEntityQueryWhere
           includeUpper: includeUpper,
         ),
       );
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterWhereClause> projectIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'projectId', value: [null]),
+      );
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterWhereClause> projectIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IndexWhereClause.between(
+          indexName: r'projectId',
+          lower: [null],
+          includeLower: false,
+          upper: [],
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterWhereClause> projectIdEqualTo(
+    String? projectId,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        IndexWhereClause.equalTo(indexName: r'projectId', value: [projectId]),
+      );
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterWhereClause> projectIdNotEqualTo(
+    String? projectId,
+  ) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'projectId',
+                lower: [],
+                upper: [projectId],
+                includeUpper: false,
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'projectId',
+                lower: [projectId],
+                includeLower: false,
+                upper: [],
+              ),
+            );
+      } else {
+        return query
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'projectId',
+                lower: [projectId],
+                includeLower: false,
+                upper: [],
+              ),
+            )
+            .addWhereClause(
+              IndexWhereClause.between(
+                indexName: r'projectId',
+                lower: [],
+                upper: [projectId],
+                includeUpper: false,
+              ),
+            );
+      }
     });
   }
 }
@@ -2080,6 +2183,171 @@ extension TaskEntityQueryFilter
           upper: upper,
           includeUpper: includeUpper,
         ),
+      );
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterFilterCondition>
+  projectIdIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNull(property: r'projectId'),
+      );
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterFilterCondition>
+  projectIdIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const FilterCondition.isNotNull(property: r'projectId'),
+      );
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterFilterCondition> projectIdEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(
+          property: r'projectId',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterFilterCondition>
+  projectIdGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(
+          include: include,
+          property: r'projectId',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterFilterCondition> projectIdLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.lessThan(
+          include: include,
+          property: r'projectId',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterFilterCondition> projectIdBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.between(
+          property: r'projectId',
+          lower: lower,
+          includeLower: includeLower,
+          upper: upper,
+          includeUpper: includeUpper,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterFilterCondition>
+  projectIdStartsWith(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.startsWith(
+          property: r'projectId',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterFilterCondition> projectIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.endsWith(
+          property: r'projectId',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterFilterCondition> projectIdContains(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.contains(
+          property: r'projectId',
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterFilterCondition> projectIdMatches(
+    String pattern, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.matches(
+          property: r'projectId',
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterFilterCondition>
+  projectIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.equalTo(property: r'projectId', value: ''),
+      );
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterFilterCondition>
+  projectIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        FilterCondition.greaterThan(property: r'projectId', value: ''),
       );
     });
   }
@@ -3320,6 +3588,18 @@ extension TaskEntityQuerySortBy
     });
   }
 
+  QueryBuilder<TaskEntity, TaskEntity, QAfterSortBy> sortByProjectId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'projectId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterSortBy> sortByProjectIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'projectId', Sort.desc);
+    });
+  }
+
   QueryBuilder<TaskEntity, TaskEntity, QAfterSortBy> sortByRecurrenceEnd() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'recurrenceEnd', Sort.asc);
@@ -3542,6 +3822,18 @@ extension TaskEntityQuerySortThenBy
     });
   }
 
+  QueryBuilder<TaskEntity, TaskEntity, QAfterSortBy> thenByProjectId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'projectId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<TaskEntity, TaskEntity, QAfterSortBy> thenByProjectIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'projectId', Sort.desc);
+    });
+  }
+
   QueryBuilder<TaskEntity, TaskEntity, QAfterSortBy> thenByRecurrenceEnd() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'recurrenceEnd', Sort.asc);
@@ -3715,6 +4007,14 @@ extension TaskEntityQueryWhereDistinct
     });
   }
 
+  QueryBuilder<TaskEntity, TaskEntity, QDistinct> distinctByProjectId({
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'projectId', caseSensitive: caseSensitive);
+    });
+  }
+
   QueryBuilder<TaskEntity, TaskEntity, QDistinct> distinctByRecurrenceEnd() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'recurrenceEnd');
@@ -3840,6 +4140,12 @@ extension TaskEntityQueryProperty
   QueryBuilder<TaskEntity, int, QQueryOperations> priorityProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'priority');
+    });
+  }
+
+  QueryBuilder<TaskEntity, String?, QQueryOperations> projectIdProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'projectId');
     });
   }
 

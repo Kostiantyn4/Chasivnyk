@@ -35,6 +35,17 @@ class MockTaskRepository implements ITaskRepository {
   }
 
   @override
+  Future<List<Task>> findByProject(String? projectId) async {
+    return _tasks
+        .where(
+          (task) => projectId == null
+              ? task.projectId == null
+              : task.projectId?.value == projectId,
+        )
+        .toList();
+  }
+
+  @override
   Future<List<Task>> findAllSortedByPriority() async {
     return List<Task>.from(_tasks)..sort((a, b) {
       final priorityOrder = TaskPriority.values.toList().reversed.toList();

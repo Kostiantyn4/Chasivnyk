@@ -6,15 +6,18 @@ import '../../../l10n/app_localizations.dart';
 import '../../../data/repositories/task_draft_repository.dart';
 import '../../../core/di/providers.dart';
 import '../../../domain/entities/task.dart';
+import '../../models/project_context.dart';
 
 class CreateTaskScreen extends ConsumerStatefulWidget {
   final Task? initialTask;
   final bool enableDraftPersistence;
+  final ProjectContext? projectContext;
 
   const CreateTaskScreen({
     super.key,
     this.initialTask,
     this.enableDraftPersistence = true,
+    this.projectContext,
   });
 
   @override
@@ -35,6 +38,10 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
   bool _isSaving = false;
   late final bool _isEditing;
   late final bool _useDraftPersistence;
+  String? _selectedProjectId;
+  String? _selectedProjectTitle;
+  late final String? _editingInitialProjectId;
+  bool _projectChanged = false;
 
   @override
   void initState() {
@@ -52,10 +59,57 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
       _titleController.clear();
       _descriptionController.clear();
     }
+
+    _selectedProjectId =
+        widget.initialTask?.projectId?.value ?? widget.projectContext?.id;
+    _selectedProjectTitle = widget.projectContext?.title;
+    _editingInitialProjectId = widget.initialTask?.projectId?.value;
+    _updateProjectSelection(_selectedProjectId, _selectedProjectTitle, notify: false);
+    if (_selectedProjectTitle == null && _selectedProjectId != null) {
+      Future.microtask(_loadProjectTitle);
+    }
     
     // Listen to changes
     _titleController.addListener(_onFieldChanged);
     _descriptionController.addListener(_onFieldChanged);
+  }
+
+  Future<void> _loadProjectTitle() async {
+    final projectId = _selectedProjectId;
+    if (projectId == null) return;
+    try {
+      final service = ref.read(projectServiceProvider);
+      final project = await service.findById(projectId);
+      if (!mounted) return;
+      if (project == null) {
+        _updateProjectSelection(null, null);
+      } else {
+        _updateProjectSelection(project.id.value, project.title.value, notify: false);
+      }
+    } catch (_) {
+      // Ignore errors silently; UI will keep previous selection
+    }
+  }
+
+  void _updateProjectSelection(
+    String? projectId,
+    String? projectTitle, {
+    bool notify = true,
+  }) {
+    void apply() {
+      _selectedProjectId = projectId;
+      _selectedProjectTitle = projectTitle;
+      if (_isEditing) {
+        _projectChanged =
+            (_selectedProjectId ?? '') != (_editingInitialProjectId ?? '');
+      }
+    }
+
+    if (notify) {
+      setState(apply);
+    } else {
+      apply();
+    }
   }
 
   Future<void> _handleDelete() async {
@@ -266,15 +320,18 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
           : _descriptionController.text.trim();
 
       final task = _isEditing
-          ? await taskService.updateTask(
-              widget.initialTask!,
-              title: title,
-              description: description,
-            )
-          : await taskService.createTask(
-              title,
-              description: description,
-            );
+        ? await taskService.updateTask(
+            widget.initialTask!,
+            title: title,
+            description: description,
+            projectId: _selectedProjectId,
+            changeProject: _projectChanged,
+          )
+        : await taskService.createTask(
+            title,
+            description: description,
+            projectId: _selectedProjectId,
+          );
       
       // Clear draft
       await _clearDraft();
@@ -416,7 +473,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
                   _buildOptionCard(
                     icon: Icons.topic,
                     title: localization.projectOption,
-                    value: localization.projectNotSelected,
+                    value: _selectedProjectTitle ?? localization.projectNotSelected,
                     onTap: () {
                       // TODO: Navigate to project picker
                     },

@@ -31,6 +31,18 @@
   "tagsNone": "Немає",
   "projectOption": "Проєкт",
   "projectNotSelected": "Не обрано",
+  "newProject": "Новий проєкт",
+  "projectNameLabel": "Назва проєкту",
+  "projectNameHint": "Наприклад, Переїзд",
+  "projectDescriptionLabel": "Опис",
+  "projectDescriptionHint": "Додайте контекст до проєкту",
+  "projectTagsLabel": "Теги",
+  "projectTagsHint": "Натисніть Enter, щоб додати тег",
+  "projectTagsEmpty": "Ще немає тегів",
+  "projectNameRequired": "Назва проєкту не може бути порожньою",
+  "projectCreated": "Проєкт створено",
+  "selectProjectTitle": "Оберіть проєкт",
+  "clearProjectSelection": "Без проєкту",
   "saveButton": "Зберегти",
   "editTaskTitle": "Редагувати задачу",
   "discardChangesTitle": "Скасувати зміни?",
@@ -44,6 +56,24 @@
   "taskNameRequired": "Назва завдання не може бути порожньою",
   "errorPrefix": "Помилка",
   "completedTasksTitle": "Завершені",
+  "projectsScreenTitle": "Проєкти",
+  "projectsAddProject": "Додати проєкт",
+  "projectProgressLabel": "{done} з {total} завдань",
+  "@projectProgressLabel": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "projectSampleGiftForAlina": "Подарунок для Аліни",
+  "projectSampleTripToCarpathians": "Подорож у Карпати",
+  "projectSampleGiftForMark": "Подарунок для Марка",
+  "projectsEmptyTitle": "Поки що немає проєктів",
+  "projectsEmptySubtitle": "Натисніть +, щоб створити перший",
   "@currentDate": {
     "placeholders": {
       "date": {

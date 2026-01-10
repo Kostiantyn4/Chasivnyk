@@ -7,7 +7,8 @@ import '../entities/task_comment.dart';
 import '../entities/task_attachment.dart';
 
 abstract class ITaskService {
-  Future<Task> createTask(String title, {
+  Future<Task> createTask(
+    String title, {
     String? description,
     DateTime? dueDate,
     TaskDuration? duration,
@@ -15,6 +16,7 @@ abstract class ITaskService {
     String? rrule,
     DateTime? recurrenceEnd,
     TaskPriority? priority,
+    String? projectId,
   });
   Future<Task> updateTask(
     Task task, {
@@ -26,6 +28,8 @@ abstract class ITaskService {
     String? rrule,
     DateTime? recurrenceEnd,
     TaskPriority? priority,
+    String? projectId,
+    bool changeProject = false,
   });
   
   Future<Task> addSubtask(Task task, String title);
@@ -46,7 +50,8 @@ class TaskService implements ITaskService {
   TaskService(this._repository);
 
   @override
-  Future<Task> createTask(String title, {
+  Future<Task> createTask(
+    String title, {
     String? description,
     DateTime? dueDate,
     TaskDuration? duration,
@@ -54,19 +59,34 @@ class TaskService implements ITaskService {
     String? rrule,
     DateTime? recurrenceEnd,
     TaskPriority? priority,
+    String? projectId,
   }) async {
+    final nonPastDueDate = _ensureDueDateIsNotPast(dueDate);
     final task = Task.create(
       title: title,
       description: description,
-      dueDate: dueDate,
+      dueDate: nonPastDueDate,
       duration: duration,
       customDuration: customDuration,
       rrule: rrule,
       recurrenceEnd: recurrenceEnd,
       priority: priority,
+      projectId: projectId,
     ).copyWith(status: TaskStatus.active);
     await _repository.save(task);
     return task;
+  }
+
+  /// Prevents app crashes from legacy records by coercing past due dates a few
+  /// minutes into the future. Data migrations should fix existing data, but
+  /// this guard protects against regressions or external integrations.
+  DateTime? _ensureDueDateIsNotPast(DateTime? dueDate) {
+    if (dueDate == null) return null;
+    final now = DateTime.now();
+    if (dueDate.isBefore(now)) {
+      return now.add(const Duration(minutes: 5));
+    }
+    return dueDate;
   }
 
   @override
@@ -85,6 +105,8 @@ class TaskService implements ITaskService {
     String? rrule,
     DateTime? recurrenceEnd,
     TaskPriority? priority,
+    String? projectId,
+    bool changeProject = false,
   }) async {
     final updatedTask = task.copyWith(
       title: title != null ? TaskTitle(title) : task.title,
@@ -97,6 +119,9 @@ class TaskService implements ITaskService {
       rrule: rrule ?? task.rrule,
       recurrenceEnd: recurrenceEnd ?? task.recurrenceEnd,
       priority: priority ?? task.priority,
+      projectId: changeProject
+          ? (projectId != null ? ProjectId(projectId) : null)
+          : task.projectId,
       updatedAt: DateTime.now(),
     );
     await _repository.save(updatedTask);

@@ -107,6 +107,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get projectNotSelected => 'Not selected';
 
   @override
+  String get newProject => 'New Project';
+
+  @override
+  String get projectNameLabel => 'Project name';
+
+  @override
+  String get projectNameHint => 'For example, Move apartment';
+
+  @override
+  String get projectDescriptionLabel => 'Description';
+
+  @override
+  String get projectDescriptionHint => 'Add context about this project';
+
+  @override
+  String get projectTagsLabel => 'Tags';
+
+  @override
+  String get projectTagsHint => 'Press Enter to add tag';
+
+  @override
+  String get projectTagsEmpty => 'No tags yet';
+
+  @override
+  String get projectNameRequired => 'Project name cannot be empty';
+
+  @override
+  String get projectCreated => 'Project created';
+
+  @override
+  String get selectProjectTitle => 'Select project';
+
+  @override
+  String get clearProjectSelection => 'No project';
+
+  @override
   String get saveButton => 'Save';
 
   @override
@@ -156,4 +192,30 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get completedTasksTitle => 'Completed';
+
+  @override
+  String get projectsScreenTitle => 'Projects';
+
+  @override
+  String get projectsAddProject => 'Add project';
+
+  @override
+  String projectProgressLabel(int done, int total) {
+    return '$done of $total tasks';
+  }
+
+  @override
+  String get projectSampleGiftForAlina => 'Gift for Alina';
+
+  @override
+  String get projectSampleTripToCarpathians => 'Trip to the Carpathians';
+
+  @override
+  String get projectSampleGiftForMark => 'Gift for Mark';
+
+  @override
+  String get projectsEmptyTitle => 'No projects yet';
+
+  @override
+  String get projectsEmptySubtitle => 'Tap + to start your first project';
 }

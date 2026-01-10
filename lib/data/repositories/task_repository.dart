@@ -1,6 +1,6 @@
-import 'package:chasivnyk/domain/entities/task.dart';
-import 'package:chasivnyk/domain/entities/value_objects/task_value_objects.dart';
-import 'package:chasivnyk/domain/repositories/task_repository.dart';
+import '../../domain/entities/task.dart';
+import '../../domain/entities/value_objects/task_value_objects.dart';
+import '../../domain/repositories/task_repository.dart';
 
 class TaskRepositoryImpl implements ITaskRepository {
   final List<Task> _tasks = [];
@@ -20,14 +20,13 @@ class TaskRepositoryImpl implements ITaskRepository {
   }
 
   @override
-  Future<Task> save(Task task) async {
+  Future<void> save(Task task) async {
     final index = _tasks.indexWhere((t) => t.id == task.id);
     if (index >= 0) {
       _tasks[index] = task;
     } else {
       _tasks.add(task);
     }
-    return task;
   }
 
   @override
@@ -40,5 +39,15 @@ class TaskRepositoryImpl implements ITaskRepository {
     final sortedTasks = List<Task>.from(_tasks);
     sortedTasks.sort((a, b) => a.priority.index.compareTo(b.priority.index));
     return sortedTasks;
+  }
+
+  @override
+  Future<List<Task>> findByProject(String? projectId) async {
+    if (projectId == null) {
+      return _tasks.where((task) => task.projectId == null).toList();
+    }
+    return _tasks
+        .where((task) => task.projectId?.value == projectId)
+        .toList();
   }
 }

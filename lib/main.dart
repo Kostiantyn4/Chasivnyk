@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'l10n/app_localizations.dart';
 import 'core/localization/app_localizations_helper.dart';
-import 'presentation/screens/timeline/timeline_screen.dart';
+import 'presentation/screens/home/root_navigation_shell.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
       home: Builder(
         builder: (context) {
           Localization.initialize(context);
-          return const TimelineScreen();
+          return const RootNavigationShell();
         },
       ),
     ),

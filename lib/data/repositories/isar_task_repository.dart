@@ -44,6 +44,18 @@ class IsarTaskRepository implements ITaskRepository {
   }
 
   @override
+  Future<List<Task>> findByProject(String? projectId) async {
+    final query = _isar.taskEntitys.filter();
+    List<TaskEntity> entities;
+    if (projectId == null) {
+      entities = await query.projectIdIsNull().findAll();
+    } else {
+      entities = await query.projectIdEqualTo(projectId).findAll();
+    }
+    return entities.map(_mapToDomain).toList();
+  }
+
+  @override
   Future<void> save(Task task) async {
     await _isar.writeTxn(() async {
       final existing = await _isar.taskEntitys
@@ -92,6 +104,7 @@ class IsarTaskRepository implements ITaskRepository {
           ? DateTime.fromMillisecondsSinceEpoch(entity.recurrenceEnd!)
           : null,
       priority: _mapPriority(entity.priority),
+      projectId: entity.projectId != null ? ProjectId(entity.projectId!) : null,
       subtasks: entity.subtasksJson != null
           ? (jsonDecode(entity.subtasksJson!) as List)
               .map((e) => Subtask.fromJson(e))
@@ -136,6 +149,7 @@ class IsarTaskRepository implements ITaskRepository {
       ..rrule = task.rrule
       ..recurrenceEnd = task.recurrenceEnd?.millisecondsSinceEpoch
       ..priority = _mapPriorityToInt(task.priority)
+      ..projectId = task.projectId?.value
       ..subtasksJson = task.subtasks.isNotEmpty
           ? jsonEncode(task.subtasks.map((e) => e.toJson()).toList())
           : null

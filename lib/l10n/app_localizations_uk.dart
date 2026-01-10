@@ -107,6 +107,42 @@ class AppLocalizationsUk extends AppLocalizations {
   String get projectNotSelected => 'Не обрано';
 
   @override
+  String get newProject => 'Новий проєкт';
+
+  @override
+  String get projectNameLabel => 'Назва проєкту';
+
+  @override
+  String get projectNameHint => 'Наприклад, Переїзд';
+
+  @override
+  String get projectDescriptionLabel => 'Опис';
+
+  @override
+  String get projectDescriptionHint => 'Додайте контекст до проєкту';
+
+  @override
+  String get projectTagsLabel => 'Теги';
+
+  @override
+  String get projectTagsHint => 'Натисніть Enter, щоб додати тег';
+
+  @override
+  String get projectTagsEmpty => 'Ще немає тегів';
+
+  @override
+  String get projectNameRequired => 'Назва проєкту не може бути порожньою';
+
+  @override
+  String get projectCreated => 'Проєкт створено';
+
+  @override
+  String get selectProjectTitle => 'Оберіть проєкт';
+
+  @override
+  String get clearProjectSelection => 'Без проєкту';
+
+  @override
   String get saveButton => 'Зберегти';
 
   @override
@@ -157,4 +193,30 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get completedTasksTitle => 'Завершені';
+
+  @override
+  String get projectsScreenTitle => 'Проєкти';
+
+  @override
+  String get projectsAddProject => 'Додати проєкт';
+
+  @override
+  String projectProgressLabel(int done, int total) {
+    return '$done з $total завдань';
+  }
+
+  @override
+  String get projectSampleGiftForAlina => 'Подарунок для Аліни';
+
+  @override
+  String get projectSampleTripToCarpathians => 'Подорож у Карпати';
+
+  @override
+  String get projectSampleGiftForMark => 'Подарунок для Марка';
+
+  @override
+  String get projectsEmptyTitle => 'Поки що немає проєктів';
+
+  @override
+  String get projectsEmptySubtitle => 'Натисніть +, щоб створити перший';
 }
