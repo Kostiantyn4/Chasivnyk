@@ -296,6 +296,12 @@ abstract class AppLocalizations {
   /// **'Save'**
   String get saveButton;
 
+  /// No description provided for @editTaskTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit task'**
+  String get editTaskTitle;
+
   /// No description provided for @discardChangesTitle.
   ///
   /// In en, this message translates to:

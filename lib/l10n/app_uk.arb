@@ -30,9 +30,10 @@
   "tagsOption": "Теги",
   "tagsNone": "Немає",
   "projectOption": "Проєкт",
-  "projectNotSelected": "Не вибрано",
+  "projectNotSelected": "Не обрано",
   "saveButton": "Зберегти",
-  "discardChangesTitle": "Відмінити зміни?",
+  "editTaskTitle": "Редагувати задачу",
+  "discardChangesTitle": "Скасувати зміни?",
   "discardChangesMessage": "Чернетка збережена. Ви зможете продовжити пізніше.",
   "discardChangesMessageNoSave": "Незбережені зміни будуть втрачені",
   "continueEditing": "Продовжити",
@@ -42,6 +43,7 @@
   "draftRestored": "Чернетку відновлено",
   "taskNameRequired": "Назва завдання не може бути порожньою",
   "errorPrefix": "Помилка",
+  "completedTasksTitle": "Завершені",
   "@currentDate": {
     "placeholders": {
       "date": {

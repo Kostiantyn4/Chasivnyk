@@ -9,8 +9,13 @@ import '../../../domain/entities/task.dart';
 
 class CreateTaskScreen extends ConsumerStatefulWidget {
   final Task? initialTask;
+  final bool enableDraftPersistence;
 
-  const CreateTaskScreen({super.key, this.initialTask});
+  const CreateTaskScreen({
+    super.key,
+    this.initialTask,
+    this.enableDraftPersistence = true,
+  });
 
   @override
   ConsumerState<CreateTaskScreen> createState() => _CreateTaskScreenState();
@@ -29,18 +34,23 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
   Timer? _autoSaveTimer;
   bool _isSaving = false;
   late final bool _isEditing;
+  late final bool _useDraftPersistence;
 
   @override
   void initState() {
     super.initState();
     _isEditing = widget.initialTask != null;
+    _useDraftPersistence = widget.enableDraftPersistence && !_isEditing;
     if (_isEditing) {
       final task = widget.initialTask!;
       _titleController.text = task.title.value;
       _descriptionController.text = task.description?.value ?? '';
-    } else {
+    } else if (_useDraftPersistence) {
       _loadDraft();
       _startAutoSave();
+    } else {
+      _titleController.clear();
+      _descriptionController.clear();
     }
     
     // Listen to changes
@@ -128,6 +138,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
   }
 
   void _startAutoSave() {
+    if (!_useDraftPersistence) return;
     _autoSaveTimer = Timer.periodic(
       const Duration(seconds: 5),
       (_) => _saveDraft(),
@@ -139,7 +150,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
   }
 
   Future<void> _loadDraft() async {
-    if (_isEditing) return;
+    if (!_useDraftPersistence) return;
     final draft = await _draftRepository.loadDraft();
     if (draft != null && mounted) {
       setState(() {
@@ -165,7 +176,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
   }
 
   Future<void> _saveDraft() async {
-    if (_isEditing) return;
+    if (!_useDraftPersistence) return;
     if (!_hasContent) return;
     
     final draft = {
@@ -178,7 +189,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
   }
 
   Future<void> _clearDraft() async {
-    if (_isEditing) return;
+    if (!_useDraftPersistence) return;
     await _draftRepository.clearDraft();
   }
 
@@ -203,7 +214,9 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
           style: TextStyle(color: AppColors.textPrimary),
         ),
         content: Text(
-          localization.discardChangesMessage,
+          _useDraftPersistence
+              ? localization.discardChangesMessage
+              : localization.discardChangesMessageNoSave,
           style: TextStyle(color: AppColors.textSecondary),
         ),
         actions: [
@@ -327,7 +340,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
           },
         ),
         title: Text(
-          localization.newTask,
+          _isEditing ? localization.editTaskTitle : localization.newTask,
           style: TextStyle(
             color: AppColors.textPrimary,
             fontSize: 18,

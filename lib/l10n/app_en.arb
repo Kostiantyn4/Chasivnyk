@@ -32,6 +32,7 @@
   "projectOption": "Project",
   "projectNotSelected": "Not selected",
   "saveButton": "Save",
+  "editTaskTitle": "Edit task",
   "discardChangesTitle": "Discard changes?",
   "discardChangesMessage": "Draft saved. You can continue later.",
   "discardChangesMessageNoSave": "Unsaved changes will be lost",

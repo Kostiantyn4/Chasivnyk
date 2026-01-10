@@ -66,7 +66,9 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
             }
             final task = await Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => const CreateTaskScreen(),
+                builder: (context) => const CreateTaskScreen(
+                  enableDraftPersistence: false,
+                ),
               ),
             );
             
@@ -449,7 +451,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
               width: 6,
               height: 48,
               decoration: BoxDecoration(
-                color: AppColors.primaryColor,
+                color: isCompleted ? AppColors.successColor : AppColors.primaryColor,
                 borderRadius: BorderRadius.circular(3),
               ),
             ),
@@ -724,7 +726,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
     try {
       final service = await ref.read(taskServiceProvider.future);
       final targetDay = _selectedDate;
-      final dueDate = DateTime(
+      DateTime dueDate = DateTime(
         targetDay.year,
         targetDay.month,
         targetDay.day,
@@ -732,6 +734,10 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
         59,
         59,
       );
+      final now = DateTime.now();
+      if (dueDate.isBefore(now)) {
+        dueDate = now.add(const Duration(minutes: 5));
+      }
 
       await service.createTask(
         text,

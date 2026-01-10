@@ -104,13 +104,16 @@ class AppLocalizationsUk extends AppLocalizations {
   String get projectOption => 'Проєкт';
 
   @override
-  String get projectNotSelected => 'Не вибрано';
+  String get projectNotSelected => 'Не обрано';
 
   @override
   String get saveButton => 'Зберегти';
 
   @override
-  String get discardChangesTitle => 'Відмінити зміни?';
+  String get editTaskTitle => 'Редагувати задачу';
+
+  @override
+  String get discardChangesTitle => 'Скасувати зміни?';
 
   @override
   String get discardChangesMessage =>
@@ -153,5 +156,5 @@ class AppLocalizationsUk extends AppLocalizations {
   String get errorPrefix => 'Помилка';
 
   @override
-  String get completedTasksTitle => 'Completed';
+  String get completedTasksTitle => 'Завершені';
 }

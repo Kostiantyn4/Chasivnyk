@@ -110,6 +110,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saveButton => 'Save';
 
   @override
+  String get editTaskTitle => 'Edit task';
+
+  @override
   String get discardChangesTitle => 'Discard changes?';
 
   @override
