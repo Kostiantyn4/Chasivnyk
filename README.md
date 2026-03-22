@@ -82,7 +82,7 @@ Chasivnyk is an offline-first task management application built with Flutter. It
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/chasivnyk.git
+git clone https://github.com/kostiantyn4/chasivnyk.git
 ```
 
 2. Install dependencies
@@ -94,16 +94,6 @@ flutter pub get
 ```bash
 flutter run
 ```
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request. For major changes, please open an issue first to discuss what you would like to change.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
 ## License
 
