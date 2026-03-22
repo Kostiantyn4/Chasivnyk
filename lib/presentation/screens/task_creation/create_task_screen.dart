@@ -52,6 +52,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
     super.initState();
     _isEditing = widget.initialTask != null;
     _useDraftPersistence = widget.enableDraftPersistence && !_isEditing;
+    
     if (_isEditing) {
       final task = widget.initialTask!;
       _titleController.text = task.title.value;
@@ -66,11 +67,12 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
 
     _selectedProjectId =
         widget.initialTask?.projectId?.value ?? widget.projectContext?.id;
-    _selectedProjectTitle = widget.projectContext?.title;
     _editingInitialProjectId = widget.initialTask?.projectId?.value;
-    _updateProjectSelection(_selectedProjectId, _selectedProjectTitle, notify: false);
     _selectedDueDate = widget.initialTask?.dueDate ?? widget.initialDueDate;
-    if (_selectedProjectTitle == null && _selectedProjectId != null) {
+    
+    if (widget.projectContext != null) {
+      _selectedProjectTitle = widget.projectContext!.title;
+    } else if (_selectedProjectId != null) {
       Future.microtask(_loadProjectTitle);
     }
     
@@ -262,8 +264,20 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
            _descriptionController.text.trim().isNotEmpty;
   }
 
+  bool get _hasChanges {
+    if (_isEditing) {
+      final task = widget.initialTask!;
+      return _titleController.text.trim() != task.title.value ||
+             _descriptionController.text.trim() != (task.description?.value ?? '') ||
+             _selectedDueDate != task.dueDate ||
+             _selectedProjectId != task.projectId?.value;
+    } else {
+      return _hasContent;
+    }
+  }
+
   Future<bool> _handleClose() async {
-    if (!_hasContent) {
+    if (!_hasChanges) {
       await _clearDraft();
       return true;
     }

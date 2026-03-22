@@ -190,7 +190,7 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
   }
 }
 
-class _ProjectCard extends StatelessWidget {
+class _ProjectCard extends StatefulWidget {
   final Project project;
   final Color accentColor;
   final AppLocalizations localization;
@@ -204,11 +204,23 @@ class _ProjectCard extends StatelessWidget {
   });
 
   @override
+  State<_ProjectCard> createState() => _ProjectCardState();
+}
+
+class _ProjectCardState extends State<_ProjectCard> {
+  bool _showDeleteButton = false;
+
+  @override
   Widget build(BuildContext context) {
     final completed = 0;
     final total = 0;
     return InkWell(
-      onTap: onTap,
+      onTap: widget.onTap,
+      onLongPress: () {
+        setState(() {
+          _showDeleteButton = !_showDeleteButton;
+        });
+      },
       borderRadius: BorderRadius.circular(16),
       child: Container(
         padding: const EdgeInsets.all(16),
@@ -223,12 +235,12 @@ class _ProjectCard extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: accentColor.withValues(alpha: 0.6),
+                color: widget.accentColor.withValues(alpha: 0.6),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
-                Icons.folder,
-                color: AppColors.primaryColor,
+                _showDeleteButton ? Icons.delete : Icons.folder,
+                color: _showDeleteButton ? AppColors.errorColor : AppColors.primaryColor,
               ),
             ),
             const SizedBox(width: 16),
@@ -240,7 +252,7 @@ class _ProjectCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          project.title.value,
+                          widget.project.title.value,
                           style: TextStyle(
                             color: AppColors.textPrimary,
                             fontSize: 16,
@@ -249,15 +261,15 @@ class _ProjectCard extends StatelessWidget {
                         ),
                       ),
                       const Icon(
-                        Icons.chevron_right,
-                        color: Colors.white54,
-                        size: 20,
-                      ),
+                          Icons.chevron_right,
+                          color: Colors.white54,
+                          size: 20,
+                        ),
                     ],
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    localization.projectProgressLabel(
+                    widget.localization.projectProgressLabel(
                       completed,
                       total,
                     ),

@@ -675,7 +675,10 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
     _collapseQuickAdd();
     final result = await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => CreateTaskScreen(initialTask: task),
+        builder: (context) => CreateTaskScreen(
+          initialTask: task,
+          projectContext: _projectContext,
+        ),
       ),
     );
     if (result != null && mounted) {
