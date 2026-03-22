@@ -1,3 +1,4 @@
+import 'package:chasivnyk/core/constants/ui_constants.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
@@ -48,33 +49,44 @@ class _RootNavigationShellState extends State<RootNavigationShell> {
             ),
           ),
           SafeArea(
-            child: NavigationBar(
-              backgroundColor: AppColors.accentColor,
-              height: 62,
-              labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-              selectedIndex: _selectedIndex,
-              destinations: [
-                NavigationDestination(
-                  icon: const Icon(Icons.calendar_today, size: 20),
-                  label: localization.timeline,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.folder, size: 20),
-                  label: localization.projects,
-                ),
-                NavigationDestination(
-                  icon: const Icon(Icons.bar_chart, size: 20),
-                  label: localization.progress,
-                ),
-              ],
-              onDestinationSelected: (index) {
-                setState(() => _selectedIndex = index);
-                _pageController.animateToPage(
-                  index,
-                  duration: const Duration(milliseconds: 280),
-                  curve: Curves.easeOutCubic,
-                );
-              },
+            top: false,
+            child: Container(
+              height: UIConstants.bottomNavigationBarHeight,
+              decoration: BoxDecoration(
+                color: AppColors.accentColor,
+              ),
+              child: BottomNavigationBar(
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                currentIndex: _selectedIndex,
+                selectedItemColor: AppColors.primaryColor,
+                unselectedItemColor: AppColors.textSecondary,
+                selectedFontSize: 12,
+                unselectedFontSize: 12,
+                type: BottomNavigationBarType.fixed,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: const Icon(Icons.calendar_today, size: 20),
+                    label: localization.timeline,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: const Icon(Icons.folder, size: 20),
+                    label: localization.projects,
+                  ),
+                  BottomNavigationBarItem(
+                    icon: const Icon(Icons.bar_chart, size: 20),
+                    label: localization.progress,
+                  ),
+                ],
+                onTap: (index) {
+                  setState(() => _selectedIndex = index);
+                  _pageController.animateToPage(
+                    index,
+                    duration: const Duration(milliseconds: 280),
+                    curve: Curves.easeOutCubic,
+                  );
+                },
+              ),
             ),
           ),
         ],

@@ -6,7 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../domain/entities/project.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../models/project_context.dart';
-import '../../widgets/buttons/primary_fab.dart';
+import '../../widgets/buttons/add_task_button.dart';
 import 'create_project_screen.dart';
 import 'project_tasks_screen.dart';
 
@@ -25,12 +25,9 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 70),
-        child: PrimaryFab(
-          onPressed: () => _openCreateProject(localization),
-          heroTag: 'projects_fab',
-        ),
+      floatingActionButton: AddTaskButton(
+        onPressed: () => _openCreateProject(localization),
+        heroTag: 'projects_fab',
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SafeArea(

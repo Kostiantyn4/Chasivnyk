@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../data/repositories/task_draft_repository.dart';
@@ -12,12 +13,14 @@ class CreateTaskScreen extends ConsumerStatefulWidget {
   final Task? initialTask;
   final bool enableDraftPersistence;
   final ProjectContext? projectContext;
+  final DateTime? initialDueDate;
 
   const CreateTaskScreen({
     super.key,
     this.initialTask,
     this.enableDraftPersistence = true,
     this.projectContext,
+    this.initialDueDate,
   });
 
   @override
@@ -42,6 +45,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
   String? _selectedProjectTitle;
   late final String? _editingInitialProjectId;
   bool _projectChanged = false;
+  DateTime? _selectedDueDate;
 
   @override
   void initState() {
@@ -65,6 +69,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
     _selectedProjectTitle = widget.projectContext?.title;
     _editingInitialProjectId = widget.initialTask?.projectId?.value;
     _updateProjectSelection(_selectedProjectId, _selectedProjectTitle, notify: false);
+    _selectedDueDate = widget.initialTask?.dueDate ?? widget.initialDueDate;
     if (_selectedProjectTitle == null && _selectedProjectId != null) {
       Future.microtask(_loadProjectTitle);
     }
@@ -229,6 +234,11 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
     );
   }
 
+  String _formatDueDate(DateTime date) {
+    final locale = Localizations.localeOf(context).toString();
+    return DateFormat.yMMMMd(locale).format(date);
+  }
+
   Future<void> _saveDraft() async {
     if (!_useDraftPersistence) return;
     if (!_hasContent) return;
@@ -324,12 +334,14 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
             widget.initialTask!,
             title: title,
             description: description,
+            dueDate: _selectedDueDate,
             projectId: _selectedProjectId,
             changeProject: _projectChanged,
           )
         : await taskService.createTask(
             title,
             description: description,
+            dueDate: _selectedDueDate,
             projectId: _selectedProjectId,
           );
       
@@ -437,7 +449,9 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
                   _buildOptionCard(
                     icon: Icons.calendar_today,
                     title: localization.dueTimeOption,
-                    value: localization.dueTimeNotSet,
+                    value: _selectedDueDate != null
+                        ? _formatDueDate(_selectedDueDate!)
+                        : localization.dueTimeNotSet,
                     onTap: () {
                       // TODO: Navigate to date picker
                     },

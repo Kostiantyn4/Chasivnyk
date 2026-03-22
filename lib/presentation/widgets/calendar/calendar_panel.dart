@@ -20,14 +20,17 @@ class CalendarPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
+    final closedHeight = UIConstants.calendarHandleHeight + UIConstants.bottomNavigationBarHeight;
+    return AnimatedPositioned(
+      duration: UIConstants.calendarAnimationDuration,
+      curve: UIConstants.calendarAnimationCurve,
       left: 0,
       right: 0,
-      bottom: 0,
+      bottom: isVisible ? 0 : -(UIConstants.bottomNavigationBarHeight - UIConstants.calendarBottomOffset),
       child: AnimatedContainer(
         duration: UIConstants.calendarAnimationDuration,
         curve: UIConstants.calendarAnimationCurve,
-        height: isVisible ? UIConstants.calendarPanelHeight : UIConstants.calendarHandleHeight,
+        height: isVisible ? UIConstants.calendarPanelHeight : closedHeight,
         decoration: BoxDecoration(
           color: AppColors.accentColor,
           borderRadius: const BorderRadius.vertical(
@@ -48,7 +51,7 @@ class CalendarPanel extends StatelessWidget {
           child: Column(
             children: [
               _buildHandle(),
-              if (isVisible) 
+              if (isVisible)
                 Expanded(
                   child: _buildCalendar(),
                 ),
@@ -61,30 +64,35 @@ class CalendarPanel extends StatelessWidget {
 
   Widget _buildHandle() {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: onToggleVisibility,
-      child: Container(
-        width: UIConstants.calendarHandleWidth,
-        height: UIConstants.calendarHandleHeight,
-        alignment: Alignment.center,
+      child: SizedBox(
+        height: UIConstants.calendarHandleTapHeight,
+        width: double.infinity,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const SizedBox(height: 4),
-            AnimatedSwitcher(
-              duration: UIConstants.calendarAnimationDuration,
-              transitionBuilder: (child, animation) {
-                return RotationTransition(
-                  turns: animation,
-                  child: child,
-                );
-              },
-              child: Icon(
-                isVisible ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
-                key: ValueKey(isVisible),
-                color: AppColors.textSecondary,
-                size: 20,
+            Container(
+              width: UIConstants.calendarHandleWidth,
+              height: UIConstants.calendarHandleHeight,
+              alignment: Alignment.center,
+              child: AnimatedSwitcher(
+                duration: UIConstants.calendarAnimationDuration,
+                transitionBuilder: (child, animation) {
+                  return RotationTransition(
+                    turns: animation,
+                    child: child,
+                  );
+                },
+                child: Icon(
+                  isVisible ? Icons.keyboard_arrow_down : Icons.keyboard_arrow_up,
+                  key: ValueKey(isVisible),
+                  color: AppColors.textSecondary,
+                  size: UIConstants.calendarHandleIconSize,
+                ),
               ),
             ),
+            const Spacer(),
           ],
         ),
       ),

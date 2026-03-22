@@ -1,3 +1,4 @@
+import 'package:chasivnyk/presentation/widgets/buttons/add_task_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -13,7 +14,6 @@ import '../../models/project_context.dart';
 import 'modes/task_list_mode.dart';
 import 'widgets/task_calendar_overlay.dart';
 import '../task_creation/create_task_screen.dart';
-import '../../widgets/buttons/primary_fab.dart';
 
 class TimelineScreen extends ConsumerStatefulWidget {
   final TaskListMode mode;
@@ -84,30 +84,29 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 70),
-        child: PrimaryFab(
-          onPressed: () async {
-            if (_isQuickAddExpanded) {
-              _collapseQuickAdd();
-              return;
-            }
-            final task = await Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => CreateTaskScreen(
-                  enableDraftPersistence: false,
-                  projectContext: _projectContext,
-                ),
+      floatingActionButton: AddTaskButton(
+        onPressed: () async {
+          if (_isQuickAddExpanded) {
+            _collapseQuickAdd();
+            return;
+          }
+          final task = await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => CreateTaskScreen(
+                enableDraftPersistence: false,
+                projectContext: _projectContext,
+                initialDueDate: _selectedDate,
               ),
-            );
-            if (task != null) {
-              _invalidateTasksSource();
-            }
-          },
-        ),
+            ),
+          );
+          if (task != null) {
+            _invalidateTasksSource();
+          }
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SafeArea(
+        bottom: false,
         child: Stack(
           children: [
             GestureDetector(
@@ -150,11 +149,6 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
               TaskCalendarOverlay(
                 isCalendarVisible: _isCalendarVisible,
                 selectedDate: _selectedDate,
-                onShowRequest: () {
-                  setState(() {
-                    _isCalendarVisible = true;
-                  });
-                },
                 onDateSelected: (date) {
                   setState(() {
                     _collapseQuickAdd();
