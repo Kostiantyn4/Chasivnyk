@@ -89,10 +89,21 @@ class AppLocalizationsUk extends AppLocalizations {
   String get remindersNone => 'Відсутні';
 
   @override
-  String get subtasksOption => 'Підзавдання';
+  String get subtasksOption => 'Підзадачі';
 
   @override
   String get subtasksNone => 'Немає';
+
+  @override
+  String subtasksCount(int count) {
+    return '$count підзадач';
+  }
+
+  @override
+  String get addSubtaskHint => 'Нова підзадача...';
+
+  @override
+  String get addButton => 'Додати';
 
   @override
   String get tagsOption => 'Теги';

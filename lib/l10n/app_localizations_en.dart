@@ -95,6 +95,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get subtasksNone => 'None';
 
   @override
+  String subtasksCount(int count) {
+    return '$count subtask(s)';
+  }
+
+  @override
+  String get addSubtaskHint => 'New subtask...';
+
+  @override
+  String get addButton => 'Add';
+
+  @override
   String get tagsOption => 'Tags';
 
   @override

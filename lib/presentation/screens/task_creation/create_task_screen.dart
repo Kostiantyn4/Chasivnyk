@@ -51,6 +51,9 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
   String? _editingInitialProjectId;
   bool _projectChanged = false;
   DateTime? _selectedDueDate;
+  List<Subtask> _subtasks = [];
+  final _subtaskController = TextEditingController();
+  bool _subtasksExpanded = false;
 
   @override
   void initState() {
@@ -77,6 +80,9 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
         widget.initialTask?.projectId?.value ?? widget.projectId;
     _editingInitialProjectId = widget.initialTask?.projectId?.value;
     _selectedDueDate = widget.initialTask?.dueDate ?? widget.initialDueDate;
+    if (widget.initialTask != null) {
+      _subtasks = List.from(widget.initialTask!.subtasks);
+    }
     
     if (widget.taskId == null && _selectedProjectId != null) {
       Future.microtask(_loadProjectTitle);
@@ -136,6 +142,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
         _selectedProjectId = task.projectId?.value;
         _editingInitialProjectId = task.projectId?.value;
         _selectedDueDate = task.dueDate;
+        _subtasks = List.from(task.subtasks);
         _isLoadingInitialTask = false;
       });
       if (_selectedProjectId != null) {
@@ -225,6 +232,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
     _descriptionController.removeListener(_onFieldChanged);
     _titleController.dispose();
     _descriptionController.dispose();
+    _subtaskController.dispose();
     super.dispose();
   }
 
@@ -305,7 +313,8 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
 
   bool get _hasContent {
     return _titleController.text.trim().isNotEmpty ||
-           _descriptionController.text.trim().isNotEmpty;
+           _descriptionController.text.trim().isNotEmpty ||
+           _subtasks.isNotEmpty;
   }
 
   bool get _hasChanges {
@@ -315,7 +324,8 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
       return _titleController.text.trim() != task.title.value ||
              _descriptionController.text.trim() != (task.description?.value ?? '') ||
              _selectedDueDate != task.dueDate ||
-             _selectedProjectId != _editingInitialProjectId;
+             _selectedProjectId != _editingInitialProjectId ||
+             !_subtasksListEquals(_subtasks, task.subtasks);
     } else {
       return _hasContent;
     }
@@ -388,22 +398,28 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
           ? null
           : _descriptionController.text.trim();
 
+      Task savedTask;
       if (_isEditing) {
-        await taskService.updateTask(
-            widget.initialTask ?? _loadedTask!,
-            title: title,
-            description: description,
-            dueDate: _selectedDueDate,
-            projectId: _selectedProjectId,
-            changeProject: _projectChanged,
-          );
+        savedTask = await taskService.updateTask(
+          widget.initialTask ?? _loadedTask!,
+          title: title,
+          description: description,
+          dueDate: _selectedDueDate,
+          projectId: _selectedProjectId,
+          changeProject: _projectChanged,
+        );
       } else {
-        await taskService.createTask(
-            title,
-            description: description,
-            dueDate: _selectedDueDate,
-            projectId: _selectedProjectId,
-          );
+        savedTask = await taskService.createTask(
+          title,
+          description: description,
+          dueDate: _selectedDueDate,
+          projectId: _selectedProjectId,
+        );
+      }
+
+      if (!_subtasksListEquals(_subtasks, savedTask.subtasks)) {
+        final repo = await ref.read(taskRepositoryProvider.future);
+        await repo.save(savedTask.copyWith(subtasks: _subtasks));
       }
       
       // Clear draft
@@ -528,14 +544,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
                     },
                   ),
                   const SizedBox(height: 8),
-                  _buildOptionCard(
-                    icon: Icons.playlist_add_check,
-                    title: localization.subtasksOption,
-                    value: localization.subtasksNone,
-                    onTap: () {
-                      // TODO: Navigate to subtasks
-                    },
-                  ),
+                  _buildSubtasksSection(localization),
                   const SizedBox(height: 8),
                   _buildOptionCard(
                     icon: Icons.label,
@@ -653,6 +662,168 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
       ),
       ),
     );
+  }
+
+  bool _subtasksListEquals(List<Subtask> a, List<Subtask> b) {
+    if (a.length != b.length) return false;
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] != b[i]) return false;
+    }
+    return true;
+  }
+
+  void _addSubtask(String title) {
+    final trimmed = title.trim();
+    if (trimmed.isEmpty) return;
+    setState(() => _subtasks.add(Subtask.create(title: trimmed)));
+    _subtaskController.clear();
+  }
+
+  Widget _buildSubtasksSection(AppLocalizations localization) {
+    final count = _subtasks.length;
+    final valueText = count == 0
+        ? localization.subtasksNone
+        : localization.subtasksCount(count);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InkWell(
+          onTap: () => setState(() => _subtasksExpanded = !_subtasksExpanded),
+          borderRadius: BorderRadius.circular(8),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.accentColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.playlist_add_check,
+                    color: AppColors.textSecondary, size: 24),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    localization.subtasksOption,
+                    style: TextStyle(
+                        color: AppColors.textPrimary, fontSize: 16),
+                  ),
+                ),
+                Text(
+                  valueText,
+                  style:
+                      TextStyle(color: AppColors.textSecondary, fontSize: 16),
+                ),
+                const SizedBox(width: 8),
+                Icon(
+                  _subtasksExpanded
+                      ? Icons.expand_less
+                      : Icons.expand_more,
+                  color: AppColors.textSecondary,
+                  size: 24,
+                ),
+              ],
+            ),
+          ),
+        ),
+        if (_subtasksExpanded) ..._buildSubtaskList(localization),
+      ],
+    );
+  }
+
+  List<Widget> _buildSubtaskList(AppLocalizations localization) {
+    return [
+      const SizedBox(height: 4),
+      Container(
+        decoration: BoxDecoration(
+          color: AppColors.accentColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          children: [
+            ..._subtasks.asMap().entries.map((entry) {
+              final i = entry.key;
+              final sub = entry.value;
+              return Row(
+                children: [
+                  Checkbox(
+                    value: sub.isDone,
+                    onChanged: (val) => setState(
+                      () => _subtasks[i] =
+                          sub.copyWith(isDone: val ?? false),
+                    ),
+                    activeColor: AppColors.primaryColor,
+                    checkColor: Colors.white,
+                    side:
+                        BorderSide(color: AppColors.textSecondary),
+                    materialTapTargetSize:
+                        MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  Expanded(
+                    child: Text(
+                      sub.title.value,
+                      style: TextStyle(
+                        color: sub.isDone
+                            ? AppColors.textSecondary
+                            : AppColors.textPrimary,
+                        fontSize: 14,
+                        decoration: sub.isDone
+                            ? TextDecoration.lineThrough
+                            : null,
+                        decorationColor: AppColors.textSecondary,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.close,
+                        color: AppColors.textSecondary, size: 18),
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(
+                        minWidth: 36, minHeight: 36),
+                    onPressed: () =>
+                        setState(() => _subtasks.removeAt(i)),
+                  ),
+                ],
+              );
+            }),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 4, 8, 8),
+              child: Row(
+                children: [
+                  Icon(Icons.add,
+                      color: AppColors.textSecondary, size: 20),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextField(
+                      controller: _subtaskController,
+                      style: TextStyle(
+                          color: AppColors.textPrimary, fontSize: 14),
+                      decoration: InputDecoration(
+                        hintText: localization.addSubtaskHint,
+                        hintStyle: TextStyle(
+                            color: AppColors.textSecondary, fontSize: 14),
+                        border: InputBorder.none,
+                        isDense: true,
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 8),
+                      ),
+                      onSubmitted: _addSubtask,
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => _addSubtask(_subtaskController.text),
+                    child: Text(
+                      localization.addButton,
+                      style: TextStyle(color: AppColors.primaryColor),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ];
   }
 
   Widget _buildLabel(String text) {

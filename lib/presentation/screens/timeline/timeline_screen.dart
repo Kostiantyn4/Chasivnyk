@@ -373,6 +373,10 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
                       fontSize: 14,
                     ),
                   ),
+                  if (task.subtasks.isNotEmpty) ...[  
+                    const SizedBox(height: 8),
+                    _buildSubtaskProgress(task),
+                  ],
                 ],
               ),
             ),
@@ -405,6 +409,51 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
       ),
     );
   }
+  Widget _buildSubtaskProgress(Task task) {
+    final total = task.subtasks.length;
+    final done = task.subtasks.where((s) => s.isDone).length;
+    final fraction = total == 0 ? 0.0 : done / total;
+    final percent = (fraction * 100).round();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          Localization.current.projectProgressWithPercent(done, total, percent),
+          style: TextStyle(
+            color: AppColors.textSecondary,
+            fontSize: 12,
+          ),
+        ),
+        const SizedBox(height: 4),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(999),
+          child: Stack(
+            children: [
+              Container(
+                height: 4,
+                color: AppColors.secondaryColor.withValues(alpha: 0.5),
+              ),
+              FractionallySizedBox(
+                widthFactor: fraction,
+                child: Container(
+                  height: 4,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.primaryColor,
+                        AppColors.primaryColor.withValues(alpha: 0.6),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   String _formatTaskTime(Task task) {
     if (task.dueDate == null) {
       return Localization.current.dueTimeNotSet;

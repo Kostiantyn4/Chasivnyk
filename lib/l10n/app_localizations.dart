@@ -266,6 +266,24 @@ abstract class AppLocalizations {
   /// **'None'**
   String get subtasksNone;
 
+  /// No description provided for @subtasksCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} subtask(s)'**
+  String subtasksCount(int count);
+
+  /// No description provided for @addSubtaskHint.
+  ///
+  /// In en, this message translates to:
+  /// **'New subtask...'**
+  String get addSubtaskHint;
+
+  /// No description provided for @addButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get addButton;
+
   /// No description provided for @tagsOption.
   ///
   /// In en, this message translates to:
