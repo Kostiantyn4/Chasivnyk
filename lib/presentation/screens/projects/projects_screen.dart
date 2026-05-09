@@ -3,12 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/di/providers.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/router/routes.dart';
 import '../../../domain/entities/project.dart';
 import '../../../l10n/app_localizations.dart';
-import '../../models/project_context.dart';
 import '../../widgets/buttons/add_task_button.dart';
-import 'create_project_screen.dart';
-import 'project_tasks_screen.dart';
 
 class ProjectsScreen extends ConsumerStatefulWidget {
   const ProjectsScreen({super.key});
@@ -26,7 +24,7 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       floatingActionButton: AddTaskButton(
-        onPressed: () => _openCreateProject(localization),
+        onPressed: () => _openCreateProject(),
         heroTag: 'projects_fab',
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -95,14 +93,12 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
       itemCount: projects.length,
       itemBuilder: (context, index) {
         final project = projects[index];
-        final accent = _colorForProject(project);
         return Padding(
           padding: const EdgeInsets.only(bottom: 12),
           child: _ProjectCard(
             project: project,
-            accentColor: accent,
             localization: localization,
-            onTap: () => _openProject(project, accent),
+            onTap: () => _openProject(project),
           ),
         );
       },
@@ -146,59 +142,23 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
     );
   }
 
-  Future<void> _openCreateProject(AppLocalizations localization) async {
-    final result = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => const CreateProjectScreen(),
-      ),
-    );
-    if (result != null && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(localization.projectCreated),
-          backgroundColor: Colors.green,
-        ),
-      );
-    }
+  void _openCreateProject() {
+    context.pushCreateProject();
   }
 
-  void _openProject(Project project, Color accentColor) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => ProjectTasksScreen(
-          projectContext: ProjectContext(
-            id: project.id.value,
-            title: project.title.value,
-            accentColor: accentColor,
-          ),
-        ),
-      ),
-    );
+  void _openProject(Project project) {
+    context.pushProjectTasks(project.id.value);
   }
 
-  Color _colorForProject(Project project) {
-    const palette = [
-      Color(0xFF1F3755),
-      Color(0xFF183D3D),
-      Color(0xFF412A4C),
-      Color(0xFF4B1D3F),
-      Color(0xFF22577A),
-      Color(0xFF2E294E),
-    ];
-    final hash = project.id.value.hashCode.abs();
-    return palette[hash % palette.length];
-  }
 }
 
 class _ProjectCard extends StatefulWidget {
   final Project project;
-  final Color accentColor;
   final AppLocalizations localization;
   final VoidCallback onTap;
 
   const _ProjectCard({
     required this.project,
-    required this.accentColor,
     required this.localization,
     required this.onTap,
   });
@@ -235,7 +195,7 @@ class _ProjectCardState extends State<_ProjectCard> {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: widget.accentColor.withValues(alpha: 0.6),
+                color: AppColors.primaryColor.withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(

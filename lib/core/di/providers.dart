@@ -5,6 +5,7 @@ import '../../data/repositories/project_repository.dart';
 import '../../data/repositories/user_settings_repository.dart';
 import '../../domain/entities/task.dart';
 import '../../domain/entities/project.dart';
+import '../../domain/entities/value_objects/task_value_objects.dart';
 import '../../domain/repositories/task_repository.dart';
 import '../../domain/repositories/project_repository.dart';
 import '../../domain/repositories/user_settings_repository.dart';
@@ -44,6 +45,18 @@ final projectServiceProvider = Provider<IProjectService>((ref) {
 final projectsProvider = FutureProvider<List<Project>>((ref) async {
   final service = ref.watch(projectServiceProvider);
   return service.getProjects();
+});
+
+final singleTaskProvider =
+    FutureProvider.family<Task?, String>((ref, taskId) async {
+  final repository = await ref.watch(taskRepositoryProvider.future);
+  return repository.findById(TaskId(taskId));
+});
+
+final singleProjectProvider =
+    FutureProvider.family<Project?, String>((ref, projectId) async {
+  final service = ref.watch(projectServiceProvider);
+  return service.findById(projectId);
 });
 
 final userSettingsRepositoryProvider = Provider<UserSettingsRepository>((ref) {

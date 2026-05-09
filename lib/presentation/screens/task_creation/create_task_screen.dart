@@ -1,25 +1,28 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../data/repositories/task_draft_repository.dart';
 import '../../../core/di/providers.dart';
 import '../../../domain/entities/task.dart';
-import '../../models/project_context.dart';
+import '../../../domain/entities/value_objects/task_value_objects.dart';
 
 class CreateTaskScreen extends ConsumerStatefulWidget {
   final Task? initialTask;
+  final String? taskId;
   final bool enableDraftPersistence;
-  final ProjectContext? projectContext;
+  final String? projectId;
   final DateTime? initialDueDate;
 
   const CreateTaskScreen({
     super.key,
     this.initialTask,
+    this.taskId,
     this.enableDraftPersistence = true,
-    this.projectContext,
+    this.projectId,
     this.initialDueDate,
   });
 
@@ -39,24 +42,29 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
   
   Timer? _autoSaveTimer;
   bool _isSaving = false;
-  late final bool _isEditing;
+  bool _isLoadingInitialTask = false;
+  Task? _loadedTask;
+  late bool _isEditing;
   late final bool _useDraftPersistence;
   String? _selectedProjectId;
   String? _selectedProjectTitle;
-  late final String? _editingInitialProjectId;
+  String? _editingInitialProjectId;
   bool _projectChanged = false;
   DateTime? _selectedDueDate;
 
   @override
   void initState() {
     super.initState();
-    _isEditing = widget.initialTask != null;
+    _isEditing = widget.initialTask != null || widget.taskId != null;
     _useDraftPersistence = widget.enableDraftPersistence && !_isEditing;
-    
-    if (_isEditing) {
+
+    if (widget.initialTask != null) {
       final task = widget.initialTask!;
       _titleController.text = task.title.value;
       _descriptionController.text = task.description?.value ?? '';
+    } else if (widget.taskId != null) {
+      _isLoadingInitialTask = true;
+      Future.microtask(_loadInitialTask);
     } else if (_useDraftPersistence) {
       _loadDraft();
       _startAutoSave();
@@ -66,13 +74,11 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
     }
 
     _selectedProjectId =
-        widget.initialTask?.projectId?.value ?? widget.projectContext?.id;
+        widget.initialTask?.projectId?.value ?? widget.projectId;
     _editingInitialProjectId = widget.initialTask?.projectId?.value;
     _selectedDueDate = widget.initialTask?.dueDate ?? widget.initialDueDate;
     
-    if (widget.projectContext != null) {
-      _selectedProjectTitle = widget.projectContext!.title;
-    } else if (_selectedProjectId != null) {
+    if (widget.taskId == null && _selectedProjectId != null) {
       Future.microtask(_loadProjectTitle);
     }
     
@@ -119,12 +125,35 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
     }
   }
 
+  Future<void> _loadInitialTask() async {
+    final repository = await ref.read(taskRepositoryProvider.future);
+    final task = await repository.findById(TaskId(widget.taskId!));
+    if (task != null && mounted) {
+      setState(() {
+        _loadedTask = task;
+        _titleController.text = task.title.value;
+        _descriptionController.text = task.description?.value ?? '';
+        _selectedProjectId = task.projectId?.value;
+        _editingInitialProjectId = task.projectId?.value;
+        _selectedDueDate = task.dueDate;
+        _isLoadingInitialTask = false;
+      });
+      if (_selectedProjectId != null) {
+        await _loadProjectTitle();
+      }
+    } else if (mounted) {
+      setState(() => _isLoadingInitialTask = false);
+    }
+  }
+
   Future<void> _handleDelete() async {
     if (!_isEditing) return;
     final localization = AppLocalizations.of(context)!;
+    final taskToDelete = widget.initialTask ?? _loadedTask;
+    if (taskToDelete == null) return;
 
     bool proceed = true;
-    if (widget.initialTask!.subtasks.isNotEmpty) {
+    if (taskToDelete.subtasks.isNotEmpty) {
       proceed = await showDialog<bool>(
             context: context,
             builder: (context) => AlertDialog(
@@ -161,7 +190,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
 
     try {
       final taskService = await ref.read(taskServiceProvider.future);
-      await taskService.deleteTask(widget.initialTask!);
+      await taskService.deleteTask(taskToDelete);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -170,7 +199,8 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
             backgroundColor: Colors.green,
           ),
         );
-        Navigator.of(context).pop(widget.initialTask!);
+        _invalidateTaskProviders();
+        context.pop();
       }
     } catch (e) {
       if (mounted) {
@@ -259,6 +289,20 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
     await _draftRepository.clearDraft();
   }
 
+  void _invalidateTaskProviders() {
+    if (_editingInitialProjectId != null) {
+      ref.invalidate(projectTasksProvider(_editingInitialProjectId!));
+    }
+    if (_selectedProjectId != null &&
+        _selectedProjectId != _editingInitialProjectId) {
+      ref.invalidate(projectTasksProvider(_selectedProjectId!));
+    }
+    if (widget.taskId != null) {
+      ref.invalidate(singleTaskProvider(widget.taskId!));
+    }
+    ref.invalidate(tasksProvider);
+  }
+
   bool get _hasContent {
     return _titleController.text.trim().isNotEmpty ||
            _descriptionController.text.trim().isNotEmpty;
@@ -266,7 +310,8 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
 
   bool get _hasChanges {
     if (_isEditing) {
-      final task = widget.initialTask!;
+      final task = widget.initialTask ?? _loadedTask;
+      if (task == null) return false;
       return _titleController.text.trim() != task.title.value ||
              _descriptionController.text.trim() != (task.description?.value ?? '') ||
              _selectedDueDate != task.dueDate ||
@@ -343,21 +388,23 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
           ? null
           : _descriptionController.text.trim();
 
-      final task = _isEditing
-        ? await taskService.updateTask(
-            widget.initialTask!,
+      if (_isEditing) {
+        await taskService.updateTask(
+            widget.initialTask ?? _loadedTask!,
             title: title,
             description: description,
             dueDate: _selectedDueDate,
             projectId: _selectedProjectId,
             changeProject: _projectChanged,
-          )
-        : await taskService.createTask(
+          );
+      } else {
+        await taskService.createTask(
             title,
             description: description,
             dueDate: _selectedDueDate,
             projectId: _selectedProjectId,
           );
+      }
       
       // Clear draft
       await _clearDraft();
@@ -372,8 +419,8 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
           ),
         );
         
-        // Return task to previous screen
-        Navigator.of(context).pop(task);
+        _invalidateTaskProviders();
+        if (mounted) context.pop();
       }
     } catch (e) {
       if (mounted) {
@@ -394,17 +441,21 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context)!;
-    
+
+    if (_isLoadingInitialTask) {
+      return Scaffold(
+        backgroundColor: AppColors.backgroundColor,
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, dynamic result) async {
         if (didPop) return;
         
-        final navigator = Navigator.of(context);
         final shouldClose = await _handleClose();
-        if (shouldClose && mounted) {
-          navigator.pop();
-        }
+        if (shouldClose && mounted) context.pop();
       },
       child: Scaffold(
       backgroundColor: AppColors.backgroundColor,
@@ -415,11 +466,8 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
           icon: const Icon(Icons.close),
           color: AppColors.textPrimary,
           onPressed: () async {
-            final navigator = Navigator.of(context);
             final shouldClose = await _handleClose();
-            if (shouldClose && mounted) {
-              navigator.pop();
-            }
+            if (shouldClose && mounted) context.pop();
           },
         ),
         title: Text(

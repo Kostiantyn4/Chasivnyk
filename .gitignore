@@ -126,5 +126,6 @@ app.*.symbols
 *.iml
 .vscode/settings.json
 PROJECT_RULES.md
-.vscode/settings.json
-PROJECT_RULES.md
+
+# Local development notes
+DEVELOPMENT_PLAN.md

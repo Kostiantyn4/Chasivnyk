@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../l10n/app_localizations.dart';
@@ -227,7 +228,7 @@ class _CreateProjectScreenState extends ConsumerState<CreateProjectScreen> {
     setState(() => _isSaving = true);
     try {
       final service = ref.read(projectServiceProvider);
-      final project = await service.createProject(
+      await service.createProject(
         title: _titleController.text.trim(),
         description: _descriptionController.text.trim().isEmpty
             ? null
@@ -242,7 +243,7 @@ class _CreateProjectScreenState extends ConsumerState<CreateProjectScreen> {
             backgroundColor: Colors.green,
           ),
         );
-        Navigator.of(context).pop(project);
+        context.pop();
       }
     } catch (e) {
       if (mounted) {

@@ -10,10 +10,9 @@ import '../../../core/di/providers.dart';
 import '../../../data/repositories/task_order_repository.dart';
 import '../../../domain/entities/task.dart';
 import '../../../domain/entities/value_objects/task_value_objects.dart';
-import '../../models/project_context.dart';
+import '../../../core/router/routes.dart';
 import 'modes/task_list_mode.dart';
 import 'widgets/task_calendar_overlay.dart';
-import '../task_creation/create_task_screen.dart';
 
 class TimelineScreen extends ConsumerStatefulWidget {
   final TaskListMode mode;
@@ -40,7 +39,6 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
   final TaskOrderRepository _taskOrderRepository = TaskOrderRepository();
   List<String> _storedOrder = [];
 
-  ProjectContext? get _projectContext => _mode.projectContext;
   String? get _projectId => _mode.projectId;
   bool get _usesDateFilter => _mode.usesDateFilter;
   bool get _showsCalendarOverlay => _mode.showsCalendarOverlay;
@@ -90,18 +88,10 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
             _collapseQuickAdd();
             return;
           }
-          final task = await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => CreateTaskScreen(
-                enableDraftPersistence: false,
-                projectContext: _projectContext,
-                initialDueDate: _selectedDate,
-              ),
-            ),
+          context.pushCreateTask(
+            projectId: _projectId,
+            initialDueDate: _selectedDate,
           );
-          if (task != null) {
-            _invalidateTasksSource();
-          }
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -671,19 +661,9 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
     }).toList();
   }
 
-  Future<void> _openTaskEditor(Task task) async {
+  void _openTaskEditor(Task task) {
     _collapseQuickAdd();
-    final result = await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => CreateTaskScreen(
-          initialTask: task,
-          projectContext: _projectContext,
-        ),
-      ),
-    );
-    if (result != null && mounted) {
-      _invalidateTasksSource();
-    }
+    context.pushEditTask(task.id.value);
   }
 
   Future<void> _toggleTaskStatus(Task task) async {
