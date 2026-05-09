@@ -95,7 +95,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
       final project = await service.findById(projectId);
       if (!mounted) return;
       if (project == null) {
-        _updateProjectSelection(null, null);
+        if (mounted) setState(() => _selectedProjectTitle = null);
       } else {
         _updateProjectSelection(project.id.value, project.title.value, notify: false);
       }
@@ -315,7 +315,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
       return _titleController.text.trim() != task.title.value ||
              _descriptionController.text.trim() != (task.description?.value ?? '') ||
              _selectedDueDate != task.dueDate ||
-             _selectedProjectId != task.projectId?.value;
+             _selectedProjectId != _editingInitialProjectId;
     } else {
       return _hasContent;
     }
