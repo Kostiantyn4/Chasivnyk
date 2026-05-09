@@ -59,6 +59,14 @@
   "projectsScreenTitle": "Проєкти",
   "projectsAddProject": "Додати проєкт",
   "projectProgressLabel": "{done} з {total} завдань",
+  "projectProgressWithPercent": "{done} / {total} задач · {percent}%",
+  "@projectProgressWithPercent": {
+    "placeholders": {
+      "done":    { "type": "int" },
+      "total":   { "type": "int" },
+      "percent": { "type": "int" }
+    }
+  },
   "@projectProgressLabel": {
     "placeholders": {
       "done": {

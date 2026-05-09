@@ -233,7 +233,7 @@ class _ProjectsScreenState extends ConsumerState<ProjectsScreen> {
 
 }
 
-class _ProjectCard extends StatefulWidget {
+class _ProjectCard extends ConsumerStatefulWidget {
   final Project project;
   final AppLocalizations localization;
   final VoidCallback onTap;
@@ -247,10 +247,10 @@ class _ProjectCard extends StatefulWidget {
   });
 
   @override
-  State<_ProjectCard> createState() => _ProjectCardState();
+  ConsumerState<_ProjectCard> createState() => _ProjectCardState();
 }
 
-class _ProjectCardState extends State<_ProjectCard>
+class _ProjectCardState extends ConsumerState<_ProjectCard>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<Offset> _slideAnimation;
@@ -372,23 +372,9 @@ class _ProjectCardState extends State<_ProjectCard>
                                 ],
                               ),
                               const SizedBox(height: 4),
-                              Text(
-                                widget.localization.projectProgressLabel(0, 0),
-                                style: const TextStyle(
-                                  color: AppColors.textSecondary,
-                                  fontSize: 13,
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(999),
-                                child: Container(
-                                  height: 6,
-                                  decoration: BoxDecoration(
-                                    color: AppColors.secondaryColor
-                                        .withValues(alpha: 0.5),
-                                  ),
-                                ),
+                              _ProjectProgressBar(
+                                projectId: widget.project.id.value,
+                                localization: widget.localization,
                               ),
                             ],
                           ),
@@ -402,6 +388,79 @@ class _ProjectCardState extends State<_ProjectCard>
           ),
         );
       },
+    );
+  }
+}
+
+class _ProjectProgressBar extends ConsumerWidget {
+  final String projectId;
+  final AppLocalizations localization;
+
+  const _ProjectProgressBar({
+    required this.projectId,
+    required this.localization,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final tasksAsync = ref.watch(projectTasksProvider(projectId));
+
+    return tasksAsync.when(
+      loading: () => _buildBar(done: 0, total: 0),
+      error: (e, _) => _buildBar(done: 0, total: 0),
+      data: (tasks) {
+        final total = tasks.length;
+        final done = tasks
+            .where((t) => t.status == TaskStatus.done)
+            .length;
+        return _buildBar(done: done, total: total);
+      },
+    );
+  }
+
+  Widget _buildBar({required int done, required int total}) {
+    final fraction = total == 0 ? 0.0 : (done / total).clamp(0.0, 1.0);
+    final percent = (fraction * 100).round();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          total == 0
+              ? localization.projectProgressLabel(0, 0)
+              : localization.projectProgressWithPercent(done, total, percent),
+          style: const TextStyle(
+            color: AppColors.textSecondary,
+            fontSize: 13,
+          ),
+        ),
+        const SizedBox(height: 8),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(999),
+          child: Stack(
+            children: [
+              Container(
+                height: 6,
+                color: AppColors.secondaryColor.withValues(alpha: 0.5),
+              ),
+              FractionallySizedBox(
+                widthFactor: fraction,
+                child: Container(
+                  height: 6,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.primaryColor,
+                        AppColors.primaryColor.withValues(alpha: 0.6),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

@@ -63,6 +63,14 @@
   "projectsScreenTitle": "Projects",
   "projectsAddProject": "Add project",
   "projectProgressLabel": "{done} of {total} tasks",
+  "projectProgressWithPercent": "{done} / {total} tasks · {percent}%",
+  "@projectProgressWithPercent": {
+    "placeholders": {
+      "done":    { "type": "int" },
+      "total":   { "type": "int" },
+      "percent": { "type": "int" }
+    }
+  },
   "@projectProgressLabel": {
     "placeholders": {
       "done": {

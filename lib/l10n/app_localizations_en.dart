@@ -205,6 +205,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String projectProgressWithPercent(int done, int total, int percent) {
+    return '$done / $total tasks · $percent%';
+  }
+
+  @override
   String get projectSampleGiftForAlina => 'Gift for Alina';
 
   @override

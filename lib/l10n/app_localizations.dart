@@ -482,6 +482,12 @@ abstract class AppLocalizations {
   /// **'{done} of {total} tasks'**
   String projectProgressLabel(int done, int total);
 
+  /// No description provided for @projectProgressWithPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} / {total} tasks · {percent}%'**
+  String projectProgressWithPercent(int done, int total, int percent);
+
   /// No description provided for @projectSampleGiftForAlina.
   ///
   /// In en, this message translates to:
