@@ -78,6 +78,15 @@
   "projectSampleGiftForMark": "Gift for Mark",
   "projectsEmptyTitle": "No projects yet",
   "projectsEmptySubtitle": "Tap + to start your first project",
+  "deleteProjectConfirmTitle": "Delete project?",
+  "deleteProjectConfirmMessage": "The project will be permanently deleted",
+  "deleteProjectHasTasksWarning": "This project has {count} incomplete task(s). All tasks, subtasks, and reminders will be permanently deleted.",
+  "@deleteProjectHasTasksWarning": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "projectDeleted": "Project deleted",
   "@currentDate": {
     "placeholders": {
       "date": {

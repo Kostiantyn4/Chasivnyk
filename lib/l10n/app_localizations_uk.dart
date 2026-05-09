@@ -219,4 +219,18 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get projectsEmptySubtitle => 'Натисніть +, щоб створити перший';
+
+  @override
+  String get deleteProjectConfirmTitle => 'Видалити проєкт?';
+
+  @override
+  String get deleteProjectConfirmMessage => 'Проєкт буде видалено назавжди';
+
+  @override
+  String deleteProjectHasTasksWarning(int count) {
+    return 'У проєкті є $count незавершених задач. Усі задачі, підзадачі та нагадування будуть видалені назавжди.';
+  }
+
+  @override
+  String get projectDeleted => 'Проєкт видалено';
 }

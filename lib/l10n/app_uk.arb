@@ -74,6 +74,15 @@
   "projectSampleGiftForMark": "Подарунок для Марка",
   "projectsEmptyTitle": "Поки що немає проєктів",
   "projectsEmptySubtitle": "Натисніть +, щоб створити перший",
+  "deleteProjectConfirmTitle": "Видалити проєкт?",
+  "deleteProjectConfirmMessage": "Проєкт буде видалено назавжди",
+  "deleteProjectHasTasksWarning": "У проєкті є {count} незавершених задач. Усі задачі, підзадачі та нагадування будуть видалені назавжди.",
+  "@deleteProjectHasTasksWarning": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "projectDeleted": "Проєкт видалено",
   "@currentDate": {
     "placeholders": {
       "date": {

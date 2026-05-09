@@ -511,6 +511,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap + to start your first project'**
   String get projectsEmptySubtitle;
+
+  /// No description provided for @deleteProjectConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete project?'**
+  String get deleteProjectConfirmTitle;
+
+  /// No description provided for @deleteProjectConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The project will be permanently deleted'**
+  String get deleteProjectConfirmMessage;
+
+  /// No description provided for @deleteProjectHasTasksWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'This project has {count} incomplete task(s). All tasks, subtasks, and reminders will be permanently deleted.'**
+  String deleteProjectHasTasksWarning(int count);
+
+  /// No description provided for @projectDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Project deleted'**
+  String get projectDeleted;
 }
 
 class _AppLocalizationsDelegate

@@ -218,4 +218,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get projectsEmptySubtitle => 'Tap + to start your first project';
+
+  @override
+  String get deleteProjectConfirmTitle => 'Delete project?';
+
+  @override
+  String get deleteProjectConfirmMessage =>
+      'The project will be permanently deleted';
+
+  @override
+  String deleteProjectHasTasksWarning(int count) {
+    return 'This project has $count incomplete task(s). All tasks, subtasks, and reminders will be permanently deleted.';
+  }
+
+  @override
+  String get projectDeleted => 'Project deleted';
 }
